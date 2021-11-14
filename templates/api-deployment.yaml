@@ -25,10 +25,6 @@ spec:
           image: {{ .Values.image }}
           ports:
           - containerPort: 8080
-          startupProbe:
-            httpGet:
-              port: 8080
-              path: /health
           livenessProbe:
             httpGet:
               port: 8080
