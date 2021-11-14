@@ -18,12 +18,6 @@ tasks {
             javaParameters = true
         }
     }
-
-    withType<Jar> {
-        manifest {
-            attributes("Main-Class" to "consulting.timhatdiehandandermaus.Application")
-        }
-    }
 }
 
 dependencies {
