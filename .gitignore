@@ -1,0 +1,16 @@
+# Java
+*.jar
+!gradle/wrapper/*.jar
+
+# Ignore Gradle project-specific cache directory
+.gradle/
+
+# Ignore Gradle build output directory
+build/
+
+# IDE
+.idea/
+out/
+
+# macOS
+.DS_Store

@@ -1,0 +1,36 @@
+name: Main
+on: push
+
+jobs:
+  docker:
+    name: Docker Build and Push
+    runs-on: ubuntu-latest
+    if: success() && github.ref == 'refs/heads/main'
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v2
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build the tagged Docker image
+        run: docker build -t ghcr.io/tim-hat-die-hand-an-der-maus/api:${GITHUB_SHA} --build-arg "build=${GITHUB_SHA}" .
+      - name: Push the tagged Docker image
+        run: docker push ghcr.io/tim-hat-die-hand-an-der-maus/api:${GITHUB_SHA}
+
+  deploy:
+    name: Deploy to Kubernetes
+    runs-on: ubuntu-latest
+    needs: docker
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v2
+      - name: Substitute environment variables in values.yaml
+        run: "envsubst < values.yaml > values_sub.yaml && mv values_sub.yaml values.yaml"
+      - name: Deploy helm chart
+        uses: WyriHaximus/github-action-helm3@v2
+        with:
+          exec: helm upgrade backend . --install --namespace=timhatdiehandandermaus
+          kubeconfig: '${{ secrets.KUBECONFIG_RAW }}'

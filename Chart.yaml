@@ -1,0 +1,7 @@
+apiVersion: v2
+name: timhatdiehandandermaus-api
+description: "It's an API"
+
+type: application
+
+version: 0.1.0

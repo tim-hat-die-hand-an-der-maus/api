@@ -1,0 +1,15 @@
+[versions]
+kotlin = "1.5.31"
+ktlint = "0.43.0"
+ktor = "1.6.5"
+quarkus = "2.4.2.Final"
+
+[libraries]
+quarkus-kotlin = { module = "io.quarkus:quarkus-kotlin", version.ref = "quarkus" }
+quarkus-junit = { module = "io.quarkus:quarkus-junit5", version.ref = "quarkus" }
+quarkus-resteasy-core = { module = "io.quarkus:quarkus-resteasy", version.ref = "quarkus" }
+quarkus-resteasy-jackson = { module = "io.quarkus:quarkus-resteasy-jackson", version.ref = "quarkus" }
+
+[plugins]
+quarkus = { id = "io.quarkus", version.ref = "quarkus" }
+spotless = { id = "com.diffplug.spotless", version = "6.0.0" }
