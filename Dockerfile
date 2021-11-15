@@ -6,7 +6,7 @@ USER quarkus
 
 WORKDIR /code
 
-RUN ./gradlew buildNative
+RUN ./gradlew build -Dquarkus.package.type=native
 
 FROM registry.access.redhat.com/ubi8/ubi-minimal
 WORKDIR /app
@@ -17,4 +17,5 @@ EXPOSE 8080
 ARG build
 ENV BUILD=$build
 
-CMD [ "./application", "-Dquarkus.http.host=0.0.0.0" ]
+ENTRYPOINT [ "./application", "-Dquarkus.http.host=0.0.0.0", "-Xmx64M"]
+
