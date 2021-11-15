@@ -31,7 +31,7 @@ class MovieResource {
         val uid = try {
             UUID.fromString(id)
         } catch (e: IllegalArgumentException) {
-            // ID is not an UUID, so it's unknown
+            // ID is not a UUID, so it's unknown
             throw NotFoundException()
         }
         // TODO: implement
