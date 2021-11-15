@@ -11,7 +11,7 @@ import javax.ws.rs.PathParam
 @Path("/movie")
 class MovieResource {
     @PUT
-    fun post(body: MoviePostRequest): MovieResponse {
+    fun put(body: MoviePostRequest): MovieResponse {
         // TODO: implement
         return MovieResponse(
             UUID.randomUUID(),
