@@ -5,8 +5,10 @@ ktor = "1.6.5"
 quarkus = "2.4.2.Final"
 
 [libraries]
-quarkus-kotlin = { module = "io.quarkus:quarkus-kotlin", version.ref = "quarkus" }
+jackson-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
+quarkus-jackson = { module = "io.quarkus:quarkus-jackson", version.ref = "quarkus" }
 quarkus-junit = { module = "io.quarkus:quarkus-junit5", version.ref = "quarkus" }
+quarkus-kotlin = { module = "io.quarkus:quarkus-kotlin", version.ref = "quarkus" }
 quarkus-resteasy-core = { module = "io.quarkus:quarkus-resteasy", version.ref = "quarkus" }
 quarkus-resteasy-jackson = { module = "io.quarkus:quarkus-resteasy-jackson", version.ref = "quarkus" }
 

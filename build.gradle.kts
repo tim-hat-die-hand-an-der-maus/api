@@ -26,8 +26,10 @@ dependencies {
     implementation(enforcedPlatform("io.quarkus:quarkus-bom:${libs.versions.quarkus.get()}"))
 
     implementation(libs.quarkus.kotlin)
+    implementation(libs.quarkus.jackson)
     implementation(libs.quarkus.resteasy.core)
     implementation(libs.quarkus.resteasy.jackson)
+    implementation(libs.jackson.kotlin)
 
     testImplementation(libs.quarkus.junit)
 }
