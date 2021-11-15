@@ -17,5 +17,5 @@ EXPOSE 8080
 ARG build
 ENV BUILD=$build
 
-ENTRYPOINT [ "./application", "-Dquarkus.http.host=0.0.0.0", "-Xmx128M"]
+ENTRYPOINT [ "./application", "-Xmx128M"]
 
