@@ -2,10 +2,22 @@ name: Main
 on: push
 
 jobs:
+  check:
+    name: Test and Lint
+    runs-on: ubuntu-latest
+    container: openjdk:11-jdk
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v2
+      - name: Run checks
+        run: ./gradlew check
+
   docker:
     name: Docker Build and Push
     runs-on: ubuntu-latest
     if: success() && github.ref == 'refs/heads/main'
+    needs:
+      - check
     steps:
       - name: Check out repo
         uses: actions/checkout@v2
