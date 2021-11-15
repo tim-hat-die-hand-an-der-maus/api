@@ -6,7 +6,7 @@ USER quarkus
 
 WORKDIR /code
 
-RUN ./gradlew build -Dquarkus.package.type=native
+RUN ./gradlew assemble -Dquarkus.package.type=native
 
 FROM registry.access.redhat.com/ubi8/ubi-minimal
 WORKDIR /app
