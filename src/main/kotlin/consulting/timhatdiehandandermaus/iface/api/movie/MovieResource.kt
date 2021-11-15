@@ -1,6 +1,6 @@
 package consulting.timhatdiehandandermaus.iface.api.movie
 
-import MovieStatus
+import consulting.timhatdiehandandermaus.domain.model.MovieStatus
 import java.util.UUID
 import javax.ws.rs.GET
 import javax.ws.rs.NotFoundException

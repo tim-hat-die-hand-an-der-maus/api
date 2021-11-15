@@ -1,6 +1,6 @@
 package consulting.timhatdiehandandermaus.iface.api.queue
 
-import MovieStatus
+import consulting.timhatdiehandandermaus.domain.model.MovieStatus
 import java.util.UUID
 
 data class QueueResponse(
