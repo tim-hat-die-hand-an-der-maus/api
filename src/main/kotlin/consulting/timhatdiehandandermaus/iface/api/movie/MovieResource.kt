@@ -14,7 +14,7 @@ class MovieResource {
     fun put(body: MoviePostRequest): MovieResponse {
         // TODO: implement
         return MovieResponse(
-            UUID.randomUUID(),
+            UUID.randomUUID().toString(),
             MovieStatus.Queued,
             ImdbMetadata(
                 "1234567",

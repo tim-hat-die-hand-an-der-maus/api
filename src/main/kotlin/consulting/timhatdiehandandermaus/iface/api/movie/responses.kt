@@ -1,10 +1,9 @@
 package consulting.timhatdiehandandermaus.iface.api.movie
 
 import consulting.timhatdiehandandermaus.domain.model.MovieStatus
-import java.util.UUID
 
 data class MovieResponse(
-    val id: UUID,
+    val id: String,
     val status: MovieStatus,
     val imdb: ImdbMetadata,
 )
