@@ -1,14 +1,18 @@
 package consulting.timhatdiehandandermaus.iface.api.movie
 
-import consulting.timhatdiehandandermaus.domain.model.MovieStatus
+enum class MovieStatusResponse {
+    Queued,
+    Watched,
+    Deleted,
+}
 
 data class MovieResponse(
     val id: String,
-    val status: MovieStatus,
-    val imdb: ImdbMetadata,
+    val status: MovieStatusResponse,
+    val imdb: MovieMetadataResponse,
 )
 
-data class ImdbMetadata(
+data class MovieMetadataResponse(
     val id: String,
     val title: String,
     val year: Int,

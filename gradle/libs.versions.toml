@@ -1,16 +1,25 @@
 [versions]
 kotlin = "1.6.0"
 ktlint = "0.43.0"
-ktor = "1.6.5"
+mapstruct = "1.4.2.Final"
 quarkus = "2.5.0.Final"
 
 [libraries]
 jackson-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
+
+mapstruct-runtime = { module = "org.mapstruct:mapstruct", version.ref = "mapstruct" }
+mapstruct-processor = { module = "org.mapstruct:mapstruct-processor", version.ref = "mapstruct" }
+
 quarkus-jackson = { module = "io.quarkus:quarkus-jackson", version.ref = "quarkus" }
 quarkus-junit = { module = "io.quarkus:quarkus-junit5", version.ref = "quarkus" }
 quarkus-kotlin = { module = "io.quarkus:quarkus-kotlin", version.ref = "quarkus" }
+
+quarkus-restclient-core = { module = "io.quarkus:quarkus-rest-client", version.ref = "quarkus" }
+quarkus-restclient-jackson = { module = "io.quarkus:quarkus-rest-client-jackson", version.ref = "quarkus" }
+
 quarkus-resteasy-core = { module = "io.quarkus:quarkus-resteasy", version.ref = "quarkus" }
 quarkus-resteasy-jackson = { module = "io.quarkus:quarkus-resteasy-jackson", version.ref = "quarkus" }
+
 quarkus-smallrye-health = { module = "io.quarkus:quarkus-smallrye-health", version.ref = "quarkus" }
 quarkus-smallrye-openapi = { module = "io.quarkus:quarkus-smallrye-openapi", version.ref = "quarkus" }
 

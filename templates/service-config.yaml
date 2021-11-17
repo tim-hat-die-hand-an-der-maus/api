@@ -1,0 +1,6 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: api-service-config
+data:
+  QUARKUS_REST_CLIENT_IMDB_API_URL: "http//imdb-resolver"

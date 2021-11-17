@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     alias(libs.plugins.spotless)
     kotlin("jvm") version libs.versions.kotlin
+    kotlin("kapt") version libs.versions.kotlin
     alias(libs.plugins.quarkus)
     kotlin("plugin.allopen") version libs.versions.kotlin
 }
@@ -16,7 +17,17 @@ tasks {
         kotlinOptions {
             jvmTarget = "17"
             javaParameters = true
+            freeCompilerArgs = listOf(
+                "-Xjvm-default=all",
+            )
         }
+    }
+}
+
+kapt {
+    arguments {
+        arg("mapstruct.defaultComponentModel", "cdi")
+        arg("mapstruct.defaultInjectionStrategy", "constructor")
     }
 }
 
@@ -25,12 +36,20 @@ dependencies {
 
     implementation(enforcedPlatform("io.quarkus:quarkus-bom:${libs.versions.quarkus.get()}"))
 
+    implementation(libs.mapstruct.runtime)
+    kapt(libs.mapstruct.processor)
+
     implementation(libs.quarkus.kotlin)
     implementation(libs.quarkus.jackson)
+    implementation(libs.jackson.kotlin)
+
+    implementation(libs.quarkus.restclient.core)
+    implementation(libs.quarkus.restclient.jackson)
+
     implementation(libs.quarkus.resteasy.core)
     implementation(libs.quarkus.resteasy.jackson)
+
     implementation(libs.bundles.smallrye)
-    implementation(libs.jackson.kotlin)
 
     testImplementation(libs.quarkus.junit)
 }

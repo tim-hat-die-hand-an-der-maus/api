@@ -1,7 +1,8 @@
 package consulting.timhatdiehandandermaus.iface.api.movie
 
-import consulting.timhatdiehandandermaus.domain.model.MovieStatus
+import consulting.timhatdiehandandermaus.application.usecase.AddMovie
 import java.util.UUID
+import javax.inject.Inject
 import javax.ws.rs.GET
 import javax.ws.rs.NotFoundException
 import javax.ws.rs.PUT
@@ -9,20 +10,14 @@ import javax.ws.rs.Path
 import javax.ws.rs.PathParam
 
 @Path("/movie")
-class MovieResource {
+class MovieResource @Inject constructor(
+    private val movieConverter: MovieConverter,
+    private val addMovie: AddMovie,
+) {
     @PUT
     fun put(body: MoviePostRequest): MovieResponse {
-        // TODO: implement
-        return MovieResponse(
-            UUID.randomUUID().toString(),
-            MovieStatus.Queued,
-            ImdbMetadata(
-                "1234567",
-                "Movie Title",
-                2021,
-                "10.0",
-            ),
-        )
+        val movie = addMovie(body.imdbUrl)
+        return movieConverter.convertToResponse(movie)
     }
 
     @GET
