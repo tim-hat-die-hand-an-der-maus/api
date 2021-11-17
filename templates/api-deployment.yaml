@@ -28,7 +28,11 @@ spec:
           livenessProbe:
             httpGet:
               port: 8080
-              path: /health
+              path: /q/health/live
+          readinessProbe:
+            httpGet:
+              port: 8080
+              path: /q/health/ready
           resources:
             limits:
               cpu: 100m

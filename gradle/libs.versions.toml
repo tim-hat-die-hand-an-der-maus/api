@@ -11,7 +11,14 @@ quarkus-junit = { module = "io.quarkus:quarkus-junit5", version.ref = "quarkus" 
 quarkus-kotlin = { module = "io.quarkus:quarkus-kotlin", version.ref = "quarkus" }
 quarkus-resteasy-core = { module = "io.quarkus:quarkus-resteasy", version.ref = "quarkus" }
 quarkus-resteasy-jackson = { module = "io.quarkus:quarkus-resteasy-jackson", version.ref = "quarkus" }
+quarkus-smallrye-health = { module = "io.quarkus:quarkus-smallrye-health", version.ref = "quarkus" }
 quarkus-smallrye-openapi = { module = "io.quarkus:quarkus-smallrye-openapi", version.ref = "quarkus" }
+
+[bundles]
+smallrye = [
+    "quarkus-smallrye-health",
+    "quarkus-smallrye-openapi",
+]
 
 [plugins]
 quarkus = { id = "io.quarkus", version.ref = "quarkus" }

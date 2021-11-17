@@ -29,7 +29,7 @@ dependencies {
     implementation(libs.quarkus.jackson)
     implementation(libs.quarkus.resteasy.core)
     implementation(libs.quarkus.resteasy.jackson)
-    implementation(libs.quarkus.smallrye.openapi)
+    implementation(libs.bundles.smallrye)
     implementation(libs.jackson.kotlin)
 
     testImplementation(libs.quarkus.junit)
