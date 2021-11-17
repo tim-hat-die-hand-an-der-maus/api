@@ -1,3 +1,5 @@
+// ktlint-disable filename
+
 package consulting.timhatdiehandandermaus.infrastructure.repository
 
 import consulting.timhatdiehandandermaus.application.exception.DuplicateMovieException
