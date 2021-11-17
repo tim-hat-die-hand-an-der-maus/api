@@ -9,6 +9,7 @@ import consulting.timhatdiehandandermaus.application.repository.MovieInsertDtoCo
 import consulting.timhatdiehandandermaus.application.repository.MovieRepository
 import consulting.timhatdiehandandermaus.domain.model.Movie
 import consulting.timhatdiehandandermaus.domain.model.MovieMetadata
+import consulting.timhatdiehandandermaus.domain.model.MovieStatus
 import java.util.UUID
 import javax.enterprise.context.ApplicationScoped
 import javax.inject.Inject
@@ -34,6 +35,12 @@ class MemoryMovieRepository @Inject constructor(
     override fun updateMetadata(id: UUID, metadata: MovieMetadata) {
         val movie = db[id] ?: throw MovieNotFoundException("Movie with ID $id not found")
         movie.metadata = metadata
+    }
+
+    @Throws(MovieNotFoundException::class)
+    override fun updateStatus(id: UUID, status: MovieStatus) {
+        val movie = db[id] ?: throw MovieNotFoundException("Movie with ID $id not found")
+        movie.status = status
     }
 
     override fun find(id: UUID): Movie? {

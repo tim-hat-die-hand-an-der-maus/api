@@ -4,6 +4,9 @@ import consulting.timhatdiehandandermaus.application.exception.DuplicateMovieExc
 import consulting.timhatdiehandandermaus.application.exception.MovieNotFoundException
 import consulting.timhatdiehandandermaus.application.repository.MovieRepository
 import consulting.timhatdiehandandermaus.application.usecase.AddMovie
+import consulting.timhatdiehandandermaus.iface.api.model.MoviePostRequest
+import consulting.timhatdiehandandermaus.iface.api.model.MovieResponse
+import consulting.timhatdiehandandermaus.iface.api.model.MovieResponseConverter
 import java.util.UUID
 import javax.inject.Inject
 import javax.ws.rs.GET
@@ -16,7 +19,7 @@ import javax.ws.rs.core.Response
 
 @Path("/movie")
 class MovieResource @Inject constructor(
-    private val movieConverter: MovieConverter,
+    private val movieConverter: MovieResponseConverter,
     private val addMovie: AddMovie,
     private val movieRepo: MovieRepository,
 ) {

@@ -21,7 +21,11 @@ interface MovieInsertDtoConverter {
 interface MovieRepository {
     @Throws(DuplicateMovieException::class)
     fun insert(movie: MovieInsertDto): UUID
+
     @Throws(MovieNotFoundException::class)
     fun updateMetadata(id: UUID, metadata: MovieMetadata)
+
+    @Throws(MovieNotFoundException::class)
+    fun updateStatus(id: UUID, status: MovieStatus)
     fun find(id: UUID): Movie?
 }
