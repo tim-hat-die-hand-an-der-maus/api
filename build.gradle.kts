@@ -42,6 +42,7 @@ dependencies {
     implementation(libs.quarkus.kotlin)
     implementation(libs.quarkus.jackson)
     implementation(libs.jackson.kotlin)
+    implementation(libs.quarkus.sentry)
 
     implementation(libs.quarkus.restclient.core)
     implementation(libs.quarkus.restclient.jackson)
