@@ -1,5 +1,5 @@
 [versions]
-kotlin = "1.5.31"
+kotlin = "1.6.0"
 ktlint = "0.43.0"
 ktor = "1.6.5"
 quarkus = "2.4.2.Final"
