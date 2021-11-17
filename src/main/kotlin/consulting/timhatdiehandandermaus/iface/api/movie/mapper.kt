@@ -1,3 +1,5 @@
+// ktlint-disable filename
+
 package consulting.timhatdiehandandermaus.iface.api.movie
 
 import consulting.timhatdiehandandermaus.domain.model.Movie
