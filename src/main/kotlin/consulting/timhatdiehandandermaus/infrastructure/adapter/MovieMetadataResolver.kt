@@ -9,8 +9,8 @@ import javax.enterprise.context.RequestScoped
 import javax.inject.Inject
 import javax.ws.rs.POST
 
-private data class ImdbRequest(val imdbUrl: String)
-private data class ImdbResponse(
+data class ImdbRequest(val imdbUrl: String)
+data class ImdbResponse(
     val id: String,
     val title: String,
     val year: Int,
@@ -18,18 +18,18 @@ private data class ImdbResponse(
 )
 
 @RegisterRestClient(configKey = "imdb-api")
-private interface ImdbService {
+interface ImdbService {
     @POST
     fun resolveMetadata(request: ImdbRequest): ImdbResponse
 }
 
 @Mapper
-private interface ResponseConverter {
+interface ResponseConverter {
     fun toModel(response: ImdbResponse): MovieMetadata
 }
 
 @RequestScoped
-class ImdbMovieMetadataResolver @Inject private constructor(
+class ImdbMovieMetadataResolver @Inject constructor(
     @RestClient
     private val service: ImdbService,
     private val converter: ResponseConverter,
