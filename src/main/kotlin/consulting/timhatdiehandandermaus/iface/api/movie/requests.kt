@@ -2,7 +2,6 @@
 
 package consulting.timhatdiehandandermaus.iface.api.movie
 
-import io.quarkus.runtime.annotations.RegisterForReflection
+import com.fasterxml.jackson.annotation.JsonCreator
 
-@RegisterForReflection
-data class MoviePostRequest(val imdbUrl: String)
+data class MoviePostRequest @JsonCreator constructor(val imdbUrl: String)
