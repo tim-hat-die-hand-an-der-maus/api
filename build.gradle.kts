@@ -15,7 +15,7 @@ version = "0.1.0"
 tasks {
     withType<KotlinCompile> {
         kotlinOptions {
-            jvmTarget = "17"
+            jvmTarget = "11"
             javaParameters = true
             freeCompilerArgs = listOf(
                 "-Xjvm-default=all",
@@ -81,7 +81,7 @@ spotless {
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
+        languageVersion.set(JavaLanguageVersion.of(11))
     }
 }
 
