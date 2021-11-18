@@ -15,7 +15,6 @@ mapstruct-processor = { module = "org.mapstruct:mapstruct-processor", version.re
 quarkus-jackson = { module = "io.quarkus:quarkus-jackson", version.ref = "quarkus" }
 quarkus-junit = { module = "io.quarkus:quarkus-junit5", version.ref = "quarkus" }
 quarkus-kotlin = { module = "io.quarkus:quarkus-kotlin", version.ref = "quarkus" }
-quarkus-picocli = { module = "io.quarkus:quarkus-picocli", version.ref = "quarkus" }
 quarkus-sentry = { module = "io.quarkus:quarkus-logging-sentry", version.ref = "quarkus" }
 
 quarkus-db-agroal = { module = "io.quarkus:quarkus-agroal", version.ref = "quarkus" }
