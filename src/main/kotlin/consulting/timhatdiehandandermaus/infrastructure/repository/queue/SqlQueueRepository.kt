@@ -7,7 +7,7 @@ import consulting.timhatdiehandandermaus.application.repository.QueueRepository
 import io.quarkus.hibernate.orm.panache.kotlin.PanacheRepositoryBase
 import io.quarkus.panache.common.Sort
 import java.util.UUID
-import javax.enterprise.context.RequestScoped
+import javax.enterprise.context.ApplicationScoped
 import javax.inject.Inject
 import javax.persistence.Column
 import javax.persistence.Entity
@@ -16,7 +16,7 @@ import javax.persistence.Id
 import javax.persistence.Table
 import javax.transaction.Transactional
 
-@RequestScoped
+@ApplicationScoped
 class SqlQueueRepository @Inject constructor(
     private val movieRepo: MovieRepository,
 ) : QueueRepository, PanacheRepositoryBase<QueueItemEntity, UUID> {
