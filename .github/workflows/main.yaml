@@ -6,6 +6,15 @@ jobs:
     name: Test and Lint
     runs-on: ubuntu-latest
     container: openjdk:11-jdk
+    services:
+      postgres:
+        image: postgres:14-alpine
+        env:
+          POSTGRES_DB: tim
+          POSTGRES_USER: tim
+          POSTGRES_PASSWORD: pw
+    env:
+      QUARKUS_DATASOURCE_JDBC_URL: "jdbc:postgresql://postgres:5432/tim"
     steps:
       - name: Check out repo
         uses: actions/checkout@v2

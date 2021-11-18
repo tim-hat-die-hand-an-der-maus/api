@@ -5,6 +5,8 @@ mapstruct = "1.4.2.Final"
 quarkus = "2.5.0.Final"
 
 [libraries]
+flyway-junit = { module = "com.radcortez.flyway:flyway-junit5-extension", version = "1.2.0" }
+
 jackson-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
 
 mapstruct-runtime = { module = "org.mapstruct:mapstruct", version.ref = "mapstruct" }
@@ -14,6 +16,12 @@ quarkus-jackson = { module = "io.quarkus:quarkus-jackson", version.ref = "quarku
 quarkus-junit = { module = "io.quarkus:quarkus-junit5", version.ref = "quarkus" }
 quarkus-kotlin = { module = "io.quarkus:quarkus-kotlin", version.ref = "quarkus" }
 quarkus-sentry = { module = "io.quarkus:quarkus-logging-sentry", version.ref = "quarkus" }
+
+quarkus-db-agroal = { module = "io.quarkus:quarkus-agroal", version.ref = "quarkus" }
+quarkus-db-flyway = { module = "io.quarkus:quarkus-flyway", version.ref = "quarkus" }
+quarkus-db-hibernate = { module = "io.quarkus:quarkus-hibernate-orm", version.ref = "quarkus" }
+quarkus-db-jdbc-postgres = { module = "io.quarkus:quarkus-jdbc-postgresql", version.ref = "quarkus" }
+quarkus-db-panache = { module = "io.quarkus:quarkus-hibernate-orm-panache-kotlin", version.ref = "quarkus" }
 
 quarkus-restclient-core = { module = "io.quarkus:quarkus-rest-client", version.ref = "quarkus" }
 quarkus-restclient-jackson = { module = "io.quarkus:quarkus-rest-client-jackson", version.ref = "quarkus" }
@@ -25,6 +33,13 @@ quarkus-smallrye-health = { module = "io.quarkus:quarkus-smallrye-health", versi
 quarkus-smallrye-openapi = { module = "io.quarkus:quarkus-smallrye-openapi", version.ref = "quarkus" }
 
 [bundles]
+db = [
+    "quarkus-db-agroal",
+    "quarkus-db-flyway",
+    "quarkus-db-hibernate",
+    "quarkus-db-jdbc-postgres",
+    "quarkus-db-panache",
+]
 smallrye = [
     "quarkus-smallrye-health",
     "quarkus-smallrye-openapi",

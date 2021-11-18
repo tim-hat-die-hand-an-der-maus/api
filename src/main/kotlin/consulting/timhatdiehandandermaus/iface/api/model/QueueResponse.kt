@@ -15,6 +15,7 @@ data class QueueItemResponse(
 
 @Mapper(uses = [UuidMapper::class])
 interface QueueResponseConverter {
+    @Mapping(target = "copy", ignore = true)
     @Mapping(source = "movieId", target = "id")
     fun convertToResponse(queue: QueueItemDto): QueueItemResponse
 }

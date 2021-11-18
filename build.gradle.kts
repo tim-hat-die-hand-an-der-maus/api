@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.spotless)
     kotlin("jvm") version libs.versions.kotlin
     kotlin("kapt") version libs.versions.kotlin
+    kotlin("plugin.jpa") version libs.versions.kotlin
     alias(libs.plugins.quarkus)
     kotlin("plugin.allopen") version libs.versions.kotlin
 }
@@ -44,6 +45,8 @@ dependencies {
     implementation(libs.jackson.kotlin)
     implementation(libs.quarkus.sentry)
 
+    implementation(libs.bundles.db)
+
     implementation(libs.quarkus.restclient.core)
     implementation(libs.quarkus.restclient.jackson)
 
@@ -53,11 +56,14 @@ dependencies {
     implementation(libs.bundles.smallrye)
 
     testImplementation(libs.quarkus.junit)
+    testImplementation(libs.flyway.junit)
 }
 
 allOpen {
-    annotation("javax.ws.rs.Path")
     annotation("javax.enterprise.context.ApplicationScoped")
+    annotation("javax.persistence.Embeddable")
+    annotation("javax.persistence.Entity")
+    annotation("javax.ws.rs.Path")
     annotation("io.quarkus.test.junit.QuarkusTest")
 }
 
