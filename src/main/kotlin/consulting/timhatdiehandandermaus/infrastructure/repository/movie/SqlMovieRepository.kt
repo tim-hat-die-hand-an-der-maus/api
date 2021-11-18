@@ -95,4 +95,6 @@ class MovieMetadataEntity(
     var title: String,
     var year: Int,
     var rating: String,
+    @Column(name = "cover_url")
+    var coverUrl: String?,
 )

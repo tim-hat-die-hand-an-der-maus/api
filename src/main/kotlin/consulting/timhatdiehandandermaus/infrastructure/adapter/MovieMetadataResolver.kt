@@ -15,6 +15,7 @@ data class ImdbResponse(
     val title: String,
     val year: Int,
     val rating: Float,
+    val coverUrl: String,
 )
 
 @RegisterRestClient(configKey = "imdb-api")
