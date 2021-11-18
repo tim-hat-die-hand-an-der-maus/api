@@ -42,6 +42,7 @@ class ImdbMovieMetadataResolver @Inject constructor(
     }
 
     override fun resolveImdbById(imdbId: String): MovieMetadata {
-        TODO("Not yet implemented")
+        val imdbUrl = "https://imdb.com/tt$imdbId/"
+        return resolveImdb(imdbUrl)
     }
 }
