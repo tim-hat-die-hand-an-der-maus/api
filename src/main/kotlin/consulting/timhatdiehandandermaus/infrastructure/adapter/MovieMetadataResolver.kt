@@ -40,4 +40,8 @@ class ImdbMovieMetadataResolver @Inject constructor(
         val response = service.resolveMetadata(ImdbRequest(imdbUrl))
         return converter.toModel(response)
     }
+
+    override fun resolveImdbById(imdbId: String): MovieMetadata {
+        TODO("Not yet implemented")
+    }
 }

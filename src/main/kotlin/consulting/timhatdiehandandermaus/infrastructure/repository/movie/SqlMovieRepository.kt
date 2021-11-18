@@ -11,7 +11,7 @@ import io.quarkus.hibernate.orm.panache.kotlin.PanacheRepositoryBase
 import org.mapstruct.Mapper
 import org.mapstruct.Mapping
 import java.util.UUID
-import javax.enterprise.context.ApplicationScoped
+import javax.enterprise.context.RequestScoped
 import javax.inject.Inject
 import javax.persistence.Column
 import javax.persistence.Embeddable
@@ -24,10 +24,11 @@ import javax.persistence.Id
 import javax.persistence.Table
 import javax.transaction.Transactional
 
-@ApplicationScoped
+@RequestScoped
 class SqlMovieRepository @Inject constructor(
-    private val mapper: MovieEntityMapper
+    private val mapper: MovieEntityMapper,
 ) : MovieRepository, PanacheRepositoryBase<MovieEntity, UUID> {
+
     @Transactional
     @Throws(DuplicateMovieException::class)
     override fun insert(movie: MovieInsertDto): UUID {
@@ -61,6 +62,10 @@ class SqlMovieRepository @Inject constructor(
 
     override fun find(id: UUID): Movie? {
         return findById(id)?.let(mapper::toModel)
+    }
+
+    override fun findWithoutCoverUrl(): List<Movie> {
+        return find("cover_url is NULL").list().map { mapper.toModel(it) }
     }
 }
 

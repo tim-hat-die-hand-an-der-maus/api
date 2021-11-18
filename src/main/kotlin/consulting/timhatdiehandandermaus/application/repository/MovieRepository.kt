@@ -28,4 +28,6 @@ interface MovieRepository {
     @Throws(MovieNotFoundException::class)
     fun updateStatus(id: UUID, status: MovieStatus)
     fun find(id: UUID): Movie?
+
+    fun findWithoutCoverUrl(): List<Movie>
 }
