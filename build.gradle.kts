@@ -63,6 +63,7 @@ dependencies {
 allOpen {
     annotation("io.quarkus.picocli.runtime.annotations.TopCommand")
     annotation("io.quarkus.test.junit.QuarkusTest")
+    annotation("javax.enterprise.context.RequestScoped")
     annotation("javax.enterprise.context.ApplicationScoped")
     annotation("javax.persistence.Embeddable")
     annotation("javax.persistence.Entity")
