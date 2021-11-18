@@ -41,6 +41,8 @@ spec:
               memory: 64Mi
           envFrom:
             - configMapRef:
+                name: api-db-config
+            - configMapRef:
                 name: api-service-config
             - secretRef:
                 name: api-secrets

@@ -15,10 +15,17 @@ kind: ConfigMap
 metadata:
   name: postgres-config
 data:
-  POSTGRES_DB: tim
-  POSTGRES_HOSTNAME: tim-postgres
-  POSTGRES_USER: tim
+  POSTGRES_DB: {{ .Values.postgres.db }}
+  POSTGRES_HOSTNAME: {{ .Values.postgres.host }}
+  POSTGRES_USER: {{ .Values.postgres.user }}
   PGDATA: /data/pg
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: postgres-secrets
+data:
+  POSTGRES_PASSWORD: {{ .Values.postgres.password }}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -54,14 +61,14 @@ spec:
               name: data
           envFrom:
             - secretRef:
-                name: api-secrets
+                name: postgres-secrets
             - configMapRef:
                 name: postgres-config
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: postgres
+  name: {{ .Values.postgres.host }}
 spec:
   ports:
     - name: psql

@@ -1,0 +1,8 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: api-db-config
+data:
+  POSTGRES_USER: {{ .Values.postgres.user }}
+  POSTGRES_DB: {{ .Values.postgres.db }}
+  POSTGRES_HOST: {{ .Values.postgres.host }}
