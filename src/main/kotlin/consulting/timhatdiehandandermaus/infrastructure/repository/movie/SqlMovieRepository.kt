@@ -11,7 +11,7 @@ import io.quarkus.hibernate.orm.panache.kotlin.PanacheRepositoryBase
 import org.mapstruct.Mapper
 import org.mapstruct.Mapping
 import java.util.UUID
-import javax.enterprise.context.ApplicationScoped
+import javax.enterprise.context.RequestScoped
 import javax.inject.Inject
 import javax.persistence.Column
 import javax.persistence.Embeddable
@@ -24,7 +24,7 @@ import javax.persistence.Id
 import javax.persistence.Table
 import javax.transaction.Transactional
 
-@ApplicationScoped
+@RequestScoped
 class SqlMovieRepository @Inject constructor(
     private val mapper: MovieEntityMapper,
 ) : MovieRepository, PanacheRepositoryBase<MovieEntity, UUID> {
