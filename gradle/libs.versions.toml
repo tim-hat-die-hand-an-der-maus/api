@@ -2,7 +2,7 @@
 kotlin = "1.6.0"
 ktlint = "0.43.0"
 mapstruct = "1.4.2.Final"
-quarkus = "2.5.0.Final"
+quarkus = "2.4.2.Final"
 
 [libraries]
 flyway-junit = { module = "com.radcortez.flyway:flyway-junit5-extension", version = "1.2.0" }
