@@ -5,6 +5,7 @@ import io.quarkus.runtime.Quarkus
 import io.quarkus.runtime.QuarkusApplication
 import io.quarkus.runtime.annotations.QuarkusMain
 import org.jboss.logging.Logger
+import javax.enterprise.context.control.ActivateRequestContext
 import javax.inject.Inject
 
 @QuarkusMain
@@ -12,6 +13,7 @@ class Main @Inject constructor(
     private val log: Logger,
     private val findMissingCovers: FindMissingCovers,
 ) : QuarkusApplication {
+
     override fun run(vararg args: String): Int {
         if (args.isEmpty()) {
             Quarkus.waitForExit()
@@ -19,11 +21,16 @@ class Main @Inject constructor(
         }
 
         if (args[0] == "find-missing-covers") {
-            findMissingCovers()
-            return 0
+            return runFindMissingCovers()
         }
 
         log.error("Unrecognized args: ${args.contentToString()}")
         return 1
+    }
+
+    @ActivateRequestContext
+    private fun runFindMissingCovers(): Int {
+        findMissingCovers()
+        return 0
     }
 }
