@@ -23,6 +23,7 @@ import javax.persistence.GeneratedValue
 import javax.persistence.Id
 import javax.persistence.Table
 import javax.transaction.Transactional
+import kotlin.streams.asSequence
 
 @RequestScoped
 class SqlMovieRepository @Inject constructor(
@@ -66,6 +67,11 @@ class SqlMovieRepository @Inject constructor(
 
     override fun findWithoutCoverUrl(): List<Movie> {
         return find("cover_url is NULL").list().map { mapper.toModel(it) }
+    }
+
+    @Transactional
+    override fun getAll(): Sequence<Movie> {
+        return streamAll().asSequence().map(mapper::toModel)
     }
 }
 

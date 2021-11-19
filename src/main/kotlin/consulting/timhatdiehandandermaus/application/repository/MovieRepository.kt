@@ -30,4 +30,6 @@ interface MovieRepository {
     fun find(id: UUID): Movie?
 
     fun findWithoutCoverUrl(): List<Movie>
+
+    fun getAll(): Sequence<Movie>
 }
