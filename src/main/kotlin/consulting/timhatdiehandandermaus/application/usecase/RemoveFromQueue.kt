@@ -15,9 +15,12 @@ class RemoveFromQueue @Inject constructor(
     private val queueRepo: QueueRepository,
 ) {
     @Throws(MovieNotFoundException::class)
-    operator fun invoke(movieId: UUID): Movie {
+    operator fun invoke(movieId: UUID, status: MovieStatus): Movie {
+        if (status !in listOf(MovieStatus.Deleted, MovieStatus.Watched)) {
+            throw IllegalArgumentException()
+        }
         queueRepo.delete(movieId)
-        movieRepo.updateStatus(movieId, MovieStatus.Deleted)
+        movieRepo.updateStatus(movieId, status)
         return movieRepo.find(movieId) ?: throw MovieNotFoundException()
     }
 }
