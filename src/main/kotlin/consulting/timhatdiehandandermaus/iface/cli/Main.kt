@@ -29,7 +29,7 @@ class Main @Inject constructor(
     }
 
     @ActivateRequestContext
-    private fun runFindMissingCovers(): Int {
+    fun runFindMissingCovers(): Int {
         findMissingCovers()
         return 0
     }
