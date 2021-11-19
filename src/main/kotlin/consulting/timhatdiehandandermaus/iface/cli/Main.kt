@@ -18,7 +18,9 @@ enum class Command {
     ;
 
     override fun toString(): String {
-        return name.replaceFirstChar { it.lowercaseChar() }.replace(Regex("[A-Z]")) { "-$it" }
+        return name
+            .replaceFirstChar { it.lowercaseChar() }
+            .replace(Regex("[A-Z]")) { "-${it.value.lowercase()}" }
     }
 
     companion object {
