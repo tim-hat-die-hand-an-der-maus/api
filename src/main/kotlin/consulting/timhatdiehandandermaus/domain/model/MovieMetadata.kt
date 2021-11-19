@@ -5,5 +5,5 @@ data class MovieMetadata(
     val title: String,
     val year: Int,
     val rating: String,
-    val coverUrl: String?,
+    val coverUrl: String,
 )

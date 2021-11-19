@@ -1,19 +1,16 @@
 package consulting.timhatdiehandandermaus.iface.cli
 
-import consulting.timhatdiehandandermaus.application.usecase.FindMissingCovers
 import consulting.timhatdiehandandermaus.application.usecase.UpdateMetadata
 import io.quarkus.runtime.Quarkus
 import io.quarkus.runtime.QuarkusApplication
 import io.quarkus.runtime.annotations.QuarkusMain
 import kotlinx.cli.ArgParser
 import kotlinx.cli.ArgType
-import org.jboss.logging.Logger
 import javax.enterprise.context.control.ActivateRequestContext
 import javax.inject.Inject
 
 enum class Command {
     RunApi,
-    FindMissingCovers,
     UpdateMetadata,
     ;
 
@@ -32,8 +29,6 @@ enum class Command {
 
 @QuarkusMain
 class Main @Inject constructor(
-    private val log: Logger,
-    private val findMissingCovers: FindMissingCovers,
     private val updateMetadata: UpdateMetadata,
 ) : QuarkusApplication {
 
@@ -50,15 +45,11 @@ class Main @Inject constructor(
 
         when (command) {
             Command.RunApi -> Quarkus.waitForExit()
-            Command.FindMissingCovers -> runFindMissingCovers()
             Command.UpdateMetadata -> runUpdateMetadata()
         }
 
         return 0
     }
-
-    @ActivateRequestContext
-    fun runFindMissingCovers() = findMissingCovers()
 
     @ActivateRequestContext
     fun runUpdateMetadata() = updateMetadata()
