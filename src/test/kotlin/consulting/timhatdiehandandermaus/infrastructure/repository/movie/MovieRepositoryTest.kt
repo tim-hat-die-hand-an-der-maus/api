@@ -6,6 +6,7 @@ import consulting.timhatdiehandandermaus.application.exception.DuplicateMovieExc
 import consulting.timhatdiehandandermaus.application.repository.MovieInsertDto
 import consulting.timhatdiehandandermaus.application.repository.MovieRepository
 import consulting.timhatdiehandandermaus.domain.model.DummyDataResolver
+import consulting.timhatdiehandandermaus.domain.model.Movie
 import consulting.timhatdiehandandermaus.domain.model.MovieMetadata
 import consulting.timhatdiehandandermaus.domain.model.MovieStatus
 import consulting.timhatdiehandandermaus.infrastructure.repository.QuarkusDataSourceProvider
@@ -70,7 +71,7 @@ class MovieRepositoryTest {
     }
 
     @Test
-    fun testGetAll(
+    fun testForEachMovie(
         metadata1: MovieMetadata,
         metadata2: MovieMetadata,
         metadata3: MovieMetadata,
@@ -78,7 +79,8 @@ class MovieRepositoryTest {
         val metadata = setOf(metadata1, metadata2, metadata3)
         val ids = metadata.map { repo.insert(MovieInsertDto(MovieStatus.Queued, it)) }.toSet()
 
-        val all = repo.getAll().toSet()
+        val all: MutableSet<Movie> = mutableSetOf()
+        repo.forEachMovie { all.add(it) }
         assertEquals(ids, all.map { it.id }.toSet())
         assertEquals(metadata, all.map { it.metadata }.toSet())
     }

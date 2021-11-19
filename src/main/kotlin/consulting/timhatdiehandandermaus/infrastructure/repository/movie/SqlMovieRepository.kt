@@ -23,7 +23,6 @@ import javax.persistence.GeneratedValue
 import javax.persistence.Id
 import javax.persistence.Table
 import javax.transaction.Transactional
-import kotlin.streams.asSequence
 
 @RequestScoped
 class SqlMovieRepository @Inject constructor(
@@ -70,8 +69,8 @@ class SqlMovieRepository @Inject constructor(
     }
 
     @Transactional
-    override fun getAll(): Sequence<Movie> {
-        return streamAll().asSequence().map(mapper::toModel)
+    override fun forEachMovie(action: (Movie) -> Unit) {
+        streamAll().map(mapper::toModel).forEach(action)
     }
 }
 

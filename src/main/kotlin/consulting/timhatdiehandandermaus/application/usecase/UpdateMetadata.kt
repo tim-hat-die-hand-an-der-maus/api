@@ -15,9 +15,7 @@ class UpdateMetadata @Inject constructor(
     operator fun invoke() {
         log.info("Updating metadata for all movies")
 
-        val movies = movieRepo.getAll()
-
-        for (movie in movies) {
+        movieRepo.forEachMovie { movie ->
             log.info("Resolving metadata for ${movie.metadata.title} (${movie.id})")
             val newMetadata = metadataResolver.resolveImdbById(movie.metadata.id)
             if (newMetadata != movie.metadata) {

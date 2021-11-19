@@ -31,5 +31,5 @@ interface MovieRepository {
 
     fun findWithoutCoverUrl(): List<Movie>
 
-    fun getAll(): Sequence<Movie>
+    fun forEachMovie(action: (Movie) -> Unit)
 }
