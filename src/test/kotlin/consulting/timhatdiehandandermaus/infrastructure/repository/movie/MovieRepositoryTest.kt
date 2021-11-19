@@ -68,4 +68,18 @@ class MovieRepositoryTest {
         assertNotNull(persisted)
         assertEquals(persisted!!.metadata, newMetadata)
     }
+
+    @Test
+    fun testGetAll(
+        metadata1: MovieMetadata,
+        metadata2: MovieMetadata,
+        metadata3: MovieMetadata,
+    ) {
+        val metadata = setOf(metadata1, metadata2, metadata3)
+        val ids = metadata.map { repo.insert(MovieInsertDto(MovieStatus.Queued, it)) }.toSet()
+
+        val all = repo.getAll().toSet()
+        assertEquals(ids, all.map { it.id }.toSet())
+        assertEquals(metadata, all.map { it.metadata }.toSet())
+    }
 }

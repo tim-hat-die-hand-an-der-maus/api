@@ -37,6 +37,8 @@ dependencies {
 
     implementation(enforcedPlatform("io.quarkus:quarkus-bom:${libs.versions.quarkus.get()}"))
 
+    implementation(libs.cli)
+
     implementation(libs.mapstruct.runtime)
     kapt(libs.mapstruct.processor)
 

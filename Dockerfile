@@ -18,3 +18,4 @@ ARG build
 ENV BUILD=$build
 
 ENTRYPOINT [ "./application", "-Xmx128M"]
+CMD [ "run-api" ]

@@ -1,36 +1,63 @@
 package consulting.timhatdiehandandermaus.iface.cli
 
 import consulting.timhatdiehandandermaus.application.usecase.FindMissingCovers
+import consulting.timhatdiehandandermaus.application.usecase.UpdateMetadata
 import io.quarkus.runtime.Quarkus
 import io.quarkus.runtime.QuarkusApplication
 import io.quarkus.runtime.annotations.QuarkusMain
+import kotlinx.cli.ArgParser
+import kotlinx.cli.ArgType
 import org.jboss.logging.Logger
 import javax.enterprise.context.control.ActivateRequestContext
 import javax.inject.Inject
+
+enum class Command {
+    RunApi,
+    FindMissingCovers,
+    UpdateMetadata,
+    ;
+
+    override fun toString(): String {
+        return name.replaceFirstChar { it.lowercaseChar() }.replace(Regex("[A-Z]")) { "-$it" }
+    }
+
+    companion object {
+        fun ofString(s: String): Command {
+            return values().first { it.toString() == s }
+        }
+    }
+}
 
 @QuarkusMain
 class Main @Inject constructor(
     private val log: Logger,
     private val findMissingCovers: FindMissingCovers,
+    private val updateMetadata: UpdateMetadata,
 ) : QuarkusApplication {
 
-    override fun run(vararg args: String): Int {
-        if (args.isEmpty()) {
-            Quarkus.waitForExit()
-            return 0
+    override fun run(args: Array<String>): Int {
+        val parser = ArgParser("application")
+        val command: Command by parser.argument(
+            ArgType.Choice(
+                toString = { it.toString() },
+                toVariant = { Command.ofString(it) },
+            )
+        )
+
+        parser.parse(args)
+
+        when (command) {
+            Command.RunApi -> Quarkus.waitForExit()
+            Command.FindMissingCovers -> runFindMissingCovers()
+            Command.UpdateMetadata -> runUpdateMetadata()
         }
 
-        if (args[0] == "find-missing-covers") {
-            return runFindMissingCovers()
-        }
-
-        log.error("Unrecognized args: ${args.contentToString()}")
-        return 1
+        return 0
     }
 
     @ActivateRequestContext
-    fun runFindMissingCovers(): Int {
-        findMissingCovers()
-        return 0
-    }
+    fun runFindMissingCovers() = findMissingCovers()
+
+    @ActivateRequestContext
+    fun runUpdateMetadata() = updateMetadata()
 }
