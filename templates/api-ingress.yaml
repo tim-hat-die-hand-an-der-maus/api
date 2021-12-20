@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: api
+  annotations:
+    kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: letsencrypt-issuer
+    cert-manager.io/issue-temporary-certificate: "false"
+spec:
+  rules:
+    - host: api.timhatdiehandandermaus.consulting
+      http:
+        paths:
+          - backend:
+              service:
+                name: api
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
+  tls:
+    - hosts:
+        - api.timhatdiehandandermaus.consulting
+      secretName: tls-api
