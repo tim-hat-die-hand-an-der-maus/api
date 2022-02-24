@@ -6,7 +6,7 @@ metadata:
   labels:
     app: backend
 spec:
-  replicas: 1
+  replicas: 3
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -37,7 +37,7 @@ spec:
             limits:
               cpu: 100m
             requests:
-              cpu: 50m
+              cpu: 30m
               memory: 64Mi
           envFrom:
             - configMapRef:
