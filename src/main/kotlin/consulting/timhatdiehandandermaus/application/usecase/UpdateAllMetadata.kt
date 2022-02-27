@@ -7,7 +7,7 @@ import javax.enterprise.context.RequestScoped
 import javax.inject.Inject
 
 @RequestScoped
-class UpdateMetadata @Inject constructor(
+class UpdateAllMetadata @Inject constructor(
     private val log: Logger,
     private val metadataResolver: MovieMetadataResolver,
     private val movieRepo: MovieRepository,

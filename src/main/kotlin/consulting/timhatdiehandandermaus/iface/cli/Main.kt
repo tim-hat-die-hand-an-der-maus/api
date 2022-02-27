@@ -1,6 +1,6 @@
 package consulting.timhatdiehandandermaus.iface.cli
 
-import consulting.timhatdiehandandermaus.application.usecase.UpdateMetadata
+import consulting.timhatdiehandandermaus.application.usecase.UpdateAllMetadata
 import io.quarkus.runtime.Quarkus
 import io.quarkus.runtime.QuarkusApplication
 import io.quarkus.runtime.annotations.QuarkusMain
@@ -29,7 +29,7 @@ enum class Command {
 
 @QuarkusMain
 class Main @Inject constructor(
-    private val updateMetadata: UpdateMetadata,
+    private val updateAllMetadata: UpdateAllMetadata,
 ) : QuarkusApplication {
 
     override fun run(args: Array<String>): Int {
@@ -52,5 +52,5 @@ class Main @Inject constructor(
     }
 
     @ActivateRequestContext
-    fun runUpdateMetadata() = updateMetadata()
+    fun runUpdateMetadata() = updateAllMetadata()
 }
