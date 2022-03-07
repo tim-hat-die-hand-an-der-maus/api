@@ -1,0 +1,4 @@
+ALTER TABLE movie
+    ADD cover_ratio FLOAT8 NOT NULL DEFAULT 1;
+ALTER TABLE movie
+    ALTER COLUMN cover_ratio DROP DEFAULT;

@@ -4,6 +4,7 @@ import consulting.timhatdiehandandermaus.application.exception.DuplicateMovieExc
 import consulting.timhatdiehandandermaus.application.exception.MovieNotFoundException
 import consulting.timhatdiehandandermaus.application.repository.MovieInsertDto
 import consulting.timhatdiehandandermaus.application.repository.MovieRepository
+import consulting.timhatdiehandandermaus.domain.model.CoverMetadata
 import consulting.timhatdiehandandermaus.domain.model.Movie
 import consulting.timhatdiehandandermaus.domain.model.MovieMetadata
 import consulting.timhatdiehandandermaus.domain.model.MovieStatus
@@ -64,10 +65,6 @@ class SqlMovieRepository @Inject constructor(
         return findById(id)?.let(mapper::toModel)
     }
 
-    override fun findWithoutCoverUrl(): List<Movie> {
-        return find("cover_url is NULL").list().map { mapper.toModel(it) }
-    }
-
     @Transactional
     override fun forEachMovie(action: (Movie) -> Unit) {
         streamAll().map(mapper::toModel).forEach(action)
@@ -80,6 +77,7 @@ interface MovieEntityMapper {
     fun toEntity(movie: MovieInsertDto): MovieEntity
 
     fun toEntity(movieMetadata: MovieMetadata): MovieMetadataEntity
+    fun toEntity(coverMetadata: CoverMetadata): CoverMetadataEntity
 
     fun toModel(movieEntity: MovieEntity): Movie
 }
@@ -105,6 +103,14 @@ class MovieMetadataEntity(
     var title: String,
     var year: Int,
     var rating: String,
+    @Embedded
+    var cover: CoverMetadataEntity,
+)
+
+@Embeddable
+class CoverMetadataEntity(
     @Column(name = "cover_url")
-    var coverUrl: String,
+    var url: String,
+    @Column(name = "cover_ratio")
+    var ratio: Double,
 )
