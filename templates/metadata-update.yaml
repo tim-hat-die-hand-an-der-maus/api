@@ -1,0 +1,39 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: metadata-update
+  labels:
+    app: metadata-update
+spec:
+  schedule: "* * * * *"
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 3
+  startingDeadlineSeconds: 1200
+  suspend: true
+  jobTemplate:
+    metadata:
+      labels:
+        app: metadata-update
+    spec:
+      template:
+        spec:
+          containers:
+            - name: app
+              image: {{ .Values.image }}
+              args:
+                - update-metadata
+              resources:
+                limits:
+                  cpu: 100m
+                requests:
+                  cpu: 50m
+                  memory: 128Mi
+              envFrom:
+                - configMapRef:
+                    name: api-db-config
+                - configMapRef:
+                    name: api-service-config
+                - secretRef:
+                    name: api-secrets
