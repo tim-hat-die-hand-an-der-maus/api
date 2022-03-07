@@ -1,10 +1,15 @@
 package consulting.timhatdiehandandermaus.domain.model
 
+data class CoverMetadata(
+    val url: String,
+    val ratio: Double,
+)
+
 data class MovieMetadata(
     /** IMDb ID */
     val id: String,
     val title: String,
     val year: Int,
     val rating: String,
-    val coverUrl: String,
+    val cover: CoverMetadata,
 )

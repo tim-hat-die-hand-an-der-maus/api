@@ -29,7 +29,5 @@ interface MovieRepository {
     fun updateStatus(id: UUID, status: MovieStatus)
     fun find(id: UUID): Movie?
 
-    fun findWithoutCoverUrl(): List<Movie>
-
     fun forEachMovie(action: (Movie) -> Unit)
 }

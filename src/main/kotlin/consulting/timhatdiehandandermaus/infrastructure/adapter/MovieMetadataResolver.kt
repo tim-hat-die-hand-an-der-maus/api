@@ -10,12 +10,17 @@ import javax.inject.Inject
 import javax.ws.rs.POST
 
 data class ImdbRequest(val imdbUrl: String)
+data class CoverResponse(
+    val url: String,
+    val ratio: Double,
+)
+
 data class ImdbResponse(
     val id: String,
     val title: String,
     val year: Int,
-    val rating: Float,
-    val coverUrl: String,
+    val rating: String,
+    val cover: CoverResponse,
 )
 
 @RegisterRestClient(configKey = "imdb-api")

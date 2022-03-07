@@ -37,6 +37,9 @@ class DummyDataResolver : ParameterResolver {
         title = "test-title-$name",
         year = Random.nextInt(1900, 3000),
         rating = String.format("%.1f", Random.nextFloat()),
-        coverUrl = "https://m.media-amazon.com/images/M/MV5BMTkxMjYyNzgwMl5BMl5BanBnXkFtZTgwMTE3MjYyMTE@._V1_.jpg",
+        cover = CoverMetadata(
+            url = "https://m.media-amazon.com/images/M/MV5BMTkxMjYyNzgwMl5BMl5BanBnXkFtZTgwMTE3MjYyMTE@._V1_.jpg",
+            ratio = 0.5,
+        ),
     )
 }
