@@ -9,6 +9,7 @@ import consulting.timhatdiehandandermaus.domain.model.Movie
 import consulting.timhatdiehandandermaus.domain.model.MovieMetadata
 import consulting.timhatdiehandandermaus.domain.model.MovieStatus
 import io.quarkus.hibernate.orm.panache.kotlin.PanacheRepositoryBase
+import io.quarkus.narayana.jta.runtime.TransactionConfiguration
 import org.mapstruct.Mapper
 import org.mapstruct.Mapping
 import java.util.UUID
@@ -66,6 +67,7 @@ class SqlMovieRepository @Inject constructor(
     }
 
     @Transactional
+    @TransactionConfiguration(timeout = 3600)
     override fun forEachMovie(action: (Movie) -> Unit) {
         streamAll().map(mapper::toModel).forEach(action)
     }
