@@ -5,11 +5,13 @@ import consulting.timhatdiehandandermaus.application.exception.MovieNotFoundExce
 import consulting.timhatdiehandandermaus.application.repository.MovieRepository
 import consulting.timhatdiehandandermaus.application.usecase.AddMovie
 import consulting.timhatdiehandandermaus.application.usecase.RefreshMetadata
+import consulting.timhatdiehandandermaus.iface.api.model.MovieMetadataField
 import consulting.timhatdiehandandermaus.iface.api.model.MovieMetadataFieldConverter
 import consulting.timhatdiehandandermaus.iface.api.model.MovieMetadataPatchRequest
 import consulting.timhatdiehandandermaus.iface.api.model.MoviePostRequest
 import consulting.timhatdiehandandermaus.iface.api.model.MovieResponse
 import consulting.timhatdiehandandermaus.iface.api.model.MovieResponseConverter
+import org.jboss.logging.Logger
 import java.util.UUID
 import javax.inject.Inject
 import javax.ws.rs.GET
@@ -23,6 +25,7 @@ import javax.ws.rs.core.Response
 
 @Path("/movie")
 class MovieResource @Inject constructor(
+    private val log: Logger,
     private val movieConverter: MovieResponseConverter,
     private val addMovie: AddMovie,
     private val refreshMetadata: RefreshMetadata,
@@ -65,7 +68,12 @@ class MovieResource @Inject constructor(
             throw NotFoundException()
         }
 
-        val fields = body.refresh.map(movieMetadataFieldConverter::toDomain)
+        val fields = body.refresh.map {
+            if (it == MovieMetadataField.coverUrl) {
+                log.warn { "Got request with deprecated coverUrl field" }
+            }
+            movieMetadataFieldConverter.toDomain(it)
+        }
         refreshMetadata(uid, fields)
     }
 }

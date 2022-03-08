@@ -36,7 +36,7 @@ private typealias DomainMovieMetadataField = consulting.timhatdiehandandermaus.d
 @Mapper
 interface MovieMetadataFieldConverter {
     @ValueMapping(source = "cover", target = "Cover")
-    @ValueMapping(source = "coverUrl", target = "CoverUrl")
+    @ValueMapping(source = "coverUrl", target = "Cover")
     @ValueMapping(source = "rating", target = "Rating")
     fun toDomain(
         movieMetadataField: MovieMetadataField,
