@@ -2,9 +2,9 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: metadata-update
+  name: full-metadata-update
   labels:
-    app: metadata-update
+    app: full-metadata-update
 spec:
   schedule: "* * * * *"
   concurrencyPolicy: Forbid
@@ -15,7 +15,7 @@ spec:
   jobTemplate:
     metadata:
       labels:
-        app: metadata-update
+        app: full-metadata-update
     spec:
       template:
         spec:
