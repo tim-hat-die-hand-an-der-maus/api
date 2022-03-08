@@ -16,6 +16,7 @@ enum class MovieDeleteStatus {
 
 @Suppress("EnumEntryName")
 enum class MovieMetadataField {
+    cover,
     coverUrl,
     rating,
     ;
