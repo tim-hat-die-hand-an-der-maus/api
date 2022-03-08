@@ -32,12 +32,9 @@ interface MovieRequestConverter {
 
 private typealias DomainMovieMetadataField = consulting.timhatdiehandandermaus.domain.value.MovieMetadataField
 
-fun t() {
-    "".replaceFirstChar { it.uppercaseChar() }
-}
-
 @Mapper
 interface MovieMetadataFieldConverter {
+    @ValueMapping(source = "cover", target = "Cover")
     @ValueMapping(source = "coverUrl", target = "CoverUrl")
     @ValueMapping(source = "rating", target = "Rating")
     fun toDomain(
