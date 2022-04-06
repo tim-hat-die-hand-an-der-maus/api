@@ -49,4 +49,4 @@ smallrye = [
 
 [plugins]
 quarkus = { id = "io.quarkus", version.ref = "quarkus" }
-spotless = { id = "com.diffplug.spotless", version = "6.4.0" }
+spotless = { id = "com.diffplug.spotless", version = "6.4.2" }
