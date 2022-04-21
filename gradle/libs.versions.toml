@@ -2,7 +2,7 @@
 kotlin = "1.6.0"
 ktlint = "0.43.0"
 mapstruct = "1.4.2.Final"
-quarkus = "2.8.0.Final"
+quarkus = "2.8.1.Final"
 
 [libraries]
 cli = { module = "org.jetbrains.kotlinx:kotlinx-cli", version = "0.3.4" }
