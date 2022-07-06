@@ -1,6 +1,6 @@
 [versions]
 kotlin = "1.6.0"
-ktlint = "0.43.0"
+ktlint = "0.46.1"
 mapstruct = "1.5.2.Final"
 quarkus = "2.10.1.Final"
 
