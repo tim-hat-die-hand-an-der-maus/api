@@ -1,4 +1,4 @@
-FROM quay.io/quarkus/ubi-quarkus-native-image:22.2-java11 as build
+FROM quay.io/quarkus/ubi-quarkus-native-image:22.1-java11 as build
 
 COPY --chown=quarkus:quarkus . /code/
 
