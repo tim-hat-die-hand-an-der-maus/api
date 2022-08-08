@@ -8,7 +8,7 @@ jobs:
   check:
     name: Test and Lint
     runs-on: ubuntu-latest
-    container: openjdk:11-jdk
+    container: openjdk:20-jdk
     services:
       postgres:
         image: postgres:14-alpine
