@@ -72,12 +72,12 @@ allOpen {
 
 spotless {
     kotlin {
-        ktlint(libs.versions.ktlint.get())
+        ktlint()
         lineEndings = LineEnding.UNIX
         endWithNewline()
     }
     kotlinGradle {
-        ktlint(libs.versions.ktlint.get())
+        ktlint()
         lineEndings = LineEnding.UNIX
         endWithNewline()
     }
