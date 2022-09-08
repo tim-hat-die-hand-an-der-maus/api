@@ -1,8 +1,12 @@
 FROM quay.io/quarkus/ubi-quarkus-native-image:22.1-java11 as build
 
-COPY --chown=quarkus:quarkus . /code/
+USER root
+
+RUN microdnf install findutils && microdnf clean all
 
 USER quarkus
+
+COPY --chown=quarkus:quarkus . /code/
 
 WORKDIR /code
 
