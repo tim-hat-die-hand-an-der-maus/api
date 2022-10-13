@@ -19,8 +19,6 @@ jobs:
     env:
       QUARKUS_DATASOURCE_JDBC_URL: "jdbc:postgresql://postgres:5432/tim"
     steps:
-      - name: Install xargs
-        run: apt-get install -y findutils
       - name: Check out repo
         uses: actions/checkout@v3
       - name: Run checks
