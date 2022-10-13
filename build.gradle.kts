@@ -7,6 +7,7 @@ plugins {
     kotlin("kapt") version libs.versions.kotlin
     kotlin("plugin.jpa") version libs.versions.kotlin
     alias(libs.plugins.quarkus)
+    alias(libs.plugins.versions)
     kotlin("plugin.allopen") version libs.versions.kotlin
 }
 
