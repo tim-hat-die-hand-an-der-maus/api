@@ -1,4 +1,4 @@
-FROM quay.io/quarkus/ubi-quarkus-native-image:22.2-java17 as build
+FROM quay.io/quarkus/ubi-quarkus-native-image:22.2-java11 as build
 
 USER root
 
