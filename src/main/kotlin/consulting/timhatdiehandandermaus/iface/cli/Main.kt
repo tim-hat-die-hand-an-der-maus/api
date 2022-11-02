@@ -38,7 +38,7 @@ class Main @Inject constructor(
             ArgType.Choice(
                 toString = { it.toString() },
                 toVariant = { Command.ofString(it) },
-            )
+            ),
         )
 
         parser.parse(args)

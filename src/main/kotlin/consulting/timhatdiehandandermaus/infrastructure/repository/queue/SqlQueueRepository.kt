@@ -58,5 +58,5 @@ class QueueItemEntity(
     @Column(name = "movie_id")
     var movieId: UUID,
     @Column(nullable = false)
-    var index: Int
+    var index: Int,
 )
