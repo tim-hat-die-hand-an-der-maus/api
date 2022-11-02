@@ -14,7 +14,7 @@ enum class MovieDeleteStatus {
     Watched,
 }
 
-@Suppress("EnumEntryName")
+@Suppress("EnumEntryName", "ktlint:enum-entry-name-case")
 enum class MovieMetadataField {
     cover,
     coverUrl,
