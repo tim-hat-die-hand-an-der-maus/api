@@ -74,11 +74,23 @@ allOpen {
 spotless {
     kotlin {
         ktlint()
+            .editorConfigOverride(
+                mapOf(
+                    "ij_kotlin_allow_trailing_comma" to "true",
+                    "ij_kotlin_allow_trailing_comma_on_call_site" to "true",
+                ),
+            )
         lineEndings = LineEnding.UNIX
         endWithNewline()
     }
     kotlinGradle {
         ktlint()
+            .editorConfigOverride(
+                mapOf(
+                    "ij_kotlin_allow_trailing_comma" to "true",
+                    "ij_kotlin_allow_trailing_comma_on_call_site" to "true",
+                ),
+            )
         lineEndings = LineEnding.UNIX
         endWithNewline()
     }
