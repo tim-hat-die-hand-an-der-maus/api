@@ -16,4 +16,6 @@ interface QueueRepository {
 
     @Throws(MovieNotFoundException::class)
     fun delete(movieId: UUID)
+
+    fun updateOrder(movieIds: List<UUID>)
 }

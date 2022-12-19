@@ -49,6 +49,15 @@ class SqlQueueRepository @Inject constructor(
             throw MovieNotFoundException()
         }
     }
+
+    @Transactional
+    override fun updateOrder(movieIds: List<UUID>) {
+        movieIds.forEachIndexed { index, id ->
+            val entity = findById(id) ?: throw MovieNotFoundException()
+            entity.index = index
+            persist(entity)
+        }
+    }
 }
 
 @Entity

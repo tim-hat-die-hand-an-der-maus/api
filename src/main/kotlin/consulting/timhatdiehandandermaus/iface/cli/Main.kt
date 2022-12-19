@@ -1,5 +1,6 @@
 package consulting.timhatdiehandandermaus.iface.cli
 
+import consulting.timhatdiehandandermaus.application.usecase.ShuffleQueue
 import consulting.timhatdiehandandermaus.application.usecase.UpdateAllMetadata
 import io.quarkus.runtime.Quarkus
 import io.quarkus.runtime.QuarkusApplication
@@ -11,6 +12,7 @@ import javax.inject.Inject
 
 enum class Command {
     RunApi,
+    ShuffleQueue,
     UpdateMetadata,
     ;
 
@@ -29,6 +31,7 @@ enum class Command {
 
 @QuarkusMain
 class Main @Inject constructor(
+    private val shuffleQueue: ShuffleQueue,
     private val updateAllMetadata: UpdateAllMetadata,
 ) : QuarkusApplication {
 
@@ -45,6 +48,7 @@ class Main @Inject constructor(
 
         when (command) {
             Command.RunApi -> Quarkus.waitForExit()
+            Command.ShuffleQueue -> runShuffleQueue()
             Command.UpdateMetadata -> runUpdateMetadata()
         }
 
@@ -53,4 +57,7 @@ class Main @Inject constructor(
 
     @ActivateRequestContext
     fun runUpdateMetadata() = updateAllMetadata()
+
+    @ActivateRequestContext
+    fun runShuffleQueue() = shuffleQueue()
 }
