@@ -1,0 +1,32 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: shuffle-queue
+spec:
+  schedule: "0 6 * * 1"
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 3
+  startingDeadlineSeconds: 1200
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: app
+              image: {{ .Values.image }}
+              args:
+                - shuffle-queue
+              resources:
+                limits:
+                  cpu: 100m
+                requests:
+                  cpu: 100m
+                  memory: 128Mi
+              envFrom:
+                - configMapRef:
+                    name: api-db-config
+                - secretRef:
+                    name: api-secrets
