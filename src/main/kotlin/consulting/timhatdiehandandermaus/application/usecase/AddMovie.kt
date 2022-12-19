@@ -33,6 +33,7 @@ class AddMovie @Inject constructor(
         } catch (e: DuplicateMovieException) {
             log.debug("Movie already exists in database, refreshing metadata")
             movieRepo.updateMetadata(e.id, metadata)
+            movieRepo.updateStatus(e.id, MovieStatus.Queued)
             e.id
         }
         queueRepo.insert(id)
