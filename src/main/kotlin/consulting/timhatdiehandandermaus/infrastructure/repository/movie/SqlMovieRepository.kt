@@ -38,7 +38,7 @@ class SqlMovieRepository @Inject constructor(
 
         val existing = find("imdb_id", movie.metadata.id).firstResult()
         if (existing != null) {
-            throw DuplicateMovieException()
+            throw DuplicateMovieException(existing.id!!)
         }
 
         persist(entity)
