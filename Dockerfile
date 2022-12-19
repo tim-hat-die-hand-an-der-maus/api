@@ -19,7 +19,7 @@ RUN chmod 755 /app
 EXPOSE 8080
 
 ARG build
-ENV BUILD=$build
+ENV QUARKUS_LOG_SENTRY_RELEASE=$build
 
 ENTRYPOINT [ "./application", "-Xmx128M"]
 CMD [ "run-api" ]
