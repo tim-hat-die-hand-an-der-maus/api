@@ -1,5 +1,4 @@
 [versions]
-kotlin = "1.7.20"
 mapstruct = "1.5.3.Final"
 quarkus = "2.15.0.Final"
 

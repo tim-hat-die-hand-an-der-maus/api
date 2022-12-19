@@ -3,12 +3,12 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     alias(libs.plugins.spotless)
-    kotlin("jvm") version libs.versions.kotlin
-    kotlin("kapt") version libs.versions.kotlin
-    kotlin("plugin.jpa") version libs.versions.kotlin
+    kotlin("jvm") version "1.7.20"
+    kotlin("kapt") version "1.7.20"
+    kotlin("plugin.jpa") version "1.7.20"
     alias(libs.plugins.quarkus)
     alias(libs.plugins.versions)
-    kotlin("plugin.allopen") version libs.versions.kotlin
+    kotlin("plugin.allopen") version "1.7.20"
 }
 
 group = "consulting.timhatdiehandandermaus"
@@ -34,7 +34,7 @@ kapt {
 }
 
 dependencies {
-    implementation(kotlin("stdlib-jdk8", version = libs.versions.kotlin.get()))
+    implementation(kotlin("stdlib-jdk8"))
 
     implementation(enforcedPlatform("io.quarkus:quarkus-bom:${libs.versions.quarkus.get()}"))
 
