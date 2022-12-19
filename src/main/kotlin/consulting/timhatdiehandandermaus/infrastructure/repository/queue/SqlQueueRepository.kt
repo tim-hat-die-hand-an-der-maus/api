@@ -15,6 +15,7 @@ import javax.persistence.EntityExistsException
 import javax.persistence.Id
 import javax.persistence.Table
 import javax.transaction.Transactional
+import javax.validation.ConstraintViolationException
 
 @RequestScoped
 class SqlQueueRepository @Inject constructor(
@@ -33,6 +34,9 @@ class SqlQueueRepository @Inject constructor(
             persist(QueueItemEntity(movieId, nextIndex))
         } catch (e: EntityExistsException) {
             // It's okay!
+            return
+        } catch (e: ConstraintViolationException) {
+            // Duplicate in DB, but not in session.
             return
         }
     }
