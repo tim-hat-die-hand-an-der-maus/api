@@ -2,6 +2,7 @@ package consulting.timhatdiehandandermaus.infrastructure.repository.queue
 
 import com.radcortez.flyway.test.annotation.DataSource
 import com.radcortez.flyway.test.annotation.FlywayTest
+import consulting.timhatdiehandandermaus.application.exception.DuplicateMovieException
 import consulting.timhatdiehandandermaus.application.exception.MovieNotFoundException
 import consulting.timhatdiehandandermaus.application.repository.MovieInsertDto
 import consulting.timhatdiehandandermaus.application.repository.MovieRepository
@@ -50,7 +51,7 @@ class QueueRepositoryTest {
         val id = movieRepo.insert(MovieInsertDto(MovieStatus.Queued, metadata))
 
         repo.insert(id)
-        assertDoesNotThrow {
+        assertThrows<DuplicateMovieException> {
             repo.insert(id)
         }
 

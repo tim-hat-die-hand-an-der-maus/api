@@ -1,5 +1,6 @@
 package consulting.timhatdiehandandermaus.application.repository
 
+import consulting.timhatdiehandandermaus.application.exception.DuplicateMovieException
 import consulting.timhatdiehandandermaus.application.exception.MovieNotFoundException
 import java.util.UUID
 
@@ -9,7 +10,7 @@ data class QueueItemDto(
 )
 
 interface QueueRepository {
-    @Throws(MovieNotFoundException::class)
+    @Throws(DuplicateMovieException::class, MovieNotFoundException::class)
     fun insert(movieId: UUID)
 
     fun list(): List<QueueItemDto>
