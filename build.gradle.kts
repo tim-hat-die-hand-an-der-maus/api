@@ -3,12 +3,12 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     alias(libs.plugins.spotless)
-    kotlin("jvm") version "1.7.22"
-    kotlin("kapt") version "1.7.22"
-    kotlin("plugin.jpa") version "1.7.22"
+    kotlin("jvm") version "1.8.0"
+    kotlin("kapt") version "1.8.0"
+    kotlin("plugin.jpa") version "1.8.0"
     alias(libs.plugins.quarkus)
     alias(libs.plugins.versions)
-    kotlin("plugin.allopen") version "1.7.22"
+    kotlin("plugin.allopen") version "1.8.0"
 }
 
 group = "consulting.timhatdiehandandermaus"
