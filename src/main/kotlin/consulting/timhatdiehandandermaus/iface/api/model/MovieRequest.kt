@@ -19,7 +19,6 @@ enum class MovieMetadataField {
     cover,
     coverUrl,
     rating,
-    ;
 }
 
 data class MovieMetadataPatchRequest @JsonCreator constructor(
