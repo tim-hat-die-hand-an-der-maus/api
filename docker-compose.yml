@@ -9,3 +9,5 @@ services:
       POSTGRES_PASSWORD: pw
     ports:
       - "5432:5432"
+    healthcheck:
+      test: pg_isready
