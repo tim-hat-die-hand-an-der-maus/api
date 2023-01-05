@@ -1,5 +1,4 @@
 import com.diffplug.spotless.LineEnding
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -17,13 +16,11 @@ version = "0.2.0"
 
 tasks {
     withType<KotlinCompile> {
-        compilerOptions {
-            javaParameters.set(true)
-            jvmTarget.set(JvmTarget.JVM_17)
-            freeCompilerArgs.set(
-                listOf(
-                    "-Xjvm-default=all",
-                ),
+        kotlinOptions {
+            jvmTarget = "17"
+            javaParameters = true
+            freeCompilerArgs = listOf(
+                "-Xjvm-default=all",
             )
         }
     }
