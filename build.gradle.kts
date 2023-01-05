@@ -6,7 +6,7 @@ plugins {
     alias(libs.plugins.quarkus)
     kotlin("jvm") version "1.7.21"
     kotlin("kapt") version "1.7.21"
-    kotlin("plugin.jpa") version "1.7.21"
+    kotlin("plugin.jpa") version "1.7.22"
     alias(libs.plugins.versions)
     kotlin("plugin.allopen") version "1.7.21"
 }
