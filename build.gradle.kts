@@ -8,7 +8,7 @@ plugins {
     kotlin("kapt") version "1.7.21"
     kotlin("plugin.jpa") version "1.7.21"
     alias(libs.plugins.versions)
-    kotlin("plugin.allopen") version "1.7.21"
+    kotlin("plugin.allopen") version "1.7.22"
 }
 
 group = "consulting.timhatdiehandandermaus"
