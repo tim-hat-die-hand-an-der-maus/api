@@ -20,7 +20,7 @@ class ListMovies @Inject constructor(
 
     operator fun invoke(query: String?, status: MovieStatus?): List<Movie> {
         val results = movieRepository.listMovies(status)
-        return if (query == null) {
+        return if (query.isNullOrBlank()) {
             results.toList()
         } else {
             rank(results, query)
