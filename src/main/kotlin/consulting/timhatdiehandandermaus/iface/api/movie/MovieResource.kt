@@ -69,9 +69,15 @@ class MovieResource @Inject constructor(
 
     @GET
     @Path("/")
-    @Operation(summary = "Query the list of known movies")
-    fun get(@QueryParam("status") status: MovieGetStatus): MoviesResponse {
-        val movies = listMovies(movieRequestConverter.toMovieStatus(status))
+    @Operation(
+        summary = "Query the list of known movies.",
+    )
+    fun get(
+        @QueryParam("q") query: String?,
+        @QueryParam("status") status: MovieGetStatus?,
+    ): MoviesResponse {
+        val domainStatus = status?.let(movieRequestConverter::toMovieStatus)
+        val movies = listMovies(query, domainStatus)
         return MoviesResponse(
             movies = movies.map(movieConverter::convertToResponse),
         )

@@ -72,8 +72,13 @@ class SqlMovieRepository @Inject constructor(
         streamAll().map(mapper::toModel).forEach(action)
     }
 
-    override fun listMovies(status: MovieStatus): Iterable<Movie> {
-        return list("status", status).map(mapper::toModel)
+    override fun listMovies(status: MovieStatus?): Iterable<Movie> {
+        val list = if (status == null) {
+            listAll()
+        } else {
+            list("status", status)
+        }
+        return list.map(mapper::toModel)
     }
 }
 

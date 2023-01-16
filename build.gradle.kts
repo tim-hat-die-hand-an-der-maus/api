@@ -58,6 +58,8 @@ dependencies {
 
     implementation(libs.bundles.smallrye)
 
+    implementation(libs.fuzzywuzzy)
+
     testImplementation(libs.quarkus.junit)
     testImplementation(libs.flyway.junit)
 }

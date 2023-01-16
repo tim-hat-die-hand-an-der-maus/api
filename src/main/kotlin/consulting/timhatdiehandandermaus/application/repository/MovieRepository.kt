@@ -31,5 +31,5 @@ interface MovieRepository {
 
     fun forEachMovie(action: (Movie) -> Unit)
 
-    fun listMovies(status: MovieStatus): Iterable<Movie>
+    fun listMovies(status: MovieStatus?): Iterable<Movie>
 }
