@@ -18,6 +18,10 @@ data class MovieResponse(
     val imdb: MovieMetadataResponse,
 )
 
+data class MoviesResponse(
+    val movies: List<MovieResponse>,
+)
+
 data class CoverMetadataResponse(
     val url: String,
     val ratio: Double,

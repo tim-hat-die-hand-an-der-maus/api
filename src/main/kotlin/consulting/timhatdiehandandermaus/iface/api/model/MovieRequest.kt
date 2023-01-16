@@ -14,6 +14,12 @@ enum class MovieDeleteStatus {
     Watched,
 }
 
+enum class MovieGetStatus {
+    Queued,
+    Deleted,
+    Watched,
+}
+
 @Suppress("EnumEntryName", "ktlint:enum-entry-name-case")
 enum class MovieMetadataField {
     cover,
@@ -28,6 +34,7 @@ data class MovieMetadataPatchRequest @JsonCreator constructor(
 @Mapper
 interface MovieRequestConverter {
     fun toMovieStatus(movieDeleteStatus: MovieDeleteStatus): MovieStatus
+    fun toMovieStatus(movieGetStatus: MovieGetStatus): MovieStatus
 }
 
 private typealias DomainMovieMetadataField = consulting.timhatdiehandandermaus.domain.value.MovieMetadataField

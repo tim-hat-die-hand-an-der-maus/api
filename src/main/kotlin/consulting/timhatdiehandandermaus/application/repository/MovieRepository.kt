@@ -30,4 +30,6 @@ interface MovieRepository {
     fun find(id: UUID): Movie?
 
     fun forEachMovie(action: (Movie) -> Unit)
+
+    fun listMovies(status: MovieStatus): Iterable<Movie>
 }

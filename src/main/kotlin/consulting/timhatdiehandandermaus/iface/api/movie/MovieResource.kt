@@ -4,13 +4,18 @@ import consulting.timhatdiehandandermaus.application.exception.DuplicateMovieExc
 import consulting.timhatdiehandandermaus.application.exception.MovieNotFoundException
 import consulting.timhatdiehandandermaus.application.repository.MovieRepository
 import consulting.timhatdiehandandermaus.application.usecase.AddMovie
+import consulting.timhatdiehandandermaus.application.usecase.ListMovies
 import consulting.timhatdiehandandermaus.application.usecase.RefreshMetadata
+import consulting.timhatdiehandandermaus.iface.api.model.MovieGetStatus
 import consulting.timhatdiehandandermaus.iface.api.model.MovieMetadataField
 import consulting.timhatdiehandandermaus.iface.api.model.MovieMetadataFieldConverter
 import consulting.timhatdiehandandermaus.iface.api.model.MovieMetadataPatchRequest
 import consulting.timhatdiehandandermaus.iface.api.model.MoviePostRequest
+import consulting.timhatdiehandandermaus.iface.api.model.MovieRequestConverter
 import consulting.timhatdiehandandermaus.iface.api.model.MovieResponse
 import consulting.timhatdiehandandermaus.iface.api.model.MovieResponseConverter
+import consulting.timhatdiehandandermaus.iface.api.model.MoviesResponse
+import org.eclipse.microprofile.openapi.annotations.Operation
 import org.jboss.logging.Logger
 import java.util.UUID
 import javax.inject.Inject
@@ -20,6 +25,7 @@ import javax.ws.rs.PATCH
 import javax.ws.rs.PUT
 import javax.ws.rs.Path
 import javax.ws.rs.PathParam
+import javax.ws.rs.QueryParam
 import javax.ws.rs.WebApplicationException
 import javax.ws.rs.core.Response
 
@@ -27,7 +33,9 @@ import javax.ws.rs.core.Response
 class MovieResource @Inject constructor(
     private val log: Logger,
     private val movieConverter: MovieResponseConverter,
+    private val movieRequestConverter: MovieRequestConverter,
     private val addMovie: AddMovie,
+    private val listMovies: ListMovies,
     private val refreshMetadata: RefreshMetadata,
     private val movieMetadataFieldConverter: MovieMetadataFieldConverter,
     private val movieRepo: MovieRepository,
@@ -46,6 +54,7 @@ class MovieResource @Inject constructor(
 
     @GET
     @Path("/{id}")
+    @Operation(summary = "Get a specific movie using its ID")
     fun get(@PathParam("id") id: String): MovieResponse {
         val uid = try {
             UUID.fromString(id)
@@ -56,6 +65,16 @@ class MovieResource @Inject constructor(
 
         val movie = movieRepo.find(uid) ?: throw NotFoundException("Not implemented ($uid)")
         return movieConverter.convertToResponse(movie)
+    }
+
+    @GET
+    @Path("/")
+    @Operation(summary = "Query the list of known movies")
+    fun get(@QueryParam("status") status: MovieGetStatus): MoviesResponse {
+        val movies = listMovies(movieRequestConverter.toMovieStatus(status))
+        return MoviesResponse(
+            movies = movies.map(movieConverter::convertToResponse),
+        )
     }
 
     @PATCH
