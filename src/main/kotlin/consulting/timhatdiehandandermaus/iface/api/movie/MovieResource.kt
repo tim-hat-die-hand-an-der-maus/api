@@ -95,7 +95,7 @@ class MovieResource @Inject constructor(
 
         val fields = body.refresh.map {
             if (it == MovieMetadataField.coverUrl) {
-                log.warn { "Got request with deprecated coverUrl field" }
+                log.warn("Got request with deprecated coverUrl field")
             }
             movieMetadataFieldConverter.toDomain(it)
         }
