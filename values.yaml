@@ -3,7 +3,7 @@ image: ghcr.io/tim-hat-die-hand-an-der-maus/api:${GITHUB_SHA}
 postgres:
   db: tim
   user: tim
-  host: postgres
+  host: tim-db
   password: ${POSTGRES_PASSWORD}
 
 sentry:
