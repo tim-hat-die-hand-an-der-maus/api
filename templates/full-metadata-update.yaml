@@ -38,3 +38,9 @@ spec:
                     name: api-service-config
                 - secretRef:
                     name: api-secrets
+              env:
+                - name: QUARKUS_DATASOURCE_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ .Values.postgres.user }}.{{ .Values.postgres.host }}.credentials.postgresql.acid.zalan.do
+                      key: password
