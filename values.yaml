@@ -4,7 +4,6 @@ postgres:
   db: tim
   user: tim
   host: tim-db
-  password: ${POSTGRES_PASSWORD}
 
 sentry:
   dsn: ${SENTRY_DSN}

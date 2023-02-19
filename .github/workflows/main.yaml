@@ -61,7 +61,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: docker_push
     env:
-      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
       SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
     steps:
       - name: Check out repo
