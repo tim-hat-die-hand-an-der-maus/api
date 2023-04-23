@@ -1,5 +1,5 @@
 [versions]
-mapstruct = "1.5.4.Final"
+mapstruct = "1.5.5.Final"
 quarkus = "2.16.6.Final"
 
 [libraries]
