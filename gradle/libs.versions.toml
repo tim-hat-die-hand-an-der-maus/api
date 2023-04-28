@@ -1,6 +1,6 @@
 [versions]
 mapstruct = "1.5.5.Final"
-quarkus = "2.16.7.Final"
+quarkus = "3.0.1.Final"
 
 [libraries]
 cli = { module = "org.jetbrains.kotlinx:kotlinx-cli", version = "0.3.5" }
