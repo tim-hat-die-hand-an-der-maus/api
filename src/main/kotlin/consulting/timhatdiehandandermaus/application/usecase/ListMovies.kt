@@ -3,9 +3,9 @@ package consulting.timhatdiehandandermaus.application.usecase
 import consulting.timhatdiehandandermaus.application.repository.MovieRepository
 import consulting.timhatdiehandandermaus.domain.model.Movie
 import consulting.timhatdiehandandermaus.domain.model.MovieStatus
+import jakarta.enterprise.context.RequestScoped
+import jakarta.inject.Inject
 import me.xdrop.fuzzywuzzy.FuzzySearch
-import javax.enterprise.context.RequestScoped
-import javax.inject.Inject
 
 @RequestScoped
 class ListMovies @Inject constructor(

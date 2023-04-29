@@ -15,19 +15,19 @@ import consulting.timhatdiehandandermaus.iface.api.model.MovieRequestConverter
 import consulting.timhatdiehandandermaus.iface.api.model.MovieResponse
 import consulting.timhatdiehandandermaus.iface.api.model.MovieResponseConverter
 import consulting.timhatdiehandandermaus.iface.api.model.MoviesResponse
+import jakarta.inject.Inject
+import jakarta.ws.rs.GET
+import jakarta.ws.rs.NotFoundException
+import jakarta.ws.rs.PATCH
+import jakarta.ws.rs.PUT
+import jakarta.ws.rs.Path
+import jakarta.ws.rs.PathParam
+import jakarta.ws.rs.QueryParam
+import jakarta.ws.rs.WebApplicationException
+import jakarta.ws.rs.core.Response
 import org.eclipse.microprofile.openapi.annotations.Operation
 import org.jboss.logging.Logger
 import java.util.UUID
-import javax.inject.Inject
-import javax.ws.rs.GET
-import javax.ws.rs.NotFoundException
-import javax.ws.rs.PATCH
-import javax.ws.rs.PUT
-import javax.ws.rs.Path
-import javax.ws.rs.PathParam
-import javax.ws.rs.QueryParam
-import javax.ws.rs.WebApplicationException
-import javax.ws.rs.core.Response
 
 @Path("/movie")
 class MovieResource @Inject constructor(

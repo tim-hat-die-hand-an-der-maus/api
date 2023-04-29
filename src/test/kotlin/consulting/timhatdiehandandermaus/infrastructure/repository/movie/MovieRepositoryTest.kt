@@ -11,12 +11,12 @@ import consulting.timhatdiehandandermaus.domain.model.MovieMetadata
 import consulting.timhatdiehandandermaus.domain.model.MovieStatus
 import consulting.timhatdiehandandermaus.infrastructure.repository.QuarkusDataSourceProvider
 import io.quarkus.test.junit.QuarkusTest
+import jakarta.inject.Inject
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
-import javax.inject.Inject
 
 @QuarkusTest
 @FlywayTest(DataSource(QuarkusDataSourceProvider::class))

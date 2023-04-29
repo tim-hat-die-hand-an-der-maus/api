@@ -9,15 +9,15 @@ import consulting.timhatdiehandandermaus.iface.api.model.MovieResponse
 import consulting.timhatdiehandandermaus.iface.api.model.MovieResponseConverter
 import consulting.timhatdiehandandermaus.iface.api.model.QueueResponse
 import consulting.timhatdiehandandermaus.iface.api.model.QueueResponseConverter
+import jakarta.inject.Inject
+import jakarta.ws.rs.DELETE
+import jakarta.ws.rs.DefaultValue
+import jakarta.ws.rs.GET
+import jakarta.ws.rs.NotFoundException
+import jakarta.ws.rs.Path
+import jakarta.ws.rs.PathParam
+import jakarta.ws.rs.QueryParam
 import java.util.UUID
-import javax.inject.Inject
-import javax.ws.rs.DELETE
-import javax.ws.rs.DefaultValue
-import javax.ws.rs.GET
-import javax.ws.rs.NotFoundException
-import javax.ws.rs.Path
-import javax.ws.rs.PathParam
-import javax.ws.rs.QueryParam
 
 @Path("/queue")
 class QueueResource @Inject constructor(

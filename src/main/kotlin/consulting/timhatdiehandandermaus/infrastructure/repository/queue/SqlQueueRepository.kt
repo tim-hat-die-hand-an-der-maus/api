@@ -7,15 +7,15 @@ import consulting.timhatdiehandandermaus.application.repository.QueueItemDto
 import consulting.timhatdiehandandermaus.application.repository.QueueRepository
 import io.quarkus.hibernate.orm.panache.kotlin.PanacheRepositoryBase
 import io.quarkus.panache.common.Sort
+import jakarta.enterprise.context.RequestScoped
+import jakarta.inject.Inject
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.EntityExistsException
+import jakarta.persistence.Id
+import jakarta.persistence.Table
+import jakarta.transaction.Transactional
 import java.util.UUID
-import javax.enterprise.context.RequestScoped
-import javax.inject.Inject
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.EntityExistsException
-import javax.persistence.Id
-import javax.persistence.Table
-import javax.transaction.Transactional
 
 @RequestScoped
 class SqlQueueRepository @Inject constructor(

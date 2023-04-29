@@ -5,9 +5,9 @@ import consulting.timhatdiehandandermaus.application.repository.MovieRepository
 import consulting.timhatdiehandandermaus.application.repository.QueueRepository
 import consulting.timhatdiehandandermaus.domain.model.Movie
 import consulting.timhatdiehandandermaus.domain.model.MovieStatus
+import jakarta.enterprise.context.RequestScoped
+import jakarta.inject.Inject
 import java.util.UUID
-import javax.enterprise.context.RequestScoped
-import javax.inject.Inject
 
 @RequestScoped
 class RemoveFromQueue @Inject constructor(

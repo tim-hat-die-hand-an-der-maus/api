@@ -10,21 +10,21 @@ import consulting.timhatdiehandandermaus.domain.model.MovieMetadata
 import consulting.timhatdiehandandermaus.domain.model.MovieStatus
 import io.quarkus.hibernate.orm.panache.kotlin.PanacheRepositoryBase
 import io.quarkus.narayana.jta.runtime.TransactionConfiguration
+import jakarta.enterprise.context.RequestScoped
+import jakarta.inject.Inject
+import jakarta.persistence.Column
+import jakarta.persistence.Embeddable
+import jakarta.persistence.Embedded
+import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.Id
+import jakarta.persistence.Table
+import jakarta.transaction.Transactional
 import org.mapstruct.Mapper
 import org.mapstruct.Mapping
 import java.util.UUID
-import javax.enterprise.context.RequestScoped
-import javax.inject.Inject
-import javax.persistence.Column
-import javax.persistence.Embeddable
-import javax.persistence.Embedded
-import javax.persistence.Entity
-import javax.persistence.EnumType
-import javax.persistence.Enumerated
-import javax.persistence.GeneratedValue
-import javax.persistence.Id
-import javax.persistence.Table
-import javax.transaction.Transactional
 
 @RequestScoped
 class SqlMovieRepository @Inject constructor(
@@ -36,7 +36,7 @@ class SqlMovieRepository @Inject constructor(
     override fun insert(movie: MovieInsertDto): UUID {
         val entity = mapper.toEntity(movie)
 
-        val existing = find("imdb_id", movie.metadata.id).firstResult()
+        val existing = find("metadata.id", movie.metadata.id).firstResult()
         if (existing != null) {
             throw DuplicateMovieException(existing.id!!)
         }
