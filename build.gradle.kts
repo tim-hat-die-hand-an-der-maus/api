@@ -46,7 +46,7 @@ dependencies {
     implementation(libs.jackson.kotlin)
     implementation(libs.quarkus.jackson)
     implementation(libs.quarkus.kotlin)
-    implementation(libs.quarkus.sentry)
+    // TODO: implementation(libs.quarkus.sentry)
 
     implementation(libs.bundles.db)
 
@@ -66,11 +66,11 @@ dependencies {
 
 allOpen {
     annotation("io.quarkus.test.junit.QuarkusTest")
-    annotation("javax.enterprise.context.RequestScoped")
-    annotation("javax.enterprise.context.ApplicationScoped")
-    annotation("javax.persistence.Embeddable")
-    annotation("javax.persistence.Entity")
-    annotation("javax.ws.rs.Path")
+    annotation("jakarta.enterprise.context.RequestScoped")
+    annotation("jakarta.enterprise.context.ApplicationScoped")
+    annotation("jakarta.persistence.Embeddable")
+    annotation("jakarta.persistence.Entity")
+    annotation("jakarta.ws.rs.Path")
 }
 
 spotless {

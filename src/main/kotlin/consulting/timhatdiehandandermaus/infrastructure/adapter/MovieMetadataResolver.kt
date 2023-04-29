@@ -2,12 +2,12 @@ package consulting.timhatdiehandandermaus.infrastructure.adapter
 
 import consulting.timhatdiehandandermaus.application.port.MovieMetadataResolver
 import consulting.timhatdiehandandermaus.domain.model.MovieMetadata
+import jakarta.enterprise.context.RequestScoped
+import jakarta.inject.Inject
+import jakarta.ws.rs.POST
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient
 import org.eclipse.microprofile.rest.client.inject.RestClient
 import org.mapstruct.Mapper
-import javax.enterprise.context.RequestScoped
-import javax.inject.Inject
-import javax.ws.rs.POST
 
 data class ImdbRequest(val imdbUrl: String)
 data class CoverResponse(

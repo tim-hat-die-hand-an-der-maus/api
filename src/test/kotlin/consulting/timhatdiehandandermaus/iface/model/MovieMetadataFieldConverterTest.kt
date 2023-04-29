@@ -3,10 +3,10 @@ package consulting.timhatdiehandandermaus.iface.model
 import consulting.timhatdiehandandermaus.iface.api.model.MovieMetadataField
 import consulting.timhatdiehandandermaus.iface.api.model.MovieMetadataFieldConverter
 import io.quarkus.test.junit.QuarkusTest
+import jakarta.inject.Inject
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
-import javax.inject.Inject
 
 @QuarkusTest
 class MovieMetadataFieldConverterTest {

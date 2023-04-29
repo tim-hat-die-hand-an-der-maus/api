@@ -8,10 +8,10 @@ import consulting.timhatdiehandandermaus.application.repository.MovieRepository
 import consulting.timhatdiehandandermaus.application.repository.QueueRepository
 import consulting.timhatdiehandandermaus.domain.model.Movie
 import consulting.timhatdiehandandermaus.domain.model.MovieStatus
+import jakarta.enterprise.context.RequestScoped
+import jakarta.inject.Inject
 import org.jboss.logging.Logger
 import java.util.UUID
-import javax.enterprise.context.RequestScoped
-import javax.inject.Inject
 
 private const val THAT_MOVIE_WITH_AN_AIRPLANE = "f388de4e-184e-4258-a0b5-10ad753c1ece"
 

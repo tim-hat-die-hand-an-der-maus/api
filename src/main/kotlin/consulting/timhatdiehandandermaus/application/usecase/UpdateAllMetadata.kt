@@ -2,9 +2,9 @@ package consulting.timhatdiehandandermaus.application.usecase
 
 import consulting.timhatdiehandandermaus.application.port.MovieMetadataResolver
 import consulting.timhatdiehandandermaus.application.repository.MovieRepository
+import jakarta.enterprise.context.RequestScoped
+import jakarta.inject.Inject
 import org.jboss.logging.Logger
-import javax.enterprise.context.RequestScoped
-import javax.inject.Inject
 
 @RequestScoped
 class UpdateAllMetadata @Inject constructor(

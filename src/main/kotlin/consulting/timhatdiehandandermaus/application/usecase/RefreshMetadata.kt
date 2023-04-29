@@ -3,11 +3,11 @@ package consulting.timhatdiehandandermaus.application.usecase
 import consulting.timhatdiehandandermaus.application.port.MovieMetadataResolver
 import consulting.timhatdiehandandermaus.application.repository.MovieRepository
 import consulting.timhatdiehandandermaus.domain.value.MovieMetadataField
+import jakarta.enterprise.context.RequestScoped
+import jakarta.inject.Inject
+import jakarta.ws.rs.NotFoundException
 import org.jboss.logging.Logger
 import java.util.UUID
-import javax.enterprise.context.RequestScoped
-import javax.inject.Inject
-import javax.ws.rs.NotFoundException
 
 @RequestScoped
 class RefreshMetadata @Inject constructor(

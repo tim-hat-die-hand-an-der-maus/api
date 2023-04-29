@@ -5,10 +5,10 @@ import consulting.timhatdiehandandermaus.application.usecase.UpdateAllMetadata
 import io.quarkus.runtime.Quarkus
 import io.quarkus.runtime.QuarkusApplication
 import io.quarkus.runtime.annotations.QuarkusMain
+import jakarta.enterprise.context.control.ActivateRequestContext
+import jakarta.inject.Inject
 import kotlinx.cli.ArgParser
 import kotlinx.cli.ArgType
-import javax.enterprise.context.control.ActivateRequestContext
-import javax.inject.Inject
 
 enum class Command {
     RunApi,
