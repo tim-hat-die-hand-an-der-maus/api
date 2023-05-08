@@ -46,7 +46,7 @@ dependencies {
     implementation(libs.jackson.kotlin)
     implementation(libs.quarkus.jackson)
     implementation(libs.quarkus.kotlin)
-    // TODO: implementation(libs.quarkus.sentry)
+    implementation(libs.quarkus.sentry)
 
     implementation(libs.bundles.db)
 
