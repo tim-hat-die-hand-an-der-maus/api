@@ -1,4 +1,5 @@
 {
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "github>tim-hat-die-hand-an-der-maus/renovate-config"
   ],
