@@ -68,7 +68,7 @@ class SqlQueueRepository @Inject constructor(
 
 @Entity
 @Table(name = "queue_item")
-@RegisterForReflection(targets = [UUID::class])
+@RegisterForReflection(targets = [Array<UUID>::class])
 class QueueItemEntity(
     @Id
     @Column(name = "movie_id")

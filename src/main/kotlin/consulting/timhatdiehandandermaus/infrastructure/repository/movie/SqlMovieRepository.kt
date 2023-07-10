@@ -96,7 +96,7 @@ interface MovieEntityMapper {
 
 @Entity
 @Table(name = "movie")
-@RegisterForReflection(targets = [UUID::class])
+@RegisterForReflection(targets = [Array<UUID>::class])
 class MovieEntity {
     @Id
     @GeneratedValue
