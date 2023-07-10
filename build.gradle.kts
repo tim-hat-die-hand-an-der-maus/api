@@ -71,6 +71,7 @@ allOpen {
     annotation("jakarta.persistence.Embeddable")
     annotation("jakarta.persistence.Entity")
     annotation("jakarta.ws.rs.Path")
+    annotation("java.util.UUID")
 }
 
 spotless {
