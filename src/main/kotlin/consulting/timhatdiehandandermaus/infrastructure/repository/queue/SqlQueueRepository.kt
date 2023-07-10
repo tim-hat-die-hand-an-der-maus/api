@@ -7,6 +7,7 @@ import consulting.timhatdiehandandermaus.application.repository.QueueItemDto
 import consulting.timhatdiehandandermaus.application.repository.QueueRepository
 import io.quarkus.hibernate.orm.panache.kotlin.PanacheRepositoryBase
 import io.quarkus.panache.common.Sort
+import io.quarkus.runtime.annotations.RegisterForReflection
 import jakarta.enterprise.context.RequestScoped
 import jakarta.inject.Inject
 import jakarta.persistence.Column
@@ -67,6 +68,7 @@ class SqlQueueRepository @Inject constructor(
 
 @Entity
 @Table(name = "queue_item")
+@RegisterForReflection(targets = [UUID::class])
 class QueueItemEntity(
     @Id
     @Column(name = "movie_id")

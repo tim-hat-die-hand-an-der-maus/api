@@ -10,6 +10,7 @@ import consulting.timhatdiehandandermaus.domain.model.MovieMetadata
 import consulting.timhatdiehandandermaus.domain.model.MovieStatus
 import io.quarkus.hibernate.orm.panache.kotlin.PanacheRepositoryBase
 import io.quarkus.narayana.jta.runtime.TransactionConfiguration
+import io.quarkus.runtime.annotations.RegisterForReflection
 import jakarta.enterprise.context.RequestScoped
 import jakarta.inject.Inject
 import jakarta.persistence.Column
@@ -95,6 +96,7 @@ interface MovieEntityMapper {
 
 @Entity
 @Table(name = "movie")
+@RegisterForReflection(targets = [UUID::class])
 class MovieEntity {
     @Id
     @GeneratedValue
