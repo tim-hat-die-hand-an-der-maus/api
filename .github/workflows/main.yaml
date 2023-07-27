@@ -25,7 +25,7 @@ jobs:
         run: ./gradlew check
 
   build-container-image:
-    name: Docker Build
+    name: Container Build
     runs-on: ubuntu-latest
     if: success() && github.event_name == 'pull_request'
     needs:
@@ -42,7 +42,7 @@ jobs:
           tags: "ghcr.io/${{ env.GITHUB_REPOSITORY_OWNER_PART_SLUG }}/${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG }}:${{ github.sha }}"
 
   push-container-image:
-    name: Docker Build and Push
+    name: Container Build and Push
     runs-on: ubuntu-latest
     if: success() && github.ref_name == github.event.repository.default_branch
     needs:
