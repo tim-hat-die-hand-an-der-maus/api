@@ -1,4 +1,6 @@
-// ktlint-disable filename
+
+
+@file:Suppress("ktlint:standard:filename")
 
 package consulting.timhatdiehandandermaus.iface.api.model
 
@@ -20,7 +22,7 @@ enum class MovieGetStatus {
     Watched,
 }
 
-@Suppress("EnumEntryName", "ktlint:enum-entry-name-case")
+@Suppress("EnumEntryName", "ktlint:standard:enum-entry-name-case")
 enum class MovieMetadataField {
     cover,
     coverUrl,
