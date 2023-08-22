@@ -9,6 +9,9 @@ import consulting.timhatdiehandandermaus.iface.api.model.MovieResponse
 import consulting.timhatdiehandandermaus.iface.api.model.MovieResponseConverter
 import consulting.timhatdiehandandermaus.iface.api.model.QueueResponse
 import consulting.timhatdiehandandermaus.iface.api.model.QueueResponseConverter
+import io.quarkus.security.Authenticated
+import jakarta.annotation.security.PermitAll
+import jakarta.enterprise.context.RequestScoped
 import jakarta.inject.Inject
 import jakarta.ws.rs.DELETE
 import jakarta.ws.rs.DefaultValue
@@ -20,6 +23,8 @@ import jakarta.ws.rs.QueryParam
 import java.util.UUID
 
 @Path("/queue")
+@RequestScoped
+@Authenticated
 class QueueResource @Inject constructor(
     private val removeFromQueue: RemoveFromQueue,
     private val queueRepository: QueueRepository,
@@ -28,6 +33,7 @@ class QueueResource @Inject constructor(
     private val movieResponseConverter: MovieResponseConverter,
 ) {
     @GET
+    @PermitAll
     fun list(): QueueResponse {
         val queueItems = queueRepository.list().map(queueResponseConverter::convertToResponse)
         return QueueResponse(queueItems)

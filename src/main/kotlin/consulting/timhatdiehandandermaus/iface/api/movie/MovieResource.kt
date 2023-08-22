@@ -15,6 +15,9 @@ import consulting.timhatdiehandandermaus.iface.api.model.MovieRequestConverter
 import consulting.timhatdiehandandermaus.iface.api.model.MovieResponse
 import consulting.timhatdiehandandermaus.iface.api.model.MovieResponseConverter
 import consulting.timhatdiehandandermaus.iface.api.model.MoviesResponse
+import io.quarkus.security.Authenticated
+import jakarta.annotation.security.PermitAll
+import jakarta.enterprise.context.RequestScoped
 import jakarta.inject.Inject
 import jakarta.ws.rs.GET
 import jakarta.ws.rs.NotFoundException
@@ -30,6 +33,8 @@ import org.jboss.logging.Logger
 import java.util.UUID
 
 @Path("/movie")
+@RequestScoped
+@Authenticated
 class MovieResource @Inject constructor(
     private val log: Logger,
     private val movieConverter: MovieResponseConverter,
@@ -40,6 +45,7 @@ class MovieResource @Inject constructor(
     private val movieMetadataFieldConverter: MovieMetadataFieldConverter,
     private val movieRepo: MovieRepository,
 ) {
+
     @PUT
     fun put(body: MoviePostRequest): MovieResponse {
         val movie = try {
@@ -54,6 +60,7 @@ class MovieResource @Inject constructor(
 
     @GET
     @Path("/{id}")
+    @PermitAll
     @Operation(summary = "Get a specific movie using its ID")
     fun get(@PathParam("id") id: String): MovieResponse {
         val uid = try {
@@ -69,6 +76,7 @@ class MovieResource @Inject constructor(
 
     @GET
     @Path("/")
+    @PermitAll
     @Operation(
         summary = "Query the list of known movies.",
     )
