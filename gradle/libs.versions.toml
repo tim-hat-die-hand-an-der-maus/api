@@ -3,7 +3,7 @@ mapstruct = "1.5.5.Final"
 quarkus = "3.3.1"
 
 [libraries]
-cli = { module = "org.jetbrains.kotlinx:kotlinx-cli", version = "0.3.5" }
+cli = { module = "org.jetbrains.kotlinx:kotlinx-cli", version = "0.3.6" }
 
 flyway-junit = { module = "com.radcortez.flyway:flyway-junit5-extension", version = "1.4.1" }
 
