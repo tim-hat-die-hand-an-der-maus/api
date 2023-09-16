@@ -5,7 +5,7 @@ volumes:
 
 services:
   postgres:
-    image: postgres:14-alpine
+    image: postgres:16-alpine
     environment:
       POSTGRES_DB: tim
       POSTGRES_USER: tim
