@@ -20,7 +20,7 @@ jobs:
       QUARKUS_DATASOURCE_JDBC_URL: "jdbc:postgresql://postgres:5432/tim"
     steps:
       - name: Check out repo
-        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4
+        uses: actions/checkout@v4
       - name: Run checks
         run: ./gradlew check
 
@@ -75,7 +75,7 @@ jobs:
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v4
       - name: Check out repo
-        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4
+        uses: actions/checkout@v4
       - name: Substitute environment variables in values.yaml
         env:
           IMAGE_NAME: "ghcr.io/${{ env.GITHUB_REPOSITORY_OWNER_PART_SLUG }}/${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG }}"
