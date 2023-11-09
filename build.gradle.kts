@@ -4,11 +4,11 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     alias(libs.plugins.spotless)
     alias(libs.plugins.quarkus)
-    kotlin("jvm") version "1.9.10"
-    kotlin("kapt") version "1.9.10"
-    kotlin("plugin.jpa") version "1.9.10"
+    kotlin("jvm") version "1.9.20"
+    kotlin("kapt") version "1.9.20"
+    kotlin("plugin.jpa") version "1.9.20"
     alias(libs.plugins.versions)
-    kotlin("plugin.allopen") version "1.9.10"
+    kotlin("plugin.allopen") version "1.9.20"
 }
 
 group = "consulting.timhatdiehandandermaus"
