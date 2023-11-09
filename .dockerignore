@@ -1,0 +1,7 @@
+**/*
+!gradle/
+!src/
+!*.kts
+!LICENSE
+!gradlew
+!gradlew.bat
