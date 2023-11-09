@@ -1,4 +1,4 @@
-FROM quay.io/quarkus/ubi-quarkus-mandrel-builder-image:jdk-17 AS build
+FROM quay.io/quarkus/ubi-quarkus-mandrel-builder-image:jdk-21 AS build
 
 USER root
 RUN microdnf install findutils && microdnf clean all

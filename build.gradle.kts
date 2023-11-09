@@ -12,11 +12,11 @@ plugins {
 }
 
 group = "consulting.timhatdiehandandermaus"
-version = "0.2.0"
+version = "0.3.0"
 
 kotlin {
     compilerOptions {
-        jvmTarget = JvmTarget.JVM_17
+        jvmTarget = JvmTarget.JVM_21
         javaParameters = true
         freeCompilerArgs = listOf(
             "-Xjvm-default=all",
@@ -103,7 +103,7 @@ spotless {
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
 
