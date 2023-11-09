@@ -12,7 +12,7 @@ WORKDIR /code
 
 RUN ./gradlew assemble -Dquarkus.package.type=native
 
-FROM registry.access.redhat.com/ubi8/ubi-minimal
+FROM quay.io/quarkus/quarkus-micro-image:2.0
 WORKDIR /app
 COPY --from=build /code/build/*-runner /app/application
 RUN chmod 755 /app
