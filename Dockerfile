@@ -1,9 +1,7 @@
-FROM quay.io/quarkus/ubi-quarkus-native-image:22.3-java17 AS build
+FROM quay.io/quarkus/ubi-quarkus-mandrel-builder-image:jdk-17 AS build
 
 USER root
-
 RUN microdnf install findutils && microdnf clean all
-
 USER quarkus
 
 COPY --chown=quarkus:quarkus . /code/
