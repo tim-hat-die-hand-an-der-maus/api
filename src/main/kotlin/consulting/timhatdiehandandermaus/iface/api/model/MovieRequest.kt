@@ -27,6 +27,7 @@ enum class MovieMetadataField {
     cover,
     coverUrl,
     rating,
+    title,
 }
 
 data class MovieMetadataPatchRequest @JsonCreator constructor(
@@ -46,6 +47,7 @@ interface MovieMetadataFieldConverter {
     @ValueMapping(source = "cover", target = "Cover")
     @ValueMapping(source = "coverUrl", target = "Cover")
     @ValueMapping(source = "rating", target = "Rating")
+    @ValueMapping(source = "title", target = "Title")
     fun toDomain(
         movieMetadataField: MovieMetadataField,
     ): DomainMovieMetadataField
