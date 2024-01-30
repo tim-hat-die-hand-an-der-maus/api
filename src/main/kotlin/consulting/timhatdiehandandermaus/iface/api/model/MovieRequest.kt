@@ -25,7 +25,6 @@ enum class MovieGetStatus {
 @Suppress("EnumEntryName", "ktlint:standard:enum-entry-name-case")
 enum class MovieMetadataField {
     cover,
-    coverUrl,
     rating,
     title,
 }
@@ -45,7 +44,6 @@ private typealias DomainMovieMetadataField = consulting.timhatdiehandandermaus.d
 @Mapper
 interface MovieMetadataFieldConverter {
     @ValueMapping(source = "cover", target = "Cover")
-    @ValueMapping(source = "coverUrl", target = "Cover")
     @ValueMapping(source = "rating", target = "Rating")
     @ValueMapping(source = "title", target = "Title")
     fun toDomain(

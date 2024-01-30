@@ -7,7 +7,6 @@ import consulting.timhatdiehandandermaus.application.usecase.AddMovie
 import consulting.timhatdiehandandermaus.application.usecase.ListMovies
 import consulting.timhatdiehandandermaus.application.usecase.RefreshMetadata
 import consulting.timhatdiehandandermaus.iface.api.model.MovieGetStatus
-import consulting.timhatdiehandandermaus.iface.api.model.MovieMetadataField
 import consulting.timhatdiehandandermaus.iface.api.model.MovieMetadataFieldConverter
 import consulting.timhatdiehandandermaus.iface.api.model.MovieMetadataPatchRequest
 import consulting.timhatdiehandandermaus.iface.api.model.MoviePostRequest
@@ -101,12 +100,7 @@ class MovieResource @Inject constructor(
             throw NotFoundException()
         }
 
-        val fields = body.refresh.map {
-            if (it == MovieMetadataField.coverUrl) {
-                log.warn("Got request with deprecated coverUrl field")
-            }
-            movieMetadataFieldConverter.toDomain(it)
-        }
+        val fields = body.refresh.map(movieMetadataFieldConverter::toDomain)
         refreshMetadata(uid, fields)
     }
 }
