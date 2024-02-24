@@ -81,7 +81,7 @@ jobs:
           IMAGE_NAME: "ghcr.io/${{ env.GITHUB_REPOSITORY_OWNER_PART_SLUG }}/${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG }}"
         run: "envsubst < values.yaml > values_sub.yaml && mv values_sub.yaml values.yaml"
       - name: Deploy helm chart
-        uses: WyriHaximus/github-action-helm3@v3
+        uses: WyriHaximus/github-action-helm3@v4
         with:
           exec: helm upgrade backend . --install --namespace=timhatdiehandandermaus --atomic
           kubeconfig: '${{ secrets.KUBECONFIG_RAW }}'
