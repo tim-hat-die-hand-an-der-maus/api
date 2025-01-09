@@ -3,12 +3,11 @@ kind: Ingress
 metadata:
   name: api
   annotations:
-    kubernetes.io/tls-acme: "true"
-    cert-manager.io/cluster-issuer: letsencrypt-issuer
+    cert-manager.io/cluster-issuer: letsencrypt
     cert-manager.io/issue-temporary-certificate: "false"
 spec:
   rules:
-    - host: api.timhatdiehandandermaus.consulting
+    - host: tim-api.bembel.party
       http:
         paths:
           - backend:
@@ -20,5 +19,5 @@ spec:
             pathType: Prefix
   tls:
     - hosts:
-        - api.timhatdiehandandermaus.consulting
+        - tim-api.bembel.party
       secretName: tls-api

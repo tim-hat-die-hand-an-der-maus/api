@@ -18,7 +18,7 @@ jobs:
     container: eclipse-temurin:21
     services:
       postgres:
-        image: postgres:15-alpine
+        image: postgres:17-alpine
         env:
           POSTGRES_DB: tim
           POSTGRES_USER: tim

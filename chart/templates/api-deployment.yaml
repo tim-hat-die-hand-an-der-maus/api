@@ -6,7 +6,7 @@ metadata:
   labels:
     app: backend
 spec:
-  replicas: 3
+  replicas: 1
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -22,9 +22,10 @@ spec:
     spec:
       containers:
         - name: app
-          image: {{ .Values.image }}
+          image: {{ .Values.image.app }}:{{ .Values.appVersion }}
           ports:
             - containerPort: 8080
+              name: http
           livenessProbe:
             httpGet:
               port: 8080
@@ -46,9 +47,7 @@ spec:
                 name: api-service-config
             - secretRef:
                 name: api-secrets
-          env:
-            - name: QUARKUS_DATASOURCE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.postgres.user }}.{{ .Values.postgres.host }}.credentials.postgresql.acid.zalan.do
-                  key: password
+            - secretRef:
+                name: api-db-secrets
+
+# TODO: QUARKUS_DATASOURCE_USER, QUARKUS_DATASOURCE_PASSWORD

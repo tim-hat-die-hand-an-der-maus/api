@@ -7,7 +7,7 @@ spec:
   schedule: "0 6 * * 1"
   concurrencyPolicy: Forbid
   failedJobsHistoryLimit: 1
-  successfulJobsHistoryLimit: 3
+  successfulJobsHistoryLimit: 1
   startingDeadlineSeconds: 1200
   jobTemplate:
     spec:
@@ -16,7 +16,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: app
-              image: {{ .Values.image }}
+              image: {{ .Values.image.app }}:{{ .Values.appVersion }}
               args:
                 - shuffle-queue
               resources:
@@ -28,8 +28,12 @@ spec:
               envFrom:
                 - configMapRef:
                     name: api-db-config
+                - configMapRef:
+                    name: api-service-config
                 - secretRef:
                     name: api-secrets
+                - secretRef:
+                    name: api-db-secrets
               env:
                 - name: QUARKUS_DATASOURCE_PASSWORD
                   valueFrom:

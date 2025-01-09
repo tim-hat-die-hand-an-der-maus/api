@@ -1,0 +1,11 @@
+appVersion: latest
+image:
+  app: ghcr.io/tim-hat-die-hand-an-der-maus/api
+
+postgres:
+  db: tim
+  user: tim
+  host: tim-db-rw
+
+sentry:
+  dsn: ${SENTRY_DSN}
