@@ -20,7 +20,8 @@
       "matchPackageNames": [
         "io.quarkus*"
       ],
-      "separateMinorPatch": true
+      "separateMinorPatch": true,
+      "separateMultipleMinor": true
     }
   ]
 }
