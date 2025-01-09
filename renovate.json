@@ -8,8 +8,8 @@
   "packageRules": [
     {
       "groupName": "Kotlin",
-      "matchPackagePrefixes": [
-        "org.jetbrains.kotlin"
+      "matchPackageNames": [
+        "org.jetbrains.kotlin*"
       ],
       "matchManagers": [
         "gradle"
@@ -17,8 +17,8 @@
       "allowedVersions": "< 1.8.0"
     },
     {
-      "matchPackagePrefixes": [
-        "io.quarkus"
+      "matchPackageNames": [
+        "io.quarkus*"
       ],
       "separateMinorPatch": true
     }
