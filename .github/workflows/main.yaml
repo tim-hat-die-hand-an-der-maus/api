@@ -32,49 +32,26 @@ jobs:
         run: ./gradlew check
 
   build-container-image:
-    name: Container Build
-    runs-on: ubuntu-latest
-    if: success() && github.event_name == 'pull_request'
     needs:
       - check
-    steps:
-      - name: Inject slug/short variables
-        uses: rlespinasse/github-slug-action@v4
-      - name: Build and push container image
-        uses: docker/build-push-action@v5
-        with:
-          build-args: |
-            build=${{ github.sha }}
-          push: false
-          tags: "ghcr.io/${{ env.GITHUB_REPOSITORY_OWNER_PART_SLUG }}/${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG }}:${{ github.sha }}"
+    uses: tim-hat-die-hand-an-der-maus/actions-container/.github/workflows/build-dual-image-kaniko.yml@v5
+    with:
+      arm-runner-name: warp-ubuntu-2204-arm64-4x
+      push-image: ${{ github.ref_name == github.event.repository.default_branch }}
 
-  push-container-image:
-    name: Container Build and Push
-    runs-on: ubuntu-latest
-    if: success() && github.ref_name == github.event.repository.default_branch
-    needs:
-      - check
+  post-build-container-image:
+    name: Container Build
+    runs-on: ubuntu-24.04
+    if: github.event_name == 'pull_request'
+    needs: build-container-image
     steps:
-      - name: Inject slug/short variables
-        uses: rlespinasse/github-slug-action@v4
-      - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ github.token }}
-      - name: Build and push container image
-        uses: docker/build-push-action@v5
-        with:
-          build-args: |
-            build=${{ github.sha }}
-          push: true
-          tags: "ghcr.io/${{ env.GITHUB_REPOSITORY_OWNER_PART_SLUG }}/${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG }}:${{ github.sha }}"
+      - run: echo "All images built"
 
   clean:
     runs-on: ubuntu-latest
     concurrency: cleanup
     continue-on-error: true
+    if: false
     steps:
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v4

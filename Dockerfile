@@ -16,8 +16,8 @@ COPY --from=build /code/build/*-runner /app/application
 RUN chmod 755 /app
 EXPOSE 8080
 
-ARG build
-ENV QUARKUS_LOG_SENTRY_RELEASE=$build
+ARG APP_VERSION
+ENV QUARKUS_LOG_SENTRY_RELEASE=$APP_VERSION
 
 ENTRYPOINT [ "./application", "-Xmx128M"]
 CMD [ "run-api" ]
