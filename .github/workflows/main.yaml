@@ -47,17 +47,20 @@ jobs:
     steps:
       - run: echo "All images built"
 
-  clean:
-    runs-on: ubuntu-latest
-    concurrency: cleanup
-    continue-on-error: true
-    if: false
+  deploy:
+    runs-on: ubuntu-24.04
+    if: github.ref_name == github.event.repository.default_branch
+    permissions:
+      contents: write
+    needs:
+      - build-container-image
     steps:
-      - name: Inject slug/short variables
-        uses: rlespinasse/github-slug-action@v4
-      - name: Clean up old app container images
-        uses: actions/delete-package-versions@v5
+      - uses: actions/checkout@v4
         with:
-          package-name: ${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG }}
-          package-type: container
-          min-versions-to-keep: 10
+          fetch-depth: 0
+      - run: git push origin main:release
+
+  clean:
+    concurrency: cleanup
+    needs: [ deploy ]
+    uses: tim-hat-die-hand-an-der-maus/actions-container/.github/workflows/clean.yml@v5
