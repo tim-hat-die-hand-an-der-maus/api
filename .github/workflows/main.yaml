@@ -14,7 +14,7 @@ jobs:
 
   check:
     name: Test and Lint
-    runs-on: warp-ubuntu-latest-x64-8x
+    runs-on: warp-ubuntu-latest-arm64-8x
     container: eclipse-temurin:21
     services:
       postgres:
