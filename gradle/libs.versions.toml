@@ -5,7 +5,7 @@ quarkus = "3.7.4"
 [libraries]
 cli = { module = "org.jetbrains.kotlinx:kotlinx-cli", version = "0.3.6" }
 
-flyway-junit = { module = "com.radcortez.flyway:flyway-junit5-extension", version = "1.4.1" }
+flyway-junit = { module = "com.radcortez.flyway:flyway-junit5-extension", version = "2.1.0" }
 
 fuzzywuzzy = { module = "me.xdrop:fuzzywuzzy", version = "1.4.0" }
 
