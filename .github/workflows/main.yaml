@@ -68,7 +68,6 @@ jobs:
     runs-on: ubuntu-latest
     concurrency: cleanup
     continue-on-error: true
-    needs: [ deploy ]
     steps:
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v4
