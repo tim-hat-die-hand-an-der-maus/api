@@ -49,5 +49,3 @@ spec:
                 name: api-secrets
             - secretRef:
                 name: api-db-secrets
-
-# TODO: QUARKUS_DATASOURCE_USER, QUARKUS_DATASOURCE_PASSWORD
