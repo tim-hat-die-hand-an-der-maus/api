@@ -23,7 +23,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: app
-              image: {{ .Values.image.app }}:{{ .Values.appVersion }}
+              image: {{ $.Values.image.app }}:{{ $.Values.appVersion }}
               args: {{ .args | toJson }}
               resources:
                 requests:
