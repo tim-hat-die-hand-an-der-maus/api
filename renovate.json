@@ -12,6 +12,12 @@
       ],
       "separateMinorPatch": true,
       "separateMultipleMinor": true
+    },
+    {
+      "matchDepNames": [
+        "kotlin"
+      ],
+      "automerge": false
     }
   ]
 }
