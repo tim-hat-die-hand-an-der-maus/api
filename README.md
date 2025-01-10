@@ -3,13 +3,13 @@
 ## Usage
 
 ```shell
-./gradlew quarkusDev --quarkus-args="run-api"
+./mvnw quarkus:dev -Dquarkus.args="run-api"
 ```
 
 ### Generating a token
 
-Prerequisite: have the private key at `src/main/resource/privateKey.pem` (yeah I know)
+Prerequisite: have the private key at `src/main/resources/privateKey.pem` (yeah I know)
 
 ```shell
-./gradlew quarkusDev --quarkus-args="generate-token <service-name> <absolute-output-path>"
+./mvnw quarkus:dev -Dquarkus.args="generate-token <service-name> <absolute-output-path>"
 ```
