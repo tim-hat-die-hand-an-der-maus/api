@@ -4,5 +4,6 @@ import consulting.timhatdiehandandermaus.domain.model.MovieMetadata
 
 interface MovieMetadataResolver {
     fun resolveImdb(imdbUrl: String): MovieMetadata
+
     fun resolveImdbById(imdbId: String): MovieMetadata
 }

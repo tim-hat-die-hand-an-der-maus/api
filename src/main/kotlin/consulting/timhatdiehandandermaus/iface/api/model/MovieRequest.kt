@@ -9,7 +9,11 @@ import consulting.timhatdiehandandermaus.domain.model.MovieStatus
 import org.mapstruct.Mapper
 import org.mapstruct.ValueMapping
 
-data class MoviePostRequest @JsonCreator constructor(val imdbUrl: String)
+data class MoviePostRequest
+    @JsonCreator
+    constructor(
+        val imdbUrl: String,
+    )
 
 enum class MovieDeleteStatus {
     Deleted,
@@ -29,13 +33,16 @@ enum class MovieMetadataField {
     title,
 }
 
-data class MovieMetadataPatchRequest @JsonCreator constructor(
-    val refresh: List<MovieMetadataField>,
-)
+data class MovieMetadataPatchRequest
+    @JsonCreator
+    constructor(
+        val refresh: List<MovieMetadataField>,
+    )
 
 @Mapper
 interface MovieRequestConverter {
     fun toMovieStatus(movieDeleteStatus: MovieDeleteStatus): MovieStatus
+
     fun toMovieStatus(movieGetStatus: MovieGetStatus): MovieStatus
 }
 
@@ -46,7 +53,5 @@ interface MovieMetadataFieldConverter {
     @ValueMapping(source = "cover", target = "Cover")
     @ValueMapping(source = "rating", target = "Rating")
     @ValueMapping(source = "title", target = "Title")
-    fun toDomain(
-        movieMetadataField: MovieMetadataField,
-    ): DomainMovieMetadataField
+    fun toDomain(movieMetadataField: MovieMetadataField): DomainMovieMetadataField
 }

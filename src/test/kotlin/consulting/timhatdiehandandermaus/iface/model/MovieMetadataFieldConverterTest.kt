@@ -10,7 +10,6 @@ import org.junit.jupiter.params.provider.EnumSource
 
 @QuarkusTest
 class MovieMetadataFieldConverterTest {
-
     @Inject
     lateinit var movieMetadataFieldConverter: MovieMetadataFieldConverter
 

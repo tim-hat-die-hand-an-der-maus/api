@@ -8,22 +8,28 @@ import jakarta.inject.Inject
 import me.xdrop.fuzzywuzzy.FuzzySearch
 
 @RequestScoped
-class ListMovies @Inject constructor(
-    private val movieRepository: MovieRepository,
-) {
+class ListMovies
+    @Inject
+    constructor(
+        private val movieRepository: MovieRepository,
+    ) {
+        private fun rank(
+            movies: Iterable<Movie>,
+            query: String,
+        ): List<Movie> =
+            movies.sortedByDescending {
+                FuzzySearch.weightedRatio(it.metadata.title, query)
+            }
 
-    private fun rank(movies: Iterable<Movie>, query: String): List<Movie> {
-        return movies.sortedByDescending {
-            FuzzySearch.weightedRatio(it.metadata.title, query)
+        operator fun invoke(
+            query: String?,
+            status: MovieStatus?,
+        ): List<Movie> {
+            val results = movieRepository.listMovies(status)
+            return if (query.isNullOrBlank()) {
+                results.toList()
+            } else {
+                rank(results, query)
+            }
         }
     }
-
-    operator fun invoke(query: String?, status: MovieStatus?): List<Movie> {
-        val results = movieRepository.listMovies(status)
-        return if (query.isNullOrBlank()) {
-            results.toList()
-        } else {
-            rank(results, query)
-        }
-    }
-}

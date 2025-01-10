@@ -60,7 +60,10 @@ class MovieRepositoryTest {
     }
 
     @Test
-    fun testUpdateMetadata(metadata: MovieMetadata, newMetadata: MovieMetadata) {
+    fun testUpdateMetadata(
+        metadata: MovieMetadata,
+        newMetadata: MovieMetadata,
+    ) {
         val id = repo.insert(MovieInsertDto(MovieStatus.Queued, metadata))
 
         repo.updateMetadata(id, newMetadata)

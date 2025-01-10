@@ -15,7 +15,10 @@ data class MovieInsertDto(
 
 @Mapper
 interface MovieInsertDtoConverter {
-    fun toMovie(id: UUID, dto: MovieInsertDto): Movie
+    fun toMovie(
+        id: UUID,
+        dto: MovieInsertDto,
+    ): Movie
 }
 
 interface MovieRepository {
@@ -23,10 +26,17 @@ interface MovieRepository {
     fun insert(movie: MovieInsertDto): UUID
 
     @Throws(MovieNotFoundException::class)
-    fun updateMetadata(id: UUID, metadata: MovieMetadata)
+    fun updateMetadata(
+        id: UUID,
+        metadata: MovieMetadata,
+    )
 
     @Throws(MovieNotFoundException::class)
-    fun updateStatus(id: UUID, status: MovieStatus)
+    fun updateStatus(
+        id: UUID,
+        status: MovieStatus,
+    )
+
     fun find(id: UUID): Movie?
 
     fun forEachMovie(action: (Movie) -> Unit)

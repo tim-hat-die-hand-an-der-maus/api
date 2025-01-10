@@ -25,44 +25,48 @@ import java.util.UUID
 @Path("/queue")
 @RequestScoped
 @Authenticated
-class QueueResource @Inject constructor(
-    private val removeFromQueue: RemoveFromQueue,
-    private val queueRepository: QueueRepository,
-    private val queueResponseConverter: QueueResponseConverter,
-    private val movieRequestConverter: MovieRequestConverter,
-    private val movieResponseConverter: MovieResponseConverter,
-) {
-    @GET
-    @PermitAll
-    fun list(): QueueResponse {
-        val queueItems = queueRepository.list().map(queueResponseConverter::convertToResponse)
-        return QueueResponse(queueItems)
-    }
-
-    @DELETE
-    @Path("/{id}")
-    fun delete(
-        @PathParam("id")
-        id: String,
-        @QueryParam("status")
-        @DefaultValue("Deleted")
-        status: MovieDeleteStatus,
-    ): MovieResponse {
-        val uid = try {
-            UUID.fromString(id)
-        } catch (e: IllegalArgumentException) {
-            // ID is not a UUID, so it's unknown
-            throw NotFoundException()
+class QueueResource
+    @Inject
+    constructor(
+        private val removeFromQueue: RemoveFromQueue,
+        private val queueRepository: QueueRepository,
+        private val queueResponseConverter: QueueResponseConverter,
+        private val movieRequestConverter: MovieRequestConverter,
+        private val movieResponseConverter: MovieResponseConverter,
+    ) {
+        @GET
+        @PermitAll
+        fun list(): QueueResponse {
+            val queueItems = queueRepository.list().map(queueResponseConverter::convertToResponse)
+            return QueueResponse(queueItems)
         }
 
-        val movieStatus = movieRequestConverter.toMovieStatus(status)
+        @DELETE
+        @Path("/{id}")
+        fun delete(
+            @PathParam("id")
+            id: String,
+            @QueryParam("status")
+            @DefaultValue("Deleted")
+            status: MovieDeleteStatus,
+        ): MovieResponse {
+            val uid =
+                try {
+                    UUID.fromString(id)
+                } catch (e: IllegalArgumentException) {
+                    // ID is not a UUID, so it's unknown
+                    throw NotFoundException()
+                }
 
-        val result = try {
-            removeFromQueue(uid, movieStatus)
-        } catch (e: MovieNotFoundException) {
-            throw NotFoundException(e)
+            val movieStatus = movieRequestConverter.toMovieStatus(status)
+
+            val result =
+                try {
+                    removeFromQueue(uid, movieStatus)
+                } catch (e: MovieNotFoundException) {
+                    throw NotFoundException(e)
+                }
+
+            return movieResponseConverter.convertToResponse(result)
         }
-
-        return movieResponseConverter.convertToResponse(result)
     }
-}
