@@ -9,3 +9,8 @@ postgres:
 
 sentry:
   dsn: ${SENTRY_DSN}
+
+ingress:
+  hosts:
+    - tim-api.bembel.party
+    - tim-api-local.bembel.party
