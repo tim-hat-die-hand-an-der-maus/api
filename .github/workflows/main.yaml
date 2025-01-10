@@ -29,7 +29,7 @@ jobs:
       - name: Check out repo
         uses: actions/checkout@v4
       - name: Run checks
-        run: ./mvnw spotless:check test
+        run: ./mvnw --no-transfer-progress spotless:check test
 
   build-container-image:
     needs:
