@@ -22,7 +22,6 @@ spec:
         app: backend
     spec:
       securityContext:
-        runAsNonRoot: true
         seccompProfile:
           type: RuntimeDefault
       containers:
@@ -41,8 +40,6 @@ spec:
               path: /q/health/ready
           securityContext:
             allowPrivilegeEscalation: false
-            capabilities:
-              drop: [ALL]
           resources:
             limits:
               cpu: 100m
