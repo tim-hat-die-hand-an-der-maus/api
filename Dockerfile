@@ -8,11 +8,11 @@ COPY --chown=quarkus:quarkus . /code/
 
 WORKDIR /code
 
-RUN ./gradlew assemble -Dquarkus.native.enabled=true -Dquarkus.package.jar.enabled=false
+RUN ./mvnw package -Dnative -Dmaven.test.skip
 
 FROM quay.io/quarkus/quarkus-micro-image:2.0
 WORKDIR /app
-COPY --from=build /code/build/*-runner /app/application
+COPY --from=build /code/target/*-runner /app/application
 RUN chmod 755 /app
 EXPOSE 8080
 
