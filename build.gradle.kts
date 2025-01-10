@@ -4,11 +4,11 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.spotless)
     alias(libs.plugins.quarkus)
-    kotlin("jvm") version "1.9.22"
-    kotlin("kapt") version "1.9.22"
-    kotlin("plugin.jpa") version "1.9.22"
+    kotlin("jvm") version "2.0.21"
+    kotlin("kapt") version "2.0.21"
+    kotlin("plugin.jpa") version "2.0.21"
     alias(libs.plugins.versions)
-    kotlin("plugin.allopen") version "1.9.22"
+    kotlin("plugin.allopen") version "2.0.21"
 }
 
 group = "consulting.timhatdiehandandermaus"
