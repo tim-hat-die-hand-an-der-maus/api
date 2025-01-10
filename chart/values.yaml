@@ -17,3 +17,12 @@ ingress:
   hosts:
     - tim-api.bembel.party
     - tim-api-local.bembel.party
+
+cronJobs:
+  - name: full-metadata-update
+    schedule: "* * * * *"
+    args: [ "update-metadata" ]
+    suspend: true
+  - name: shuffle-queue
+    schedule: "0 6 * * 1"
+    args: [ "shuffle-queue" ]
