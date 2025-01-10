@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.bjoernpetersen</groupId>
-    <artifactId>timehatdiehandandermaus-api</artifactId>
+    <artifactId>timhatdiehandandermaus-api</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
@@ -13,7 +13,6 @@
         <mapstruct.version>1.6.3</mapstruct.version>
         <kotlin.version>2.0.10</kotlin.version>
 
-        <maven.compiler.parameters>true</maven.compiler.parameters>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
 
@@ -149,7 +148,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.13.0</version>
                 <configuration>
-                    <parameters>${maven.compiler.parameters}</parameters>
+                    <parameters>true</parameters>
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
                 </configuration>
