@@ -20,6 +20,7 @@ spec:
       template:
         spec:
           securityContext:
+            runAsNonRoot: true
             seccompProfile:
               type: RuntimeDefault
           restartPolicy: Never
