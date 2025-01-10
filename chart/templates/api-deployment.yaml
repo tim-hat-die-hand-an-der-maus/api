@@ -38,6 +38,11 @@ spec:
           ports:
             - containerPort: 8080
               name: http
+          startupProbe:
+            initialDelaySeconds: 5
+            httpGet:
+              port: 8080
+              path: /q/health/ready
           livenessProbe:
             httpGet:
               port: 8080
