@@ -15,6 +15,7 @@
 
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
+        <kotlin.compiler.jvmTarget>21</kotlin.compiler.jvmTarget>
 
         <surefire-plugin.version>3.5.2</surefire-plugin.version>
         <spotless.version>2.44.1</spotless.version>
@@ -189,6 +190,10 @@
                         <plugin>all-open</plugin>
                         <plugin>jpa</plugin>
                     </compilerPlugins>
+
+                    <args>
+                        <arg> -Xjvm-default=all</arg>
+                    </args>
 
                     <pluginOptions>
                         <!-- Each annotation is placed on its own line -->
