@@ -14,8 +14,8 @@
       "separateMultipleMinor": true
     },
     {
-      "matchDepNames": [
-        "kotlin"
+      "matchPackageNames": [
+        "org.jetbrains.kotlin*"
       ],
       "automerge": false
     }
