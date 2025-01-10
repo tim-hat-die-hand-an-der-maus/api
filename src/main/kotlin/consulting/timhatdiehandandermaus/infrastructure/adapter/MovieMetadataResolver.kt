@@ -9,7 +9,10 @@ import org.eclipse.microprofile.rest.client.inject.RegisterRestClient
 import org.eclipse.microprofile.rest.client.inject.RestClient
 import org.mapstruct.Mapper
 
-data class ImdbRequest(val imdbUrl: String)
+data class ImdbRequest(
+    val imdbUrl: String,
+)
+
 data class CoverResponse(
     val url: String,
     val ratio: Double,
@@ -35,19 +38,20 @@ interface ResponseConverter {
 }
 
 @RequestScoped
-class ImdbMovieMetadataResolver @Inject constructor(
-    @RestClient
-    private val service: ImdbService,
-    private val converter: ResponseConverter,
-) : MovieMetadataResolver {
+class ImdbMovieMetadataResolver
+    @Inject
+    constructor(
+        @RestClient
+        private val service: ImdbService,
+        private val converter: ResponseConverter,
+    ) : MovieMetadataResolver {
+        override fun resolveImdb(imdbUrl: String): MovieMetadata {
+            val response = service.resolveMetadata(ImdbRequest(imdbUrl))
+            return converter.toModel(response)
+        }
 
-    override fun resolveImdb(imdbUrl: String): MovieMetadata {
-        val response = service.resolveMetadata(ImdbRequest(imdbUrl))
-        return converter.toModel(response)
+        override fun resolveImdbById(imdbId: String): MovieMetadata {
+            val imdbUrl = "https://imdb.com/tt$imdbId/"
+            return resolveImdb(imdbUrl)
+        }
     }
-
-    override fun resolveImdbById(imdbId: String): MovieMetadata {
-        val imdbUrl = "https://imdb.com/tt$imdbId/"
-        return resolveImdb(imdbUrl)
-    }
-}

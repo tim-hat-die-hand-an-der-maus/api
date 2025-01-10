@@ -7,21 +7,23 @@ import jakarta.inject.Inject
 import org.jboss.logging.Logger
 
 @RequestScoped
-class UpdateAllMetadata @Inject constructor(
-    private val log: Logger,
-    private val metadataResolver: MovieMetadataResolver,
-    private val movieRepo: MovieRepository,
-) {
-    operator fun invoke() {
-        log.info("Updating metadata for all movies")
+class UpdateAllMetadata
+    @Inject
+    constructor(
+        private val log: Logger,
+        private val metadataResolver: MovieMetadataResolver,
+        private val movieRepo: MovieRepository,
+    ) {
+        operator fun invoke() {
+            log.info("Updating metadata for all movies")
 
-        movieRepo.forEachMovie { movie ->
-            log.info("Resolving metadata for ${movie.metadata.title} (${movie.id})")
-            val newMetadata = metadataResolver.resolveImdbById(movie.metadata.id)
-            if (newMetadata != movie.metadata) {
-                log.info("Updating metadata ($newMetadata)")
-                movieRepo.updateMetadata(movie.id, newMetadata)
+            movieRepo.forEachMovie { movie ->
+                log.info("Resolving metadata for ${movie.metadata.title} (${movie.id})")
+                val newMetadata = metadataResolver.resolveImdbById(movie.metadata.id)
+                if (newMetadata != movie.metadata) {
+                    log.info("Updating metadata ($newMetadata)")
+                    movieRepo.updateMetadata(movie.id, newMetadata)
+                }
             }
         }
     }
-}

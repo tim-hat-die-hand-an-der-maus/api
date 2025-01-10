@@ -8,7 +8,5 @@ import java.net.URI
 @Path("/")
 class RootResource {
     @GET
-    fun get(): Response {
-        return Response.temporaryRedirect(URI.create("/docs/swagger")).build()
-    }
+    fun get(): Response = Response.temporaryRedirect(URI.create("/docs/swagger")).build()
 }

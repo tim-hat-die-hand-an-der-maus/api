@@ -59,10 +59,14 @@ class QueueRepositoryTest {
     }
 
     @Test
-    fun testList(metadataOne: MovieMetadata, metadataTwo: MovieMetadata) {
-        val ids = listOf(metadataOne, metadataTwo).map {
-            movieRepo.insert(MovieInsertDto(MovieStatus.Queued, it))
-        }
+    fun testList(
+        metadataOne: MovieMetadata,
+        metadataTwo: MovieMetadata,
+    ) {
+        val ids =
+            listOf(metadataOne, metadataTwo).map {
+                movieRepo.insert(MovieInsertDto(MovieStatus.Queued, it))
+            }
 
         ids.forEach(repo::insert)
 

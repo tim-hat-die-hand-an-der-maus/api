@@ -21,9 +21,9 @@ private class GenerateTokenCommand(
     private val runWithRequestContext: (() -> Unit) -> Unit,
     private val generateToken: GenerateToken,
 ) : Subcommand(
-    "generate-token",
-    "Generate a JWT token",
-) {
+        "generate-token",
+        "Generate a JWT token",
+    ) {
     val serviceName by argument(
         ArgType.String,
         "service-name",
@@ -44,10 +44,11 @@ private class GenerateTokenCommand(
     }
 }
 
-private class RunApiCommand : Subcommand(
-    "run-api",
-    "Serve the API",
-) {
+private class RunApiCommand :
+    Subcommand(
+        "run-api",
+        "Serve the API",
+    ) {
     override fun execute() {
         Quarkus.waitForExit()
     }
@@ -57,9 +58,9 @@ private class ShuffleQueueCommand(
     private val runWithRequestContext: (() -> Unit) -> Unit,
     private val shuffleQueue: ShuffleQueue,
 ) : Subcommand(
-    "shuffle-queue",
-    "Shuffle the current queue",
-) {
+        "shuffle-queue",
+        "Shuffle the current queue",
+    ) {
     override fun execute() {
         runWithRequestContext {
             shuffleQueue()
@@ -71,9 +72,9 @@ private class UpdateMetadataCommand(
     private val runWithRequestContext: (() -> Unit) -> Unit,
     private val updateAllMetadata: UpdateAllMetadata,
 ) : Subcommand(
-    "update-metadata",
-    "Updates metadata of all movies in DB",
-) {
+        "update-metadata",
+        "Updates metadata of all movies in DB",
+    ) {
     override fun execute() {
         runWithRequestContext {
             updateAllMetadata()
@@ -82,30 +83,31 @@ private class UpdateMetadataCommand(
 }
 
 @QuarkusMain
-class Main @Inject constructor(
-    private val generateToken: GenerateToken,
-    private val shuffleQueue: ShuffleQueue,
-    private val updateAllMetadata: UpdateAllMetadata,
-) : QuarkusApplication {
+class Main
+    @Inject
+    constructor(
+        private val generateToken: GenerateToken,
+        private val shuffleQueue: ShuffleQueue,
+        private val updateAllMetadata: UpdateAllMetadata,
+    ) : QuarkusApplication {
+        @OptIn(ExperimentalCli::class)
+        override fun run(args: Array<String>): Int {
+            val parser = ArgParser("application")
 
-    @OptIn(ExperimentalCli::class)
-    override fun run(args: Array<String>): Int {
-        val parser = ArgParser("application")
+            parser.subcommands(
+                GenerateTokenCommand(this::withRequestContext, generateToken),
+                RunApiCommand(),
+                ShuffleQueueCommand(this::withRequestContext, shuffleQueue),
+                UpdateMetadataCommand(this::withRequestContext, updateAllMetadata),
+            )
 
-        parser.subcommands(
-            GenerateTokenCommand(this::withRequestContext, generateToken),
-            RunApiCommand(),
-            ShuffleQueueCommand(this::withRequestContext, shuffleQueue),
-            UpdateMetadataCommand(this::withRequestContext, updateAllMetadata),
-        )
+            parser.parse(args)
 
-        parser.parse(args)
+            return 0
+        }
 
-        return 0
+        @ActivateRequestContext
+        fun withRequestContext(action: () -> Unit) {
+            action()
+        }
     }
-
-    @ActivateRequestContext
-    fun withRequestContext(action: () -> Unit) {
-        action()
-    }
-}

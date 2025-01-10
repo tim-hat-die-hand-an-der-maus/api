@@ -34,73 +34,82 @@ import java.util.UUID
 @Path("/movie")
 @RequestScoped
 @Authenticated
-class MovieResource @Inject constructor(
-    private val log: Logger,
-    private val movieConverter: MovieResponseConverter,
-    private val movieRequestConverter: MovieRequestConverter,
-    private val addMovie: AddMovie,
-    private val listMovies: ListMovies,
-    private val refreshMetadata: RefreshMetadata,
-    private val movieMetadataFieldConverter: MovieMetadataFieldConverter,
-    private val movieRepo: MovieRepository,
-) {
-
-    @PUT
-    fun put(body: MoviePostRequest): MovieResponse {
-        val movie = try {
-            addMovie(body.imdbUrl)
-        } catch (e: MovieNotFoundException) {
-            throw NotFoundException(e)
-        } catch (e: DuplicateMovieException) {
-            throw WebApplicationException(e, Response.Status.CONFLICT)
-        }
-        return movieConverter.convertToResponse(movie)
-    }
-
-    @GET
-    @Path("/{id}")
-    @PermitAll
-    @Operation(summary = "Get a specific movie using its ID")
-    fun get(@PathParam("id") id: String): MovieResponse {
-        val uid = try {
-            UUID.fromString(id)
-        } catch (e: IllegalArgumentException) {
-            // ID is not a UUID, so it's unknown
-            throw NotFoundException()
+class MovieResource
+    @Inject
+    constructor(
+        private val log: Logger,
+        private val movieConverter: MovieResponseConverter,
+        private val movieRequestConverter: MovieRequestConverter,
+        private val addMovie: AddMovie,
+        private val listMovies: ListMovies,
+        private val refreshMetadata: RefreshMetadata,
+        private val movieMetadataFieldConverter: MovieMetadataFieldConverter,
+        private val movieRepo: MovieRepository,
+    ) {
+        @PUT
+        fun put(body: MoviePostRequest): MovieResponse {
+            val movie =
+                try {
+                    addMovie(body.imdbUrl)
+                } catch (e: MovieNotFoundException) {
+                    throw NotFoundException(e)
+                } catch (e: DuplicateMovieException) {
+                    throw WebApplicationException(e, Response.Status.CONFLICT)
+                }
+            return movieConverter.convertToResponse(movie)
         }
 
-        val movie = movieRepo.find(uid) ?: throw NotFoundException("Not implemented ($uid)")
-        return movieConverter.convertToResponse(movie)
-    }
+        @GET
+        @Path("/{id}")
+        @PermitAll
+        @Operation(summary = "Get a specific movie using its ID")
+        fun get(
+            @PathParam("id") id: String,
+        ): MovieResponse {
+            val uid =
+                try {
+                    UUID.fromString(id)
+                } catch (e: IllegalArgumentException) {
+                    // ID is not a UUID, so it's unknown
+                    throw NotFoundException()
+                }
 
-    @GET
-    @Path("/")
-    @PermitAll
-    @Operation(
-        summary = "Query the list of known movies.",
-    )
-    fun get(
-        @QueryParam("q") query: String?,
-        @QueryParam("status") status: MovieGetStatus?,
-    ): MoviesResponse {
-        val domainStatus = status?.let(movieRequestConverter::toMovieStatus)
-        val movies = listMovies(query, domainStatus)
-        return MoviesResponse(
-            movies = movies.map(movieConverter::convertToResponse),
+            val movie = movieRepo.find(uid) ?: throw NotFoundException("Not implemented ($uid)")
+            return movieConverter.convertToResponse(movie)
+        }
+
+        @GET
+        @Path("/")
+        @PermitAll
+        @Operation(
+            summary = "Query the list of known movies.",
         )
-    }
-
-    @PATCH
-    @Path("/{id}/metadata")
-    fun patchMetadata(@PathParam("id") id: String, body: MovieMetadataPatchRequest) {
-        val uid = try {
-            UUID.fromString(id)
-        } catch (e: IllegalArgumentException) {
-            // ID is not a UUID, so it's unknown
-            throw NotFoundException()
+        fun get(
+            @QueryParam("q") query: String?,
+            @QueryParam("status") status: MovieGetStatus?,
+        ): MoviesResponse {
+            val domainStatus = status?.let(movieRequestConverter::toMovieStatus)
+            val movies = listMovies(query, domainStatus)
+            return MoviesResponse(
+                movies = movies.map(movieConverter::convertToResponse),
+            )
         }
 
-        val fields = body.refresh.map(movieMetadataFieldConverter::toDomain)
-        refreshMetadata(uid, fields)
+        @PATCH
+        @Path("/{id}/metadata")
+        fun patchMetadata(
+            @PathParam("id") id: String,
+            body: MovieMetadataPatchRequest,
+        ) {
+            val uid =
+                try {
+                    UUID.fromString(id)
+                } catch (e: IllegalArgumentException) {
+                    // ID is not a UUID, so it's unknown
+                    throw NotFoundException()
+                }
+
+            val fields = body.refresh.map(movieMetadataFieldConverter::toDomain)
+            refreshMetadata(uid, fields)
+        }
     }
-}
