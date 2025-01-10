@@ -8,7 +8,7 @@ COPY --chown=quarkus:quarkus . /code/
 
 WORKDIR /code
 
-RUN ./gradlew assemble -Dquarkus.package.type=native
+RUN ./gradlew assemble -Dquarkus.native.enabled=true
 
 FROM quay.io/quarkus/quarkus-micro-image:2.0
 WORKDIR /app
