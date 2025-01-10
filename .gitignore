@@ -8,6 +8,13 @@
 # Ignore Gradle build output directory
 build/
 
+# Not sure what this is about.
+.kotlin/
+
+# Maven
+build/
+target/
+
 # IDE
 .idea/
 out/

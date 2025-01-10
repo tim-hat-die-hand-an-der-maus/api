@@ -1,7 +1,7 @@
 **/*
-!gradle/
 !src/
-!*.kts
+!.mvn/
 !LICENSE
-!gradlew
-!gradlew.bat
+!pom.xml
+!mvnw
+!mvnw.cmd

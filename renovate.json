@@ -7,16 +7,6 @@
   "enabled": true,
   "packageRules": [
     {
-      "groupName": "Kotlin",
-      "matchPackageNames": [
-        "org.jetbrains.kotlin*"
-      ],
-      "matchManagers": [
-        "gradle"
-      ],
-      "allowedVersions": "< 1.8.0"
-    },
-    {
       "matchPackageNames": [
         "io.quarkus*"
       ],
