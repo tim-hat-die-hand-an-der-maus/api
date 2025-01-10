@@ -10,6 +10,9 @@ postgres:
 sentry:
   dsn: ${SENTRY_DSN}
 
+api:
+  replicas: 1
+
 ingress:
   hosts:
     - tim-api.bembel.party

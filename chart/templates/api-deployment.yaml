@@ -6,13 +6,13 @@ metadata:
   labels:
     app: backend
 spec:
-  replicas: 1
+  replicas: {{ .Values.api.replicas }}
   revisionHistoryLimit: 0
   strategy:
     type: RollingUpdate
     rollingUpdate:
       maxSurge: 100%
-      maxUnavailable: 0
+      maxUnavailable: {{ sub .Values.api.replicas 1 }}
   selector:
     matchLabels:
       app: backend
@@ -57,3 +57,15 @@ spec:
                 name: api-secrets
             - secretRef:
                 name: api-db-secrets
+{{- if (gt .Values.api.replicas 1) }}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: api
+spec:
+  selector:
+    matchLabels:
+      app: backend
+  minAvailable: 1
+{{- end }}
