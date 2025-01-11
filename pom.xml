@@ -192,7 +192,7 @@
                     </compilerPlugins>
 
                     <args>
-                        <arg> -Xjvm-default=all</arg>
+                        <arg>-Xjvm-default=all</arg>
                     </args>
 
                     <pluginOptions>
@@ -261,6 +261,11 @@
                         <ktlint/>
                     </kotlin>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.8.1</version>
             </plugin>
         </plugins>
     </build>
