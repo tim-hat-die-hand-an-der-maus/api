@@ -2,12 +2,12 @@ package consulting.timhatdiehandandermaus.infrastructure.repository.movie
 
 import consulting.timhatdiehandandermaus.application.exception.DuplicateMovieException
 import consulting.timhatdiehandandermaus.application.exception.MovieNotFoundException
+import consulting.timhatdiehandandermaus.application.model.CoverMetadata
+import consulting.timhatdiehandandermaus.application.model.Movie
+import consulting.timhatdiehandandermaus.application.model.MovieMetadata
+import consulting.timhatdiehandandermaus.application.model.MovieStatus
 import consulting.timhatdiehandandermaus.application.repository.MovieInsertDto
 import consulting.timhatdiehandandermaus.application.repository.MovieRepository
-import consulting.timhatdiehandandermaus.domain.model.CoverMetadata
-import consulting.timhatdiehandandermaus.domain.model.Movie
-import consulting.timhatdiehandandermaus.domain.model.MovieMetadata
-import consulting.timhatdiehandandermaus.domain.model.MovieStatus
 import io.quarkus.hibernate.orm.panache.kotlin.PanacheRepositoryBase
 import io.quarkus.narayana.jta.runtime.TransactionConfiguration
 import io.quarkus.runtime.annotations.RegisterForReflection

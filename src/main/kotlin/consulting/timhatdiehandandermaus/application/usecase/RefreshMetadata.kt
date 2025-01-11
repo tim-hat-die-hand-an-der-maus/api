@@ -1,8 +1,8 @@
 package consulting.timhatdiehandandermaus.application.usecase
 
+import consulting.timhatdiehandandermaus.application.model.MovieMetadataField
 import consulting.timhatdiehandandermaus.application.port.MovieMetadataResolver
 import consulting.timhatdiehandandermaus.application.repository.MovieRepository
-import consulting.timhatdiehandandermaus.domain.value.MovieMetadataField
 import jakarta.enterprise.context.RequestScoped
 import jakarta.inject.Inject
 import jakarta.ws.rs.NotFoundException

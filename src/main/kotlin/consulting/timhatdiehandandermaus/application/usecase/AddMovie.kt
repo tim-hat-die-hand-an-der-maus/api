@@ -1,13 +1,13 @@
 package consulting.timhatdiehandandermaus.application.usecase
 
 import consulting.timhatdiehandandermaus.application.exception.DuplicateMovieException
+import consulting.timhatdiehandandermaus.application.model.Movie
+import consulting.timhatdiehandandermaus.application.model.MovieStatus
 import consulting.timhatdiehandandermaus.application.port.MovieMetadataResolver
 import consulting.timhatdiehandandermaus.application.repository.MovieInsertDto
 import consulting.timhatdiehandandermaus.application.repository.MovieInsertDtoConverter
 import consulting.timhatdiehandandermaus.application.repository.MovieRepository
 import consulting.timhatdiehandandermaus.application.repository.QueueRepository
-import consulting.timhatdiehandandermaus.domain.model.Movie
-import consulting.timhatdiehandandermaus.domain.model.MovieStatus
 import jakarta.enterprise.context.RequestScoped
 import jakarta.inject.Inject
 import org.jboss.logging.Logger

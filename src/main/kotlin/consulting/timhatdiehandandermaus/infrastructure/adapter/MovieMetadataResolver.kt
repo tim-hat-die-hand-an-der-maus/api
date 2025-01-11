@@ -1,7 +1,7 @@
 package consulting.timhatdiehandandermaus.infrastructure.adapter
 
+import consulting.timhatdiehandandermaus.application.model.MovieMetadata
 import consulting.timhatdiehandandermaus.application.port.MovieMetadataResolver
-import consulting.timhatdiehandandermaus.domain.model.MovieMetadata
 import jakarta.enterprise.context.RequestScoped
 import jakarta.inject.Inject
 import jakarta.ws.rs.POST

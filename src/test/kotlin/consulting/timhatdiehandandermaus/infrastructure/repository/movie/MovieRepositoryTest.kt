@@ -3,12 +3,12 @@ package consulting.timhatdiehandandermaus.infrastructure.repository.movie
 import com.radcortez.flyway.test.annotation.DataSource
 import com.radcortez.flyway.test.annotation.FlywayTest
 import consulting.timhatdiehandandermaus.application.exception.DuplicateMovieException
+import consulting.timhatdiehandandermaus.application.model.Movie
+import consulting.timhatdiehandandermaus.application.model.MovieMetadata
+import consulting.timhatdiehandandermaus.application.model.MovieStatus
 import consulting.timhatdiehandandermaus.application.repository.MovieInsertDto
 import consulting.timhatdiehandandermaus.application.repository.MovieRepository
 import consulting.timhatdiehandandermaus.domain.model.DummyDataResolver
-import consulting.timhatdiehandandermaus.domain.model.Movie
-import consulting.timhatdiehandandermaus.domain.model.MovieMetadata
-import consulting.timhatdiehandandermaus.domain.model.MovieStatus
 import consulting.timhatdiehandandermaus.infrastructure.repository.QuarkusDataSourceProvider
 import io.quarkus.test.junit.QuarkusTest
 import jakarta.inject.Inject

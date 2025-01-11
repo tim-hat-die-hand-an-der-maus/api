@@ -1,5 +1,9 @@
 package consulting.timhatdiehandandermaus.domain.model
 
+import consulting.timhatdiehandandermaus.application.model.CoverMetadata
+import consulting.timhatdiehandandermaus.application.model.Movie
+import consulting.timhatdiehandandermaus.application.model.MovieMetadata
+import consulting.timhatdiehandandermaus.application.model.MovieStatus
 import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.api.extension.ParameterContext
 import org.junit.jupiter.api.extension.ParameterResolutionException

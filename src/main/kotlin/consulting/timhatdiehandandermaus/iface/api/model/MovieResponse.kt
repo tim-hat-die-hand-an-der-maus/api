@@ -1,7 +1,7 @@
 package consulting.timhatdiehandandermaus.iface.api.model
 
-import consulting.timhatdiehandandermaus.domain.model.Movie
-import consulting.timhatdiehandandermaus.domain.model.MovieMetadata
+import consulting.timhatdiehandandermaus.application.model.Movie
+import consulting.timhatdiehandandermaus.application.model.MovieMetadata
 import consulting.timhatdiehandandermaus.iface.api.mapper.UuidMapper
 import org.mapstruct.Mapper
 import org.mapstruct.Mapping

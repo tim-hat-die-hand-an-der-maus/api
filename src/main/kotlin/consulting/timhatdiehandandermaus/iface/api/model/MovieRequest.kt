@@ -5,7 +5,7 @@
 package consulting.timhatdiehandandermaus.iface.api.model
 
 import com.fasterxml.jackson.annotation.JsonCreator
-import consulting.timhatdiehandandermaus.domain.model.MovieStatus
+import consulting.timhatdiehandandermaus.application.model.MovieStatus
 import org.mapstruct.Mapper
 import org.mapstruct.ValueMapping
 
@@ -46,7 +46,7 @@ interface MovieRequestConverter {
     fun toMovieStatus(movieGetStatus: MovieGetStatus): MovieStatus
 }
 
-private typealias DomainMovieMetadataField = consulting.timhatdiehandandermaus.domain.value.MovieMetadataField
+private typealias DomainMovieMetadataField = consulting.timhatdiehandandermaus.application.model.MovieMetadataField
 
 @Mapper
 interface MovieMetadataFieldConverter {

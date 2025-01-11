@@ -1,4 +1,4 @@
-package consulting.timhatdiehandandermaus.domain.value
+package consulting.timhatdiehandandermaus.application.model
 
 enum class MovieMetadataField {
     Cover,

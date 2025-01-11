@@ -1,4 +1,4 @@
-package consulting.timhatdiehandandermaus.domain.model
+package consulting.timhatdiehandandermaus.application.model
 
 import java.util.UUID
 

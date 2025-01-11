@@ -1,6 +1,6 @@
 package consulting.timhatdiehandandermaus.application.port
 
-import consulting.timhatdiehandandermaus.domain.model.MovieMetadata
+import consulting.timhatdiehandandermaus.application.model.MovieMetadata
 
 interface MovieMetadataResolver {
     fun resolveImdb(imdbUrl: String): MovieMetadata
