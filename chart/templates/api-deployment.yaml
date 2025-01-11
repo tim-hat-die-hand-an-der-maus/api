@@ -57,10 +57,10 @@ spec:
               drop: [ALL]
           resources:
             limits:
-              cpu: 100m
+              cpu: 500m
             requests:
-              cpu: 30m
-              memory: 64Mi
+              cpu: 20m
+              memory: 128Mi
           envFrom:
             - configMapRef:
                 name: api-db-config
