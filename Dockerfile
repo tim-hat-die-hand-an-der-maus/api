@@ -4,9 +4,14 @@ USER root
 RUN microdnf install findutils && microdnf clean all
 USER quarkus
 
-COPY --chown=quarkus:quarkus . /code/
-
 WORKDIR /code
+
+COPY .mvn ./.mvn
+COPY mvnw pom.xml ./
+
+RUN ./mvnw dependency:resolve-plugins dependency:go-offline
+
+COPY src/ src/
 
 RUN ./mvnw package -Dnative -Dmaven.test.skip
 
