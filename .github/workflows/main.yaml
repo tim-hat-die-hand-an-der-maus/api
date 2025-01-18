@@ -34,7 +34,7 @@ jobs:
   build-container-image:
     needs:
       - check
-    uses: tim-hat-die-hand-an-der-maus/actions-container/.github/workflows/build-dual-image-kaniko.yml@v5
+    uses: tim-hat-die-hand-an-der-maus/actions-container/.github/workflows/build-dual-image-kaniko.yml@v6
     with:
       amd-runner-name: warp-ubuntu-latest-x64-8x
       arm-runner-name: warp-ubuntu-latest-arm64-8x
@@ -64,4 +64,4 @@ jobs:
   clean:
     concurrency: cleanup
     needs: [ deploy ]
-    uses: tim-hat-die-hand-an-der-maus/actions-container/.github/workflows/clean.yml@v5
+    uses: tim-hat-die-hand-an-der-maus/actions-container/.github/workflows/clean.yml@v6
