@@ -11,7 +11,7 @@ COPY src/ src/
 
 RUN ./mvnw package -Dnative -Dmaven.test.skip
 
-FROM quay.io/quarkus/quarkus-micro-image:2.0
+FROM quay.io/quarkus/quarkus-micro-image:3.0
 
 USER 1000
 WORKDIR /app
