@@ -11,7 +11,7 @@ sentry:
   dsn: ${SENTRY_DSN}
 
 api:
-  replicas: 3
+  replicas: 2
 
 ingress:
   hosts:
