@@ -4,7 +4,7 @@
     "github>tim-hat-die-hand-an-der-maus/renovate-config"
   ],
   "separateMultipleMajor": true,
-  "enabled": true,
+  "enabled": false,
   "packageRules": [
     {
       "matchPackageNames": [
