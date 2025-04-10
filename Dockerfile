@@ -5,11 +5,11 @@ WORKDIR /code
 COPY .mvn ./.mvn
 COPY mvnw pom.xml ./
 
-RUN ./mvnw dependency:resolve-plugins dependency:go-offline
+RUN ./mvnw --no-transfer-progress dependency:resolve-plugins dependency:go-offline
 
 COPY src/ src/
 
-RUN ./mvnw package -Dnative -Dmaven.test.skip
+RUN ./mvnw --no-transfer-progress package -Dnative -Dmaven.test.skip
 
 FROM quay.io/quarkus/quarkus-micro-image:2.0
 
