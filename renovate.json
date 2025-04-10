@@ -10,7 +10,8 @@
         "io.quarkus*"
       ],
       "separateMinorPatch": true,
-      "separateMultipleMinor": true
+      "separateMultipleMinor": true,
+      "automerge": false
     },
     {
       "matchPackageNames": [
