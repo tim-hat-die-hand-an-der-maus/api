@@ -5,6 +5,9 @@ import com.github.ajalt.clikt.core.Context
 import com.github.ajalt.clikt.core.main
 import com.github.ajalt.clikt.core.subcommands
 import com.github.ajalt.clikt.parameters.arguments.argument
+import com.github.ajalt.clikt.parameters.options.check
+import com.github.ajalt.clikt.parameters.options.convert
+import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.long
 import consulting.timhatdiehandandermaus.application.usecase.GenerateToken
@@ -72,16 +75,22 @@ private class UpdateMetadataCommand(
 ) : CliktCommand("update-metadata") {
     override fun help(context: Context) = "Updates metadata of all movies in DB"
 
-    val minAge by option(
+    val cutoffTime by option(
         "min-age",
         "Only update for movies not updated this long (in days).",
     ).long()
+        .convert { Instant.now() - Duration.ofDays(it) }
+
+    val limit by option(
+        "limit",
+        "Limit amount of movies to update",
+    ).long()
+        .default(0)
+        .check("value must be non-negative") { it >= 0 }
 
     override fun run() {
-        val cutoffTime = minAge?.let { Instant.now() - Duration.ofDays(it) }
-
         runWithRequestContext {
-            updateAllMetadata(cutoffTime)
+            updateAllMetadata(cutoffTime, limit = limit)
         }
     }
 }

@@ -23,6 +23,9 @@ cronJobs:
     schedule: "* * * * *"
     args: [ "update-metadata" ]
     suspend: true
+  - name: metadata-refresh
+    schedule: "42 4 * * *"
+    args: [ "update-metadata", "--min-age=14", "--limit=30" ]
   - name: shuffle-queue
     schedule: "0 6 * * 1"
     args: [ "shuffle-queue" ]

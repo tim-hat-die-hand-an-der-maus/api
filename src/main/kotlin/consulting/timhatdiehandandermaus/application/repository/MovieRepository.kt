@@ -43,6 +43,7 @@ interface MovieRepository {
 
     fun forEachMovie(
         metadataUpdateTimeCutoff: Instant? = null,
+        limit: Long = 0,
         action: (Movie) -> Unit,
     )
 

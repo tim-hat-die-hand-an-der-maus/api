@@ -15,14 +15,17 @@ class UpdateAllMetadata
         private val metadataResolver: MovieMetadataResolver,
         private val movieRepo: MovieRepository,
     ) {
-        operator fun invoke(cutoffDate: Instant? = null) {
+        operator fun invoke(
+            cutoffDate: Instant? = null,
+            limit: Long = 0,
+        ) {
             if (cutoffDate != null) {
                 log.info("Updating metadata for all movies")
             } else {
                 log.info("Updating metadata for all movies not updated since $cutoffDate")
             }
 
-            movieRepo.forEachMovie(cutoffDate) { movie ->
+            movieRepo.forEachMovie(cutoffDate, limit = limit) { movie ->
                 log.info("Resolving metadata for ${movie.metadata.title} (${movie.id})")
                 val newMetadata = metadataResolver.resolveImdbById(movie.metadata.id)
                 if (newMetadata != movie.metadata) {
