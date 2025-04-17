@@ -77,13 +77,13 @@ private class UpdateMetadataCommand(
 
     val cutoffTime by option(
         "--min-age",
-        "Only update for movies not updated this long (in days).",
+        help = "Only update for movies not updated this long (in days).",
     ).long()
         .convert { Instant.now() - Duration.ofDays(it) }
 
     val limit by option(
         "--limit",
-        "Limit amount of movies to update",
+        help = "Limit amount of movies to update",
     ).long()
         .default(0)
         .check("value must be non-negative") { it >= 0 }
