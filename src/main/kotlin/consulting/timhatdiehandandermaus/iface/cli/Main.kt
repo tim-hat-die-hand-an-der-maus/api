@@ -76,13 +76,13 @@ private class UpdateMetadataCommand(
     override fun help(context: Context) = "Updates metadata of all movies in DB"
 
     val cutoffTime by option(
-        "min-age",
+        "--min-age",
         "Only update for movies not updated this long (in days).",
     ).long()
         .convert { Instant.now() - Duration.ofDays(it) }
 
     val limit by option(
-        "limit",
+        "--limit",
         "Limit amount of movies to update",
     ).long()
         .default(0)
