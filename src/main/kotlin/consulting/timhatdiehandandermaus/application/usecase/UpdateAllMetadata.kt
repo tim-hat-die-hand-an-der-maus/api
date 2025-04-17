@@ -5,6 +5,7 @@ import consulting.timhatdiehandandermaus.application.repository.MovieRepository
 import jakarta.enterprise.context.RequestScoped
 import jakarta.inject.Inject
 import org.jboss.logging.Logger
+import java.time.Instant
 
 @RequestScoped
 class UpdateAllMetadata
@@ -14,10 +15,14 @@ class UpdateAllMetadata
         private val metadataResolver: MovieMetadataResolver,
         private val movieRepo: MovieRepository,
     ) {
-        operator fun invoke() {
-            log.info("Updating metadata for all movies")
+        operator fun invoke(cutoffDate: Instant? = null) {
+            if (cutoffDate != null) {
+                log.info("Updating metadata for all movies")
+            } else {
+                log.info("Updating metadata for all movies not updated since $cutoffDate")
+            }
 
-            movieRepo.forEachMovie { movie ->
+            movieRepo.forEachMovie(cutoffDate) { movie ->
                 log.info("Resolving metadata for ${movie.metadata.title} (${movie.id})")
                 val newMetadata = metadataResolver.resolveImdbById(movie.metadata.id)
                 if (newMetadata != movie.metadata) {

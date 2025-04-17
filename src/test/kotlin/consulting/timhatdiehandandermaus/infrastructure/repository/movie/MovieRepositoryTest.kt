@@ -17,6 +17,8 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
+import java.time.Duration
+import java.time.Instant
 
 @QuarkusTest
 @FlywayTest(DataSource(QuarkusDataSourceProvider::class))
@@ -86,5 +88,40 @@ class MovieRepositoryTest {
         repo.forEachMovie { all.add(it) }
         assertEquals(ids, all.map { it.id }.toSet())
         assertEquals(metadata, all.map { it.metadata }.toSet())
+    }
+
+    @Test
+    fun testForEachMovieWithCutoff(
+        metadata1: MovieMetadata,
+        metadata2: MovieMetadata,
+        metadata3: MovieMetadata,
+    ) {
+        val metadata = setOf(metadata1, metadata2, metadata3)
+        val ids =
+            metadata
+                .map {
+                    repo.insert(
+                        MovieInsertDto(
+                            MovieStatus.Queued,
+                            it,
+                            metadataUpdateTime =
+                                if (it.id ==
+                                    metadata1.id
+                                ) {
+                                    Instant.now().minus(
+                                        Duration.ofDays(2),
+                                    )
+                                } else {
+                                    Instant.now()
+                                },
+                        ),
+                    )
+                }.toSet()
+
+        val all: MutableSet<Movie> = mutableSetOf()
+        repo.forEachMovie(Instant.now().minusSeconds(60)) { all.add(it) }
+
+        assertEquals(1, all.map { it.id }.size)
+        assertEquals(setOf(metadata1), all.map { it.metadata }.toSet())
     }
 }

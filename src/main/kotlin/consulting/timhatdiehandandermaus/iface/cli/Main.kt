@@ -5,6 +5,8 @@ import com.github.ajalt.clikt.core.Context
 import com.github.ajalt.clikt.core.main
 import com.github.ajalt.clikt.core.subcommands
 import com.github.ajalt.clikt.parameters.arguments.argument
+import com.github.ajalt.clikt.parameters.options.option
+import com.github.ajalt.clikt.parameters.types.long
 import consulting.timhatdiehandandermaus.application.usecase.GenerateToken
 import consulting.timhatdiehandandermaus.application.usecase.ShuffleQueue
 import consulting.timhatdiehandandermaus.application.usecase.UpdateAllMetadata
@@ -14,6 +16,8 @@ import io.quarkus.runtime.annotations.QuarkusMain
 import jakarta.enterprise.context.control.ActivateRequestContext
 import jakarta.inject.Inject
 import java.nio.file.Path
+import java.time.Duration
+import java.time.Instant
 import kotlin.io.path.writeText
 
 private class GenerateTokenCommand(
@@ -68,9 +72,16 @@ private class UpdateMetadataCommand(
 ) : CliktCommand("update-metadata") {
     override fun help(context: Context) = "Updates metadata of all movies in DB"
 
+    val minAge by option(
+        "min-age",
+        "Only update for movies not updated this long (in days).",
+    ).long()
+
     override fun run() {
+        val cutoffTime = minAge?.let { Instant.now() - Duration.ofDays(it) }
+
         runWithRequestContext {
-            updateAllMetadata()
+            updateAllMetadata(cutoffTime)
         }
     }
 }

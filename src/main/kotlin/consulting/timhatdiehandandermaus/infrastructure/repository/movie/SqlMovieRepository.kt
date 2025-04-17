@@ -80,8 +80,18 @@ class SqlMovieRepository
 
         @Transactional
         @TransactionConfiguration(timeout = 3600)
-        override fun forEachMovie(action: (Movie) -> Unit) {
-            streamAll().map(mapper::toModel).forEach(action)
+        override fun forEachMovie(
+            metadataUpdateTimeCutoff: Instant?,
+            action: (Movie) -> Unit,
+        ) {
+            val stream =
+                if (metadataUpdateTimeCutoff == null) {
+                    streamAll()
+                } else {
+                    stream("metadataUpdateTime < ?1", metadataUpdateTimeCutoff.atZone(ZoneOffset.UTC))
+                }
+
+            stream.map(mapper::toModel).forEach(action)
         }
 
         override fun listMovies(status: MovieStatus?): Iterable<Movie> {
