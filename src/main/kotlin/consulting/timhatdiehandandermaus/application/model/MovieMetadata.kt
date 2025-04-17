@@ -12,5 +12,5 @@ data class MovieMetadata(
     val year: Int,
     val rating: String,
     val cover: CoverMetadata?,
-    val infoPageUrl: String?,
+    val infoPageUrl: String,
 )

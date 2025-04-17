@@ -157,7 +157,7 @@ class MovieMetadataEntity(
     @Embedded
     var cover: CoverMetadataEntity,
     @Column(name = "info_page_url")
-    var infoPageUrl: String?,
+    var infoPageUrl: String,
 )
 
 @Embeddable

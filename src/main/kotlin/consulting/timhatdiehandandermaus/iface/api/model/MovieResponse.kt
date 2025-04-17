@@ -32,7 +32,7 @@ data class MovieMetadataResponse(
     val year: Int,
     val rating: String,
     val cover: CoverMetadataResponse,
-    val infoPageUrl: String?,
+    val infoPageUrl: String,
 )
 
 @Mapper(uses = [UuidMapper::class])
