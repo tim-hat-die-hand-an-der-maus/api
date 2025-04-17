@@ -6,11 +6,13 @@ import consulting.timhatdiehandandermaus.application.model.Movie
 import consulting.timhatdiehandandermaus.application.model.MovieMetadata
 import consulting.timhatdiehandandermaus.application.model.MovieStatus
 import org.mapstruct.Mapper
+import java.time.Instant
 import java.util.UUID
 
 data class MovieInsertDto(
     val status: MovieStatus,
     val metadata: MovieMetadata,
+    val metadataUpdateTime: Instant = Instant.now(),
 )
 
 @Mapper

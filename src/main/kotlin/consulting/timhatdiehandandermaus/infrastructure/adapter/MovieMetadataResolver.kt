@@ -8,6 +8,7 @@ import jakarta.ws.rs.POST
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient
 import org.eclipse.microprofile.rest.client.inject.RestClient
 import org.mapstruct.Mapper
+import org.mapstruct.Mapping
 
 data class ImdbRequest(
     val imdbUrl: String,
@@ -24,6 +25,7 @@ data class ImdbResponse(
     val year: Int,
     val rating: String,
     val cover: CoverResponse,
+    val imdbUrl: String,
 )
 
 @RegisterRestClient(configKey = "imdb-api")
@@ -34,6 +36,7 @@ interface ImdbService {
 
 @Mapper
 interface ResponseConverter {
+    @Mapping(target = "infoPageUrl", source = "imdbUrl")
     fun toModel(response: ImdbResponse): MovieMetadata
 }
 
