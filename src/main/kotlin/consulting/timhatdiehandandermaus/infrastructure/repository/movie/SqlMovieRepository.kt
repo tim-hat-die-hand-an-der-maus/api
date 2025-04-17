@@ -25,6 +25,9 @@ import jakarta.persistence.Table
 import jakarta.transaction.Transactional
 import org.mapstruct.Mapper
 import org.mapstruct.Mapping
+import java.time.Instant
+import java.time.ZoneOffset
+import java.time.ZonedDateTime
 import java.util.UUID
 
 @RequestScoped
@@ -57,6 +60,8 @@ class SqlMovieRepository
         ) {
             val persisted = findById(id) ?: throw MovieNotFoundException()
             persisted.metadata = mapper.toEntity(metadata)
+            persisted.metadataUpdateTime = ZonedDateTime.now(ZoneOffset.UTC)
+
             persist(persisted)
         }
 
@@ -90,7 +95,7 @@ class SqlMovieRepository
         }
     }
 
-@Mapper
+@Mapper(uses = [TimeMapper::class])
 interface MovieEntityMapper {
     @Mapping(target = "id", ignore = true)
     fun toEntity(movie: MovieInsertDto): MovieEntity
@@ -100,6 +105,13 @@ interface MovieEntityMapper {
     fun toEntity(coverMetadata: CoverMetadata): CoverMetadataEntity
 
     fun toModel(movieEntity: MovieEntity): Movie
+}
+
+@Mapper
+interface TimeMapper {
+    fun toInstant(source: ZonedDateTime): Instant = source.toInstant()
+
+    fun toZonedDateTime(source: Instant): ZonedDateTime = source.atZone(ZoneOffset.UTC)
 }
 
 @Entity
@@ -115,6 +127,9 @@ class MovieEntity {
 
     @Embedded
     lateinit var metadata: MovieMetadataEntity
+
+    @Column(name = "metadata_update_time")
+    lateinit var metadataUpdateTime: ZonedDateTime
 }
 
 @Embeddable
@@ -126,6 +141,8 @@ class MovieMetadataEntity(
     var rating: String,
     @Embedded
     var cover: CoverMetadataEntity,
+    @Column(name = "info_page_url")
+    var infoPageUrl: String?,
 )
 
 @Embeddable

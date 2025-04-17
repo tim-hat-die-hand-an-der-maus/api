@@ -1,7 +1,6 @@
 package consulting.timhatdiehandandermaus.iface.api.model
 
 import consulting.timhatdiehandandermaus.application.model.Movie
-import consulting.timhatdiehandandermaus.application.model.MovieMetadata
 import consulting.timhatdiehandandermaus.iface.api.mapper.UuidMapper
 import org.mapstruct.Mapper
 import org.mapstruct.Mapping
@@ -33,15 +32,11 @@ data class MovieMetadataResponse(
     val year: Int,
     val rating: String,
     val cover: CoverMetadataResponse,
-    @Deprecated("Use cover object instead")
-    val coverUrl: String,
+    val infoPageUrl: String?,
 )
 
 @Mapper(uses = [UuidMapper::class])
 interface MovieResponseConverter {
     @Mapping(source = "metadata", target = "imdb")
     fun convertToResponse(movie: Movie): MovieResponse
-
-    @Mapping(expression = "java(cover.getUrl())", target = "coverUrl")
-    fun convertToResponse(movieMetadata: MovieMetadata): MovieMetadataResponse
 }
