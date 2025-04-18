@@ -3,6 +3,7 @@ package consulting.timhatdiehandandermaus.infrastructure.repository.movie
 import consulting.timhatdiehandandermaus.application.exception.DuplicateMovieException
 import consulting.timhatdiehandandermaus.application.exception.MovieNotFoundException
 import consulting.timhatdiehandandermaus.application.model.CoverMetadata
+import consulting.timhatdiehandandermaus.application.model.MetadataSourceType
 import consulting.timhatdiehandandermaus.application.model.Movie
 import consulting.timhatdiehandandermaus.application.model.MovieMetadata
 import consulting.timhatdiehandandermaus.application.model.MovieStatus
@@ -13,14 +14,19 @@ import io.quarkus.narayana.jta.runtime.TransactionConfiguration
 import io.quarkus.runtime.annotations.RegisterForReflection
 import jakarta.enterprise.context.RequestScoped
 import jakarta.inject.Inject
+import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
-import jakarta.persistence.Embeddable
-import jakarta.persistence.Embedded
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
+import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.ManyToOne
+import jakarta.persistence.OneToMany
+import jakarta.persistence.OneToOne
 import jakarta.persistence.Table
 import jakarta.transaction.Transactional
 import org.mapstruct.Mapper
@@ -42,9 +48,17 @@ class SqlMovieRepository
         override fun insert(movie: MovieInsertDto): UUID {
             val entity = mapper.toEntity(movie)
 
-            val existing = find("metadata.id", movie.metadata.id).firstResult()
-            if (existing != null) {
-                throw DuplicateMovieException(existing.id!!)
+            for (meta in entity.metadata) {
+                meta.movie = entity
+                val existing =
+                    find(
+                        "SELECT DISTINCT m FROM MovieEntity m JOIN m.metadata meta WHERE meta.sourceId = ?1 AND meta.sourceType = ?2",
+                        meta.sourceId,
+                        meta.sourceType,
+                    ).firstResult()
+                if (existing != null) {
+                    throw DuplicateMovieException(existing.id!!)
+                }
             }
 
             persist(entity)
@@ -58,11 +72,15 @@ class SqlMovieRepository
             id: UUID,
             metadata: MovieMetadata,
         ) {
-            val persisted = findById(id) ?: throw MovieNotFoundException()
-            persisted.metadata = mapper.toEntity(metadata)
-            persisted.metadataUpdateTime = ZonedDateTime.now(ZoneOffset.UTC)
+            val movie = findById(id) ?: throw MovieNotFoundException()
 
-            persist(persisted)
+            // This is so stupid.
+            val metadataEntity = getEntityManager().merge(mapper.toEntity(metadata))
+
+            // This is so stupid.
+            metadataEntity.movie = movie
+
+            persist(movie)
         }
 
         @Transactional
@@ -89,7 +107,10 @@ class SqlMovieRepository
                 if (metadataUpdateTimeCutoff == null) {
                     streamAll()
                 } else {
-                    stream("metadataUpdateTime < ?1", metadataUpdateTimeCutoff.atZone(ZoneOffset.UTC))
+                    stream(
+                        "SELECT DISTINCT m FROM MovieEntity m JOIN m.metadata meta WHERE meta.updateTime < ?1",
+                        metadataUpdateTimeCutoff.atZone(ZoneOffset.UTC),
+                    )
                 }
 
             if (limit > 0) {
@@ -112,14 +133,43 @@ class SqlMovieRepository
 
 @Mapper(uses = [TimeMapper::class])
 interface MovieEntityMapper {
-    @Mapping(target = "id", ignore = true)
-    fun toEntity(movie: MovieInsertDto): MovieEntity
+    fun toEntity(movie: MovieInsertDto): MovieEntity {
+        val metadata =
+            mutableSetOf(
+                toEntity(movie.imdbMetadata),
+            )
 
+        return MovieEntity(
+            status = movie.status,
+            metadata = metadata,
+        )
+    }
+
+    @Mapping(target = "sourceId", source = "id")
+    @Mapping(target = "sourceType", source = "type")
+    @Mapping(
+        target = "updateTime",
+        expression = "java(movieMetadata.getUpdateTime().atZone(java.time.ZoneOffset.UTC))",
+    )
+    @Mapping(target = "movie", ignore = true)
     fun toEntity(movieMetadata: MovieMetadata): MovieMetadataEntity
 
-    fun toEntity(coverMetadata: CoverMetadata): CoverMetadataEntity
+    @Mapping(target = "id", ignore = true)
+    fun toEntity(coverMetadata: CoverMetadata): CoverEntity
 
-    fun toModel(movieEntity: MovieEntity): Movie
+    @Mapping(target = "id", source = "sourceId")
+    @Mapping(target = "type", source = "sourceType")
+    fun toModel(movieMetadataEntity: MovieMetadataEntity): MovieMetadata
+
+    fun toModel(movieEntity: MovieEntity): Movie {
+        val metadata = movieEntity.metadata.associateBy { it.sourceType }
+        return Movie(
+            id = movieEntity.id!!,
+            status = movieEntity.status,
+            imdbMetadata = metadata[MetadataSourceType.IMDB]!!.let(::toModel),
+            tmdbMetadata = metadata[MetadataSourceType.TMDB]?.let(::toModel),
+        )
+    }
 }
 
 @Mapper
@@ -132,38 +182,49 @@ interface TimeMapper {
 @Entity
 @Table(name = "movie")
 @RegisterForReflection(targets = [Array<UUID>::class])
-class MovieEntity {
+class MovieEntity(
     @Id
     @GeneratedValue
-    var id: UUID? = null
-
+    var id: UUID? = null,
     @Enumerated(EnumType.STRING)
-    lateinit var status: MovieStatus
-
-    @Embedded
-    lateinit var metadata: MovieMetadataEntity
-
-    @Column(name = "metadata_update_time")
-    lateinit var metadataUpdateTime: ZonedDateTime
-}
-
-@Embeddable
-class MovieMetadataEntity(
-    @Column(name = "imdb_id", unique = true)
-    var id: String,
-    var title: String,
-    var year: Int,
-    var rating: String,
-    @Embedded
-    var cover: CoverMetadataEntity,
-    @Column(name = "info_page_url")
-    var infoPageUrl: String,
+    var status: MovieStatus,
+    @OneToMany(mappedBy = "movie", fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
+    var metadata: MutableSet<MovieMetadataEntity>,
 )
 
-@Embeddable
-class CoverMetadataEntity(
-    @Column(name = "cover_url")
+@Entity
+@Table(name = "metadata")
+@RegisterForReflection(targets = [Array<UUID>::class])
+class MovieMetadataEntity(
+    @Id
+    @Column(name = "source_id")
+    var sourceId: String,
+    @Id
+    @Column(name = "source_type")
+    @Enumerated(EnumType.STRING)
+    var sourceType: MetadataSourceType,
+    var title: String,
+    var year: Int?,
+    var rating: String?,
+    @OneToOne(cascade = [CascadeType.ALL], orphanRemoval = true, fetch = FetchType.EAGER)
+    @JoinColumn(name = "cover_id")
+    var cover: CoverEntity?,
+    @Column(name = "info_page_url")
+    var infoPageUrl: String,
+    @Column(name = "update_time")
+    var updateTime: ZonedDateTime,
+) {
+    @ManyToOne
+    @JoinColumn(name = "movie_id", referencedColumnName = "id", nullable = false)
+    lateinit var movie: MovieEntity
+}
+
+@Entity
+@Table(name = "cover")
+class CoverEntity(
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long? = null,
     var url: String,
-    @Column(name = "cover_ratio")
     var ratio: Double,
 )

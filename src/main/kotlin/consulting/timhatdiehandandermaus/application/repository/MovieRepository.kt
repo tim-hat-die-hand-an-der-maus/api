@@ -6,17 +6,19 @@ import consulting.timhatdiehandandermaus.application.model.Movie
 import consulting.timhatdiehandandermaus.application.model.MovieMetadata
 import consulting.timhatdiehandandermaus.application.model.MovieStatus
 import org.mapstruct.Mapper
+import org.mapstruct.Mapping
 import java.time.Instant
 import java.util.UUID
 
 data class MovieInsertDto(
     val status: MovieStatus,
-    val metadata: MovieMetadata,
-    val metadataUpdateTime: Instant = Instant.now(),
+    val imdbMetadata: MovieMetadata,
+    val tmdbMetadata: MovieMetadata? = null,
 )
 
 @Mapper
 interface MovieInsertDtoConverter {
+    @Mapping(target = "id", source = "id")
     fun toMovie(
         id: UUID,
         dto: MovieInsertDto,

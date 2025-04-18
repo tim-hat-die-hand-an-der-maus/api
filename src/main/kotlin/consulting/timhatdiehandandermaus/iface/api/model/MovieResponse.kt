@@ -37,6 +37,6 @@ data class MovieMetadataResponse(
 
 @Mapper(uses = [UuidMapper::class])
 interface MovieResponseConverter {
-    @Mapping(source = "metadata", target = "imdb")
+    @Mapping(source = "imdbMetadata", target = "imdb")
     fun convertToResponse(movie: Movie): MovieResponse
 }

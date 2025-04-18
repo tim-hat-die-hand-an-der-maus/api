@@ -1,6 +1,7 @@
 package consulting.timhatdiehandandermaus.domain.model
 
 import consulting.timhatdiehandandermaus.application.model.CoverMetadata
+import consulting.timhatdiehandandermaus.application.model.MetadataSourceType
 import consulting.timhatdiehandandermaus.application.model.Movie
 import consulting.timhatdiehandandermaus.application.model.MovieMetadata
 import consulting.timhatdiehandandermaus.application.model.MovieStatus
@@ -8,11 +9,20 @@ import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.api.extension.ParameterContext
 import org.junit.jupiter.api.extension.ParameterResolutionException
 import org.junit.jupiter.api.extension.ParameterResolver
+import java.time.Clock
 import java.time.Instant
+import java.time.ZoneOffset
 import java.util.UUID
+import kotlin.jvm.optionals.getOrNull
 import kotlin.random.Random
 
+annotation class Timestamped(
+    val time: String,
+)
+
 class DummyDataResolver : ParameterResolver {
+    private val clock = Clock.tickMillis(ZoneOffset.UTC)
+
     private val supportedTypes =
         listOf(
             Movie::class,
@@ -29,9 +39,11 @@ class DummyDataResolver : ParameterResolver {
         extensionContext: ExtensionContext,
     ): Any {
         val name = parameterContext.parameter.name
+        val timestamped = parameterContext.findAnnotation(Timestamped::class.java).getOrNull()
+        val updateTime = timestamped?.time?.let(Instant::parse)
         return when (parameterContext.parameter.type.kotlin) {
             Movie::class -> movie(name)
-            MovieMetadata::class -> metadata(name)
+            MovieMetadata::class -> metadata(name, updateTime ?: Instant.now(clock))
             else -> throw ParameterResolutionException("Unsupported type: ${parameterContext.parameter.type}")
         }
     }
@@ -40,12 +52,15 @@ class DummyDataResolver : ParameterResolver {
         Movie(
             id = UUID.randomUUID(),
             status = MovieStatus.Queued,
-            metadata = metadata(name),
-            metadataUpdateTime = Instant.now(),
+            imdbMetadata = metadata(name, updateTime = Instant.now(clock)),
         )
 
-    private fun metadata(name: String): MovieMetadata =
+    private fun metadata(
+        name: String,
+        updateTime: Instant,
+    ): MovieMetadata =
         MovieMetadata(
+            type = MetadataSourceType.IMDB,
             id = "test-$name",
             title = "test-title-$name",
             year = Random.nextInt(1900, 3000),
@@ -56,5 +71,6 @@ class DummyDataResolver : ParameterResolver {
                     ratio = 0.5,
                 ),
             infoPageUrl = "https://www.imdb.com/title/tt123456",
+            updateTime = updateTime,
         )
 }

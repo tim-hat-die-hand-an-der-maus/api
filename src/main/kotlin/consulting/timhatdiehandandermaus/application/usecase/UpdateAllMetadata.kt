@@ -26,9 +26,9 @@ class UpdateAllMetadata
             }
 
             movieRepo.forEachMovie(cutoffDate, limit = limit) { movie ->
-                log.info("Resolving metadata for ${movie.metadata.title} (${movie.id})")
-                val newMetadata = metadataResolver.resolveImdbById(movie.metadata.id)
-                if (newMetadata != movie.metadata) {
+                log.info("Resolving metadata for ${movie.imdbMetadata.title} (${movie.id})")
+                val newMetadata = metadataResolver.resolveImdbById(movie.imdbMetadata.id)
+                if (newMetadata != movie.imdbMetadata) {
                     log.info("Updating metadata ($newMetadata)")
                     movieRepo.updateMetadata(movie.id, newMetadata)
                 }
