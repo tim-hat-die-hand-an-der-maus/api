@@ -37,6 +37,8 @@ interface ImdbService {
 @Mapper
 interface ResponseConverter {
     @Mapping(target = "infoPageUrl", source = "imdbUrl")
+    @Mapping(target = "type", expression = "java(consulting.timhatdiehandandermaus.application.model.MetadataSourceType.IMDB)")
+    @Mapping(target = "updateTime", expression = "java(java.time.Instant.now())")
     fun toModel(response: ImdbResponse): MovieMetadata
 }
 

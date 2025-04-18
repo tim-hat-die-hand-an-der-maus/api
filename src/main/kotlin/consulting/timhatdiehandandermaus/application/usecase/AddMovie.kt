@@ -28,11 +28,11 @@ class AddMovie
         @Throws(DuplicateMovieException::class)
         operator fun invoke(imdbUrl: String): Movie {
             // TODO error handling
-            val metadata = metadataResolver.resolveImdb(imdbUrl)
+            val imdbMetadata = metadataResolver.resolveImdb(imdbUrl)
             val movieDto =
                 MovieInsertDto(
                     status = MovieStatus.Queued,
-                    metadata = metadata,
+                    imdbMetadata = imdbMetadata,
                 )
             val id =
                 try {
@@ -40,7 +40,7 @@ class AddMovie
                 } catch (e: DuplicateMovieException) {
                     log.debug("Movie already exists in database, refreshing metadata")
                     val movieId = e.id
-                    movieRepo.updateMetadata(movieId, metadata)
+                    movieRepo.updateMetadata(movieId, imdbMetadata)
 
                     if (movieId != UUID.fromString(THAT_MOVIE_WITH_AN_AIRPLANE)) {
                         throw e
@@ -50,7 +50,7 @@ class AddMovie
                     movieId
                 }
             queueRepo.insert(id)
-            log.info("Inserted movie $id (${metadata.title}) into the database")
+            log.info("Inserted movie $id (${imdbMetadata.title}) into the database")
             return converter.toMovie(id, movieDto)
         }
     }

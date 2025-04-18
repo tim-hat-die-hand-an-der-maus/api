@@ -5,10 +5,7 @@ import consulting.timhatdiehandandermaus.application.exception.MovieNotFoundExce
 import consulting.timhatdiehandandermaus.application.repository.MovieRepository
 import consulting.timhatdiehandandermaus.application.usecase.AddMovie
 import consulting.timhatdiehandandermaus.application.usecase.ListMovies
-import consulting.timhatdiehandandermaus.application.usecase.RefreshMetadata
 import consulting.timhatdiehandandermaus.iface.api.model.MovieGetStatus
-import consulting.timhatdiehandandermaus.iface.api.model.MovieMetadataFieldConverter
-import consulting.timhatdiehandandermaus.iface.api.model.MovieMetadataPatchRequest
 import consulting.timhatdiehandandermaus.iface.api.model.MoviePostRequest
 import consulting.timhatdiehandandermaus.iface.api.model.MovieRequestConverter
 import consulting.timhatdiehandandermaus.iface.api.model.MovieResponse
@@ -20,7 +17,6 @@ import jakarta.enterprise.context.RequestScoped
 import jakarta.inject.Inject
 import jakarta.ws.rs.GET
 import jakarta.ws.rs.NotFoundException
-import jakarta.ws.rs.PATCH
 import jakarta.ws.rs.PUT
 import jakarta.ws.rs.Path
 import jakarta.ws.rs.PathParam
@@ -42,8 +38,6 @@ class MovieResource
         private val movieRequestConverter: MovieRequestConverter,
         private val addMovie: AddMovie,
         private val listMovies: ListMovies,
-        private val refreshMetadata: RefreshMetadata,
-        private val movieMetadataFieldConverter: MovieMetadataFieldConverter,
         private val movieRepo: MovieRepository,
     ) {
         @PUT
@@ -93,23 +87,5 @@ class MovieResource
             return MoviesResponse(
                 movies = movies.map(movieConverter::convertToResponse),
             )
-        }
-
-        @PATCH
-        @Path("/{id}/metadata")
-        fun patchMetadata(
-            @PathParam("id") id: String,
-            body: MovieMetadataPatchRequest,
-        ) {
-            val uid =
-                try {
-                    UUID.fromString(id)
-                } catch (e: IllegalArgumentException) {
-                    // ID is not a UUID, so it's unknown
-                    throw NotFoundException()
-                }
-
-            val fields = body.refresh.map(movieMetadataFieldConverter::toDomain)
-            refreshMetadata(uid, fields)
         }
     }

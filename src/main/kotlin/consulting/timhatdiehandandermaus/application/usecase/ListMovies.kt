@@ -18,7 +18,7 @@ class ListMovies
             query: String,
         ): List<Movie> =
             movies.sortedByDescending {
-                FuzzySearch.weightedRatio(it.metadata.title, query)
+                FuzzySearch.weightedRatio(it.imdbMetadata.title, query)
             }
 
         operator fun invoke(
