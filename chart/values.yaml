@@ -28,4 +28,5 @@ cronJobs:
     args: [ "update-metadata", "--min-age=14", "--limit=30" ]
   - name: shuffle-queue
     schedule: "0 6 * * 1"
+    backoffLimit: 3
     args: [ "shuffle-queue" ]

@@ -14,6 +14,7 @@ spec:
   startingDeadlineSeconds: 1200
   jobTemplate:
     spec:
+      backoffLimit: {{ .backoffLimit | default 1 }}
       template:
         spec:
           securityContext:
