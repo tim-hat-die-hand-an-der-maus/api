@@ -74,11 +74,13 @@ class SqlMovieRepository
         ) {
             val movie = findById(id) ?: throw MovieNotFoundException()
 
-            // This is so stupid.
-            val metadataEntity = getEntityManager().merge(mapper.toEntity(metadata))
+            var metadataEntity = mapper.toEntity(metadata)
 
             // This is so stupid.
             metadataEntity.movie = movie
+
+            // This is so stupid.
+            metadataEntity = getEntityManager().merge(metadataEntity)
 
             persist(movie)
         }

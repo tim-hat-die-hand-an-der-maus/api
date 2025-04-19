@@ -3,12 +3,14 @@ package consulting.timhatdiehandandermaus.infrastructure.repository.movie
 import com.radcortez.flyway.test.annotation.DataSource
 import com.radcortez.flyway.test.annotation.FlywayTest
 import consulting.timhatdiehandandermaus.application.exception.DuplicateMovieException
+import consulting.timhatdiehandandermaus.application.model.MetadataSourceType
 import consulting.timhatdiehandandermaus.application.model.Movie
 import consulting.timhatdiehandandermaus.application.model.MovieMetadata
 import consulting.timhatdiehandandermaus.application.model.MovieStatus
 import consulting.timhatdiehandandermaus.application.repository.MovieInsertDto
 import consulting.timhatdiehandandermaus.application.repository.MovieRepository
 import consulting.timhatdiehandandermaus.domain.model.DummyDataResolver
+import consulting.timhatdiehandandermaus.domain.model.TestMetadataSource
 import consulting.timhatdiehandandermaus.domain.model.Timestamped
 import consulting.timhatdiehandandermaus.infrastructure.repository.QuarkusDataSourceProvider
 import io.quarkus.test.junit.QuarkusTest
@@ -74,6 +76,20 @@ class MovieRepositoryTest {
         val persisted = repo.find(id)
         assertNotNull(persisted)
         assertEquals(persisted!!.imdbMetadata, newMetadata)
+    }
+
+    @Test
+    fun testUpdateMetadataWithoutOldMetadata(
+        metadata: MovieMetadata,
+        @TestMetadataSource(MetadataSourceType.TMDB)
+        tmdbMetadata: MovieMetadata,
+    ) {
+        val id = repo.insert(MovieInsertDto(MovieStatus.Queued, metadata))
+        repo.updateMetadata(id, tmdbMetadata)
+
+        val persisted = repo.find(id)
+        assertNotNull(persisted)
+        assertEquals(persisted!!.tmdbMetadata, tmdbMetadata)
     }
 
     @Test

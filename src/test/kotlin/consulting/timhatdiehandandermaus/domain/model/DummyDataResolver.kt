@@ -20,6 +20,10 @@ annotation class Timestamped(
     val time: String,
 )
 
+annotation class TestMetadataSource(
+    val source: MetadataSourceType,
+)
+
 class DummyDataResolver : ParameterResolver {
     private val clock = Clock.tickMillis(ZoneOffset.UTC)
 
@@ -39,11 +43,15 @@ class DummyDataResolver : ParameterResolver {
         extensionContext: ExtensionContext,
     ): Any {
         val name = parameterContext.parameter.name
+
         val timestamped = parameterContext.findAnnotation(Timestamped::class.java).getOrNull()
         val updateTime = timestamped?.time?.let(Instant::parse)
+
+        val source = parameterContext.findAnnotation(TestMetadataSource::class.java).getOrNull()
+
         return when (parameterContext.parameter.type.kotlin) {
             Movie::class -> movie(name)
-            MovieMetadata::class -> metadata(name, updateTime ?: Instant.now(clock))
+            MovieMetadata::class -> metadata(name, updateTime ?: Instant.now(clock), source?.source ?: MetadataSourceType.IMDB)
             else -> throw ParameterResolutionException("Unsupported type: ${parameterContext.parameter.type}")
         }
     }
@@ -52,15 +60,16 @@ class DummyDataResolver : ParameterResolver {
         Movie(
             id = UUID.randomUUID(),
             status = MovieStatus.Queued,
-            imdbMetadata = metadata(name, updateTime = Instant.now(clock)),
+            imdbMetadata = metadata(name, updateTime = Instant.now(clock), source = MetadataSourceType.IMDB),
         )
 
     private fun metadata(
         name: String,
         updateTime: Instant,
+        source: MetadataSourceType,
     ): MovieMetadata =
         MovieMetadata(
-            type = MetadataSourceType.IMDB,
+            type = source,
             id = "test-$name",
             title = "test-title-$name",
             year = Random.nextInt(1900, 3000),
