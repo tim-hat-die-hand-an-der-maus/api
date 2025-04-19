@@ -16,6 +16,8 @@ class UpdateAllMetadata
         private val log: Logger,
         @MetadataSource(MetadataSourceType.IMDB)
         private val imdbResolver: MovieMetadataResolver,
+        @MetadataSource(MetadataSourceType.TMDB)
+        private val tmdbResolver: MovieMetadataResolver,
         private val movieRepo: MovieRepository,
     ) {
         operator fun invoke(
@@ -29,11 +31,26 @@ class UpdateAllMetadata
             }
 
             movieRepo.forEachMovie(cutoffDate, limit = limit) { movie ->
-                log.info("Resolving metadata for ${movie.imdbMetadata.title} (${movie.id})")
-                val newMetadata = imdbResolver.resolveById(movie.imdbMetadata.id)
-                if (newMetadata != movie.imdbMetadata) {
-                    log.info("Updating metadata ($newMetadata)")
-                    movieRepo.updateMetadata(movie.id, newMetadata)
+                log.info("Resolving IMDb metadata for ${movie.imdbMetadata.title} (${movie.id})")
+                val imdbMetadata = imdbResolver.resolveById(movie.imdbMetadata.id)
+                if (!imdbMetadata.equalsIgnoreUpdateTime(movie.imdbMetadata)) {
+                    log.info("Updating metadata ($imdbMetadata)")
+                    movieRepo.updateMetadata(movie.id, imdbMetadata)
+                }
+
+                log.info("Resolving TMDB metadata for ${movie.imdbMetadata.title} (${movie.id})")
+                val oldMetadata = movie.tmdbMetadata
+
+                val tmdbMetadata =
+                    if (oldMetadata == null) {
+                        tmdbResolver.resolveById(imdbMetadata.id, MetadataSourceType.IMDB)
+                    } else {
+                        tmdbResolver.resolveById(oldMetadata.id)
+                    }
+
+                if (oldMetadata == null || !tmdbMetadata.equalsIgnoreUpdateTime(oldMetadata)) {
+                    log.info("Updating metadata ($tmdbMetadata)")
+                    movieRepo.updateMetadata(movie.id, tmdbMetadata)
                 }
             }
         }

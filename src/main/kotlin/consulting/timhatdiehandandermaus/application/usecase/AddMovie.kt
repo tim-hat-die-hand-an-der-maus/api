@@ -24,6 +24,8 @@ class AddMovie
         private val log: Logger,
         @MetadataSource(MetadataSourceType.IMDB)
         private val imdbResolver: MovieMetadataResolver,
+        @MetadataSource(MetadataSourceType.TMDB)
+        private val tmdbResolver: MovieMetadataResolver,
         private val converter: MovieInsertDtoConverter,
         private val movieRepo: MovieRepository,
         private val queueRepo: QueueRepository,
@@ -32,10 +34,12 @@ class AddMovie
         operator fun invoke(imdbUrl: String): Movie {
             // TODO error handling
             val imdbMetadata = imdbResolver.resolveByUrl(imdbUrl)
+            val tmdbMetadata = tmdbResolver.resolveByUrl(imdbUrl)
             val movieDto =
                 MovieInsertDto(
                     status = MovieStatus.Queued,
                     imdbMetadata = imdbMetadata,
+                    tmdbMetadata = tmdbMetadata,
                 )
             val id =
                 try {
@@ -44,6 +48,7 @@ class AddMovie
                     log.debug("Movie already exists in database, refreshing metadata")
                     val movieId = e.id
                     movieRepo.updateMetadata(movieId, imdbMetadata)
+                    movieRepo.updateMetadata(movieId, tmdbMetadata)
 
                     if (movieId != UUID.fromString(THAT_MOVIE_WITH_AN_AIRPLANE)) {
                         throw e

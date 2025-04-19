@@ -17,4 +17,6 @@ data class MovieMetadata(
     val cover: CoverMetadata?,
     val infoPageUrl: String,
     val updateTime: Instant,
-)
+) {
+    fun equalsIgnoreUpdateTime(other: MovieMetadata): Boolean = copy(updateTime = Instant.EPOCH) == other.copy(updateTime = Instant.EPOCH)
+}

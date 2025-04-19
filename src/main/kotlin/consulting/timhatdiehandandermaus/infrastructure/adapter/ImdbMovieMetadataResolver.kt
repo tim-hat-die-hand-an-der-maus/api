@@ -1,5 +1,6 @@
 package consulting.timhatdiehandandermaus.infrastructure.adapter
 
+import consulting.timhatdiehandandermaus.application.exception.MovieNotFoundException
 import consulting.timhatdiehandandermaus.application.model.MetadataSourceType
 import consulting.timhatdiehandandermaus.application.model.MovieMetadata
 import consulting.timhatdiehandandermaus.application.port.MetadataSource
@@ -58,7 +59,13 @@ class ImdbMovieMetadataResolver
             return converter.toModel(response)
         }
 
-        override fun resolveById(id: String): MovieMetadata {
+        override fun resolveById(
+            id: String,
+            idSource: MetadataSourceType?,
+        ): MovieMetadata {
+            if (idSource != null && idSource != MetadataSourceType.IMDB) {
+                throw MovieNotFoundException("Can not look up foreign IDs on IMDb")
+            }
             val imdbUrl = "https://imdb.com/tt$id/"
             return resolveByUrl(imdbUrl)
         }

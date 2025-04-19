@@ -14,5 +14,8 @@ annotation class MetadataSource(
 interface MovieMetadataResolver {
     fun resolveByUrl(url: String): MovieMetadata
 
-    fun resolveById(id: String): MovieMetadata
+    fun resolveById(
+        id: String,
+        idSource: MetadataSourceType? = null,
+    ): MovieMetadata
 }

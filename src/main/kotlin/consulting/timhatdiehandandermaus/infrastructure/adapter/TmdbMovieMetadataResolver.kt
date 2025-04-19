@@ -1,0 +1,86 @@
+package consulting.timhatdiehandandermaus.infrastructure.adapter
+
+import consulting.timhatdiehandandermaus.application.model.MetadataSourceType
+import consulting.timhatdiehandandermaus.application.model.MovieMetadata
+import consulting.timhatdiehandandermaus.application.port.MetadataSource
+import consulting.timhatdiehandandermaus.application.port.MovieMetadataResolver
+import jakarta.enterprise.context.RequestScoped
+import jakarta.inject.Inject
+import jakarta.ws.rs.POST
+import jakarta.ws.rs.Path
+import jakarta.ws.rs.PathParam
+import jakarta.ws.rs.QueryParam
+import org.eclipse.microprofile.rest.client.inject.RegisterRestClient
+import org.eclipse.microprofile.rest.client.inject.RestClient
+import org.mapstruct.Mapper
+import org.mapstruct.Mapping
+
+data class TmdbUrlRequest(
+    val link: String,
+)
+
+data class TmdbCoverResponse(
+    val url: String,
+    val ratio: Double,
+)
+
+data class TmdbResponse(
+    val id: String,
+    val title: String,
+    val year: Int,
+    val rating: String?,
+    val cover: TmdbCoverResponse?,
+    val imdbUrl: String?,
+    val tmdbUrl: String,
+)
+
+@RegisterRestClient(configKey = "tmdb-api")
+interface TmdbService {
+    @POST
+    @Path("/by_link")
+    fun resolveMetadata(request: TmdbUrlRequest): TmdbResponse
+
+    @POST
+    @Path("/by_id/{movieId}")
+    fun resolveMetadataById(
+        @PathParam("movieId") movieId: String,
+        @QueryParam("external_source") externalSource: String?,
+    ): TmdbResponse
+}
+
+@Mapper
+interface TmdbResponseConverter {
+    @Mapping(target = "infoPageUrl", source = "tmdbUrl")
+    @Mapping(target = "type", expression = "java(consulting.timhatdiehandandermaus.application.model.MetadataSourceType.TMDB)")
+    @Mapping(target = "updateTime", expression = "java(java.time.Instant.now())")
+    fun toModel(response: TmdbResponse): MovieMetadata
+}
+
+@MetadataSource(MetadataSourceType.TMDB)
+@RequestScoped
+class TmdbMovieMetadataResolver
+    @Inject
+    constructor(
+        @RestClient
+        private val service: TmdbService,
+        private val converter: TmdbResponseConverter,
+    ) : MovieMetadataResolver {
+        override fun resolveByUrl(url: String): MovieMetadata {
+            val response = service.resolveMetadata(TmdbUrlRequest(url))
+            return converter.toModel(response)
+        }
+
+        override fun resolveById(
+            id: String,
+            idSource: MetadataSourceType?,
+        ): MovieMetadata {
+            val externalSource =
+                when (idSource) {
+                    null -> null
+                    MetadataSourceType.TMDB -> null
+                    MetadataSourceType.IMDB -> "imdb"
+                }
+            val response = service.resolveMetadataById(id, externalSource = externalSource)
+            return converter.toModel(response)
+        }
+    }
