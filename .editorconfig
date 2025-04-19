@@ -15,3 +15,6 @@ ij_kotlin_allow_trailing_comma=true
 
 [*.{bat,cmd}]
 end_of_line = crlf
+
+[*.sql]
+indent_size = 2
