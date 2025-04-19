@@ -1,5 +1,6 @@
 package consulting.timhatdiehandandermaus.application.usecase
 
+import consulting.timhatdiehandandermaus.application.exception.MovieNotFoundException
 import consulting.timhatdiehandandermaus.application.model.MetadataSourceType
 import consulting.timhatdiehandandermaus.application.port.MetadataSource
 import consulting.timhatdiehandandermaus.application.port.MovieMetadataResolver
@@ -42,13 +43,18 @@ class UpdateAllMetadata
                 val oldMetadata = movie.tmdbMetadata
 
                 val tmdbMetadata =
-                    if (oldMetadata == null) {
-                        tmdbResolver.resolveById(imdbMetadata.id, MetadataSourceType.IMDB)
-                    } else {
-                        tmdbResolver.resolveById(oldMetadata.id)
+                    try {
+                        if (oldMetadata == null) {
+                            tmdbResolver.resolveById(imdbMetadata.id, MetadataSourceType.IMDB)
+                        } else {
+                            tmdbResolver.resolveById(oldMetadata.id)
+                        }
+                    } catch (e: MovieNotFoundException) {
+                        log.error("Failed to resolve TMDB metadata for ${imdbMetadata.title} (IMDb ${imdbMetadata.id})", e)
+                        null
                     }
 
-                if (oldMetadata == null || !tmdbMetadata.equalsIgnoreUpdateTime(oldMetadata)) {
+                if (tmdbMetadata != null && (oldMetadata == null || !tmdbMetadata.equalsIgnoreUpdateTime(oldMetadata))) {
                     log.info("Updating metadata ($tmdbMetadata)")
                     movieRepo.updateMetadata(movie.id, tmdbMetadata)
                 }
