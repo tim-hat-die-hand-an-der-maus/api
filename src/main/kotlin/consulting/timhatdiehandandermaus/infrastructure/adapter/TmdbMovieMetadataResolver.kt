@@ -1,5 +1,6 @@
 package consulting.timhatdiehandandermaus.infrastructure.adapter
 
+import consulting.timhatdiehandandermaus.application.exception.MovieNotFoundException
 import consulting.timhatdiehandandermaus.application.model.MetadataSourceType
 import consulting.timhatdiehandandermaus.application.model.MovieMetadata
 import consulting.timhatdiehandandermaus.application.port.MetadataSource
@@ -12,6 +13,8 @@ import jakarta.ws.rs.PathParam
 import jakarta.ws.rs.QueryParam
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient
 import org.eclipse.microprofile.rest.client.inject.RestClient
+import org.jboss.logging.Logger
+import org.jboss.resteasy.reactive.ClientWebApplicationException
 import org.mapstruct.Mapper
 import org.mapstruct.Mapping
 
@@ -64,6 +67,7 @@ class TmdbMovieMetadataResolver
         @RestClient
         private val service: TmdbService,
         private val converter: TmdbResponseConverter,
+        private val logger: Logger,
     ) : MovieMetadataResolver {
         override fun resolveByUrl(url: String): MovieMetadata {
             val response = service.resolveMetadata(TmdbUrlRequest(url))
@@ -80,7 +84,19 @@ class TmdbMovieMetadataResolver
                     MetadataSourceType.TMDB -> null
                     MetadataSourceType.IMDB -> "imdb"
                 }
-            val response = service.resolveMetadataById(id, externalSource = externalSource)
+
+            logger.info("Resolving TMDB metadata for $id (external source: $externalSource)")
+
+            val response =
+                try {
+                    service.resolveMetadataById(id, externalSource = externalSource)
+                } catch (e: ClientWebApplicationException) {
+                    if (e.response.status == 404) {
+                        throw MovieNotFoundException("Movie not found on TMDB")
+                    }
+
+                    throw e
+                }
             return converter.toModel(response)
         }
     }
