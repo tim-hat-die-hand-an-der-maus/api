@@ -139,6 +139,8 @@ interface MovieEntityMapper {
                 toEntity(movie.imdbMetadata),
             )
 
+        movie.tmdbMetadata?.let(::toEntity)?.let(metadata::add)
+
         return MovieEntity(
             status = movie.status,
             metadata = metadata,
