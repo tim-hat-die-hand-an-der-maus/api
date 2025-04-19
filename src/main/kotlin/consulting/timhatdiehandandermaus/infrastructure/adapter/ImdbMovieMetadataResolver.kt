@@ -1,6 +1,8 @@
 package consulting.timhatdiehandandermaus.infrastructure.adapter
 
+import consulting.timhatdiehandandermaus.application.model.MetadataSourceType
 import consulting.timhatdiehandandermaus.application.model.MovieMetadata
+import consulting.timhatdiehandandermaus.application.port.MetadataSource
 import consulting.timhatdiehandandermaus.application.port.MovieMetadataResolver
 import jakarta.enterprise.context.RequestScoped
 import jakarta.inject.Inject
@@ -42,6 +44,7 @@ interface ResponseConverter {
     fun toModel(response: ImdbResponse): MovieMetadata
 }
 
+@MetadataSource(MetadataSourceType.IMDB)
 @RequestScoped
 class ImdbMovieMetadataResolver
     @Inject
@@ -50,13 +53,13 @@ class ImdbMovieMetadataResolver
         private val service: ImdbService,
         private val converter: ResponseConverter,
     ) : MovieMetadataResolver {
-        override fun resolveImdb(imdbUrl: String): MovieMetadata {
-            val response = service.resolveMetadata(ImdbRequest(imdbUrl))
+        override fun resolveByUrl(url: String): MovieMetadata {
+            val response = service.resolveMetadata(ImdbRequest(url))
             return converter.toModel(response)
         }
 
-        override fun resolveImdbById(imdbId: String): MovieMetadata {
-            val imdbUrl = "https://imdb.com/tt$imdbId/"
-            return resolveImdb(imdbUrl)
+        override fun resolveById(id: String): MovieMetadata {
+            val imdbUrl = "https://imdb.com/tt$id/"
+            return resolveByUrl(imdbUrl)
         }
     }

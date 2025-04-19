@@ -1,5 +1,7 @@
 package consulting.timhatdiehandandermaus.application.usecase
 
+import consulting.timhatdiehandandermaus.application.model.MetadataSourceType
+import consulting.timhatdiehandandermaus.application.port.MetadataSource
 import consulting.timhatdiehandandermaus.application.port.MovieMetadataResolver
 import consulting.timhatdiehandandermaus.application.repository.MovieRepository
 import jakarta.enterprise.context.RequestScoped
@@ -12,7 +14,8 @@ class UpdateAllMetadata
     @Inject
     constructor(
         private val log: Logger,
-        private val metadataResolver: MovieMetadataResolver,
+        @MetadataSource(MetadataSourceType.IMDB)
+        private val imdbResolver: MovieMetadataResolver,
         private val movieRepo: MovieRepository,
     ) {
         operator fun invoke(
@@ -27,7 +30,7 @@ class UpdateAllMetadata
 
             movieRepo.forEachMovie(cutoffDate, limit = limit) { movie ->
                 log.info("Resolving metadata for ${movie.imdbMetadata.title} (${movie.id})")
-                val newMetadata = metadataResolver.resolveImdbById(movie.imdbMetadata.id)
+                val newMetadata = imdbResolver.resolveById(movie.imdbMetadata.id)
                 if (newMetadata != movie.imdbMetadata) {
                     log.info("Updating metadata ($newMetadata)")
                     movieRepo.updateMetadata(movie.id, newMetadata)
