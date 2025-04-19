@@ -15,6 +15,7 @@ data class MovieResponse(
     val id: String,
     val status: MovieStatusResponse,
     val imdb: MovieMetadataResponse,
+    val tmdb: MovieMetadataResponse?,
 )
 
 data class MoviesResponse(
@@ -38,5 +39,6 @@ data class MovieMetadataResponse(
 @Mapper(uses = [UuidMapper::class])
 interface MovieResponseConverter {
     @Mapping(source = "imdbMetadata", target = "imdb")
+    @Mapping(source = "tmdbMetadata", target = "tmdb")
     fun convertToResponse(movie: Movie): MovieResponse
 }
