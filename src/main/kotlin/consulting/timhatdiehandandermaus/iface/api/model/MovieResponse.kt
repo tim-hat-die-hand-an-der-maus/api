@@ -31,8 +31,8 @@ data class MovieMetadataResponse(
     val id: String,
     val title: String,
     val year: Int,
-    val rating: String,
-    val cover: CoverMetadataResponse,
+    val rating: String?,
+    val cover: CoverMetadataResponse?,
     val infoPageUrl: String,
 )
 
