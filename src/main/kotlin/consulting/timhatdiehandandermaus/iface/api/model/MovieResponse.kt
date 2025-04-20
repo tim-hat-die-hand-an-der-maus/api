@@ -14,7 +14,7 @@ enum class MovieStatusResponse {
 data class MovieResponse(
     val id: String,
     val status: MovieStatusResponse,
-    val imdb: MovieMetadataResponse,
+    val imdb: MovieMetadataResponse?,
     val tmdb: MovieMetadataResponse?,
 )
 
