@@ -18,6 +18,7 @@ import io.quarkus.runtime.QuarkusApplication
 import io.quarkus.runtime.annotations.QuarkusMain
 import jakarta.enterprise.context.control.ActivateRequestContext
 import jakarta.inject.Inject
+import org.flywaydb.core.Flyway
 import java.nio.file.Path
 import java.time.Duration
 import java.time.Instant
@@ -95,6 +96,20 @@ private class UpdateMetadataCommand(
     }
 }
 
+
+private class RunFlywayCommand(
+    private val runWithRequestContext: (() -> Unit) -> Unit,
+    private val flyway: Flyway,
+) : CliktCommand("run-flyway") {
+    override fun help(context: Context) = "Runs all DB migrations"
+
+    override fun run() {
+        runWithRequestContext {
+            flyway.migrate()
+        }
+    }
+}
+
 private class MainCommand : CliktCommand("main") {
     override fun run() = Unit
 }
@@ -106,6 +121,7 @@ class Main
         private val generateToken: GenerateToken,
         private val shuffleQueue: ShuffleQueue,
         private val updateAllMetadata: UpdateAllMetadata,
+        private val flyway: Flyway,
     ) : QuarkusApplication {
         override fun run(args: Array<String>): Int {
             val main =
@@ -115,6 +131,7 @@ class Main
                         RunApiCommand(),
                         ShuffleQueueCommand(this::withRequestContext, shuffleQueue),
                         UpdateMetadataCommand(this::withRequestContext, updateAllMetadata),
+                        RunFlywayCommand(this::withRequestContext, flyway),
                     )
 
             main.main(args)

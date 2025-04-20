@@ -9,6 +9,7 @@ import consulting.timhatdiehandandermaus.application.model.MovieMetadata
 import consulting.timhatdiehandandermaus.application.model.MovieStatus
 import consulting.timhatdiehandandermaus.application.repository.MovieInsertDto
 import consulting.timhatdiehandandermaus.application.repository.MovieRepository
+import consulting.timhatdiehandandermaus.infrastructure.repository.jooq.Tables
 import io.quarkus.hibernate.orm.panache.kotlin.PanacheRepositoryBase
 import io.quarkus.narayana.jta.runtime.TransactionConfiguration
 import io.quarkus.runtime.annotations.RegisterForReflection
@@ -35,6 +36,7 @@ import java.time.Instant
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.util.UUID
+
 
 @RequestScoped
 class SqlMovieRepository
@@ -137,6 +139,8 @@ class SqlMovieRepository
 interface MovieEntityMapper {
     fun toEntity(movie: MovieInsertDto): MovieEntity {
         val metadata = mutableSetOf<MovieMetadataEntity>()
+
+
 
         movie.imdbMetadata?.let(::toEntity)?.let(metadata::add)
         movie.tmdbMetadata?.let(::toEntity)?.let(metadata::add)
