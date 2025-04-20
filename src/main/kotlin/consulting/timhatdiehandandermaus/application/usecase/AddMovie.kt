@@ -1,6 +1,7 @@
 package consulting.timhatdiehandandermaus.application.usecase
 
 import consulting.timhatdiehandandermaus.application.exception.DuplicateMovieException
+import consulting.timhatdiehandandermaus.application.exception.MovieNotFoundException
 import consulting.timhatdiehandandermaus.application.model.MetadataSourceType
 import consulting.timhatdiehandandermaus.application.model.Movie
 import consulting.timhatdiehandandermaus.application.model.MovieStatus
@@ -31,10 +32,26 @@ class AddMovie
         private val queueRepo: QueueRepository,
     ) {
         @Throws(DuplicateMovieException::class)
-        operator fun invoke(imdbUrl: String): Movie {
-            // TODO error handling
-            val imdbMetadata = imdbResolver.resolveByUrl(imdbUrl)
-            val tmdbMetadata = tmdbResolver.resolveByUrl(imdbUrl)
+        operator fun invoke(url: String): Movie {
+            val imdbMetadata =
+                try {
+                    imdbResolver.resolveByUrl(url)
+                } catch (e: MovieNotFoundException) {
+                    log.info("Movie not found on IMDb: $url")
+                    null
+                }
+            val tmdbMetadata =
+                try {
+                    tmdbResolver.resolveByUrl(url)
+                } catch (e: MovieNotFoundException) {
+                    log.info("Movie not found on TMDB: $url")
+                    null
+                }
+
+            if (imdbMetadata == null && tmdbMetadata == null) {
+                throw MovieNotFoundException()
+            }
+
             val movieDto =
                 MovieInsertDto(
                     status = MovieStatus.Queued,
@@ -47,8 +64,13 @@ class AddMovie
                 } catch (e: DuplicateMovieException) {
                     log.debug("Movie already exists in database, refreshing metadata")
                     val movieId = e.id
-                    movieRepo.updateMetadata(movieId, imdbMetadata)
-                    movieRepo.updateMetadata(movieId, tmdbMetadata)
+
+                    if (imdbMetadata != null) {
+                        movieRepo.updateMetadata(movieId, imdbMetadata)
+                    }
+                    if (tmdbMetadata != null) {
+                        movieRepo.updateMetadata(movieId, tmdbMetadata)
+                    }
 
                     if (movieId != UUID.fromString(THAT_MOVIE_WITH_AN_AIRPLANE)) {
                         throw e
@@ -58,7 +80,7 @@ class AddMovie
                     movieId
                 }
             queueRepo.insert(id)
-            log.info("Inserted movie $id (${imdbMetadata.title}) into the database")
+            log.info("Inserted movie $id into the database")
             return converter.toMovie(id, movieDto)
         }
     }

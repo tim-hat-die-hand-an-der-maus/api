@@ -32,29 +32,36 @@ class UpdateAllMetadata
             }
 
             movieRepo.forEachMovie(cutoffDate, limit = limit) { movie ->
-                log.info("Resolving IMDb metadata for ${movie.imdbMetadata.title} (${movie.id})")
-                val imdbMetadata = imdbResolver.resolveById(movie.imdbMetadata.id)
-                if (!imdbMetadata.equalsIgnoreUpdateTime(movie.imdbMetadata)) {
-                    log.info("Updating metadata ($imdbMetadata)")
-                    movieRepo.updateMetadata(movie.id, imdbMetadata)
+                val oldImdbMetadata = movie.imdbMetadata
+                if (oldImdbMetadata != null) {
+                    log.info("Resolving IMDb metadata for ${movie.id}")
+                    val imdbMetadata = imdbResolver.resolveById(oldImdbMetadata.id)
+                    if (!imdbMetadata.equalsIgnoreUpdateTime(oldImdbMetadata)) {
+                        log.info("Updating metadata ($imdbMetadata)")
+                        movieRepo.updateMetadata(movie.id, imdbMetadata)
+                    }
                 }
 
-                log.info("Resolving TMDB metadata for ${movie.imdbMetadata.title} (${movie.id})")
-                val oldMetadata = movie.tmdbMetadata
+                log.info("Resolving TMDB metadata for movie ${movie.id}")
+                val oldTmdbMetadata = movie.tmdbMetadata
 
                 val tmdbMetadata =
                     try {
-                        if (oldMetadata == null) {
-                            tmdbResolver.resolveById(imdbMetadata.id, MetadataSourceType.IMDB)
-                        } else {
-                            tmdbResolver.resolveById(oldMetadata.id)
+                        when {
+                            oldTmdbMetadata == null && oldImdbMetadata != null ->
+                                tmdbResolver.resolveById(
+                                    oldImdbMetadata.id,
+                                    MetadataSourceType.IMDB,
+                                )
+                            oldTmdbMetadata != null -> tmdbResolver.resolveById(oldTmdbMetadata.id)
+                            else -> null
                         }
                     } catch (e: MovieNotFoundException) {
-                        log.error("Failed to resolve TMDB metadata for ${imdbMetadata.title} (IMDb ${imdbMetadata.id})", e)
+                        log.error("Failed to resolve TMDB metadata for ${movie.id}", e)
                         null
                     }
 
-                if (tmdbMetadata != null && (oldMetadata == null || !tmdbMetadata.equalsIgnoreUpdateTime(oldMetadata))) {
+                if (tmdbMetadata != null && (oldTmdbMetadata == null || !tmdbMetadata.equalsIgnoreUpdateTime(oldTmdbMetadata))) {
                     log.info("Updating metadata ($tmdbMetadata)")
                     movieRepo.updateMetadata(movie.id, tmdbMetadata)
                 }

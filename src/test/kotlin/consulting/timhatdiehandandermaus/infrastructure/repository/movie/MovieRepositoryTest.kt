@@ -31,7 +31,7 @@ class MovieRepositoryTest {
 
     @Test
     fun testInsert(metadata: MovieMetadata) {
-        val id = repo.insert(MovieInsertDto(MovieStatus.Queued, metadata))
+        val id = repo.insert(MovieInsertDto(MovieStatus.Queued, metadata, tmdbMetadata = null))
         assertNotNull(id)
 
         val movie = repo.find(id)
@@ -43,7 +43,7 @@ class MovieRepositoryTest {
 
     @Test
     fun testDuplicateInsert(metadata: MovieMetadata) {
-        val dto = MovieInsertDto(MovieStatus.Queued, metadata)
+        val dto = MovieInsertDto(MovieStatus.Queued, metadata, tmdbMetadata = null)
         val id = repo.insert(dto)
         assertNotNull(id)
 
@@ -54,7 +54,7 @@ class MovieRepositoryTest {
 
     @Test
     fun testUpdateStatus(metadata: MovieMetadata) {
-        val id = repo.insert(MovieInsertDto(MovieStatus.Queued, metadata))
+        val id = repo.insert(MovieInsertDto(MovieStatus.Queued, metadata, tmdbMetadata = null))
 
         repo.updateStatus(id, MovieStatus.Watched)
 
@@ -68,7 +68,7 @@ class MovieRepositoryTest {
         metadata: MovieMetadata,
         newMetadata: MovieMetadata,
     ) {
-        val id = repo.insert(MovieInsertDto(MovieStatus.Queued, metadata))
+        val id = repo.insert(MovieInsertDto(MovieStatus.Queued, metadata, tmdbMetadata = null))
 
         val newMetadata = newMetadata.copy(id = metadata.id)
         repo.updateMetadata(id, newMetadata)
@@ -80,16 +80,18 @@ class MovieRepositoryTest {
 
     @Test
     fun testUpdateMetadataWithoutOldMetadata(
-        metadata: MovieMetadata,
+        imdbMetadata: MovieMetadata,
         @TestMetadataSource(MetadataSourceType.TMDB)
         tmdbMetadata: MovieMetadata,
     ) {
-        val id = repo.insert(MovieInsertDto(MovieStatus.Queued, metadata))
+        val id = repo.insert(MovieInsertDto(MovieStatus.Queued, imdbMetadata, tmdbMetadata = null))
         repo.updateMetadata(id, tmdbMetadata)
 
         val persisted = repo.find(id)
         assertNotNull(persisted)
-        assertEquals(persisted!!.tmdbMetadata, tmdbMetadata)
+        persisted!!
+        assertEquals(persisted.tmdbMetadata, tmdbMetadata)
+        assertEquals(persisted.imdbMetadata, imdbMetadata)
     }
 
     @Test
@@ -102,7 +104,7 @@ class MovieRepositoryTest {
         metadata3: MovieMetadata,
     ) {
         val metadata = setOf(metadata1, metadata2, metadata3)
-        val ids = metadata.map { repo.insert(MovieInsertDto(MovieStatus.Queued, it)) }.toSet()
+        val ids = metadata.map { repo.insert(MovieInsertDto(MovieStatus.Queued, it, tmdbMetadata = null)) }.toSet()
 
         val all: MutableSet<Movie> = mutableSetOf()
         repo.forEachMovie { all.add(it) }
@@ -125,6 +127,7 @@ class MovieRepositoryTest {
                         MovieInsertDto(
                             MovieStatus.Queued,
                             it,
+                            tmdbMetadata = null,
                         ),
                     )
                 }.toSet()

@@ -5,6 +5,6 @@ import java.util.UUID
 class Movie(
     val id: UUID,
     var status: MovieStatus,
-    var imdbMetadata: MovieMetadata,
-    var tmdbMetadata: MovieMetadata? = null,
+    var imdbMetadata: MovieMetadata?,
+    var tmdbMetadata: MovieMetadata?,
 )

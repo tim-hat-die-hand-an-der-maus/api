@@ -80,7 +80,7 @@ class SqlMovieRepository
             metadataEntity.movie = movie
 
             // This is so stupid.
-            metadataEntity = getEntityManager().merge(metadataEntity)
+            getEntityManager().merge(metadataEntity)
 
             persist(movie)
         }
@@ -136,11 +136,9 @@ class SqlMovieRepository
 @Mapper(uses = [TimeMapper::class])
 interface MovieEntityMapper {
     fun toEntity(movie: MovieInsertDto): MovieEntity {
-        val metadata =
-            mutableSetOf(
-                toEntity(movie.imdbMetadata),
-            )
+        val metadata = mutableSetOf<MovieMetadataEntity>()
 
+        movie.imdbMetadata?.let(::toEntity)?.let(metadata::add)
         movie.tmdbMetadata?.let(::toEntity)?.let(metadata::add)
 
         return MovieEntity(
@@ -170,7 +168,7 @@ interface MovieEntityMapper {
         return Movie(
             id = movieEntity.id!!,
             status = movieEntity.status,
-            imdbMetadata = metadata[MetadataSourceType.IMDB]!!.let(::toModel),
+            imdbMetadata = metadata[MetadataSourceType.IMDB]?.let(::toModel),
             tmdbMetadata = metadata[MetadataSourceType.TMDB]?.let(::toModel),
         )
     }

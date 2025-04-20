@@ -61,6 +61,7 @@ class DummyDataResolver : ParameterResolver {
             id = UUID.randomUUID(),
             status = MovieStatus.Queued,
             imdbMetadata = metadata(name, updateTime = Instant.now(clock), source = MetadataSourceType.IMDB),
+            tmdbMetadata = metadata(name, updateTime = Instant.now(clock), source = MetadataSourceType.TMDB),
         )
 
     private fun metadata(

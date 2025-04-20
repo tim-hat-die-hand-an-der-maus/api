@@ -12,8 +12,8 @@ import java.util.UUID
 
 data class MovieInsertDto(
     val status: MovieStatus,
-    val imdbMetadata: MovieMetadata,
-    val tmdbMetadata: MovieMetadata? = null,
+    val imdbMetadata: MovieMetadata?,
+    val tmdbMetadata: MovieMetadata?,
 )
 
 @Mapper

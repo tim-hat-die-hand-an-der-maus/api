@@ -33,7 +33,7 @@ class QueueRepositoryTest {
 
     @Test
     fun testInsert(metadata: MovieMetadata) {
-        val id = movieRepo.insert(MovieInsertDto(MovieStatus.Queued, metadata))
+        val id = movieRepo.insert(MovieInsertDto(MovieStatus.Queued, metadata, tmdbMetadata = null))
         assertDoesNotThrow {
             repo.insert(id)
         }
@@ -48,7 +48,7 @@ class QueueRepositoryTest {
 
     @Test
     fun testDuplicateInsert(metadata: MovieMetadata) {
-        val id = movieRepo.insert(MovieInsertDto(MovieStatus.Queued, metadata))
+        val id = movieRepo.insert(MovieInsertDto(MovieStatus.Queued, metadata, tmdbMetadata = null))
 
         repo.insert(id)
         assertThrows<DuplicateMovieException> {
@@ -65,7 +65,7 @@ class QueueRepositoryTest {
     ) {
         val ids =
             listOf(metadataOne, metadataTwo).map {
-                movieRepo.insert(MovieInsertDto(MovieStatus.Queued, it))
+                movieRepo.insert(MovieInsertDto(MovieStatus.Queued, it, tmdbMetadata = null))
             }
 
         ids.forEach(repo::insert)
@@ -76,7 +76,7 @@ class QueueRepositoryTest {
 
     @Test
     fun testDelete(metadata: MovieMetadata) {
-        val id = movieRepo.insert(MovieInsertDto(MovieStatus.Queued, metadata))
+        val id = movieRepo.insert(MovieInsertDto(MovieStatus.Queued, metadata, null))
 
         repo.insert(id)
         assertDoesNotThrow {
