@@ -14,13 +14,14 @@ class ListMovies
         private val movieRepository: MovieRepository,
     ) {
         private fun rank(
-            movies: Iterable<Movie>,
+            movies: Sequence<Movie>,
             query: String,
         ): List<Movie> =
-            movies.sortedByDescending {
-                val meta = (it.tmdbMetadata ?: it.imdbMetadata)!!
-                FuzzySearch.weightedRatio(meta.title, query)
-            }
+            movies
+                .sortedByDescending {
+                    val meta = (it.tmdbMetadata ?: it.imdbMetadata)!!
+                    FuzzySearch.weightedRatio(meta.title, query)
+                }.toList()
 
         operator fun invoke(
             query: String?,

@@ -14,7 +14,10 @@ data class MovieInsertDto(
     val status: MovieStatus,
     val imdbMetadata: MovieMetadata?,
     val tmdbMetadata: MovieMetadata?,
-)
+) {
+    val availableMetadata: List<MovieMetadata>
+        get() = listOfNotNull(imdbMetadata, tmdbMetadata)
+}
 
 @Mapper
 interface MovieInsertDtoConverter {
@@ -49,5 +52,5 @@ interface MovieRepository {
         action: (Movie) -> Unit,
     )
 
-    fun listMovies(status: MovieStatus?): Iterable<Movie>
+    fun listMovies(status: MovieStatus?): Sequence<Movie>
 }
