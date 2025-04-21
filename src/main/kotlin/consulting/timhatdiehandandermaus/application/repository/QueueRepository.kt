@@ -10,7 +10,7 @@ data class QueueItemDto(
 )
 
 interface QueueRepository {
-    @Throws(DuplicateMovieException::class, MovieNotFoundException::class)
+    @Throws(DuplicateMovieException::class)
     fun insert(movieId: UUID)
 
     fun list(): List<QueueItemDto>

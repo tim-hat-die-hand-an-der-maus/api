@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -12,6 +13,7 @@
         <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
         <mapstruct.version>1.6.3</mapstruct.version>
         <kotlin.version>2.1.20</kotlin.version>
+        <jdbi.version>3.49.0</jdbi.version>
 
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
@@ -28,6 +30,14 @@
                 <groupId>${quarkus.platform.group-id}</groupId>
                 <artifactId>quarkus-bom</artifactId>
                 <version>${quarkus.platform.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jdbi</groupId>
+                <artifactId>jdbi3-bom</artifactId>
+                <version>${jdbi.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -54,15 +64,7 @@
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-hibernate-orm</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.quarkus</groupId>
             <artifactId>quarkus-jdbc-postgresql</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-hibernate-orm-panache-kotlin</artifactId>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
@@ -80,6 +82,28 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-rest-client-jackson</artifactId>
         </dependency>
+
+        <!-- JDBI -->
+        <dependency>
+            <groupId>io.quarkiverse.jdbi</groupId>
+            <artifactId>quarkus-jdbi</artifactId>
+            <version>1.7.2</version>
+        </dependency>
+
+        <!-- JDBI -->
+        <dependency>
+            <groupId>org.jdbi</groupId>
+            <artifactId>jdbi3-postgres</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jdbi</groupId>
+            <artifactId>jdbi3-kotlin</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jdbi</groupId>
+            <artifactId>jdbi3-kotlin-sqlobject</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-junit5</artifactId>
@@ -102,12 +126,12 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-smallrye-jwt-build</artifactId>
         </dependency>
+
+        <!-- Other libraries -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-smallrye-openapi</artifactId>
         </dependency>
-
-        <!-- Other libraries -->
         <dependency>
             <groupId>com.github.ajalt.clikt</groupId>
             <artifactId>clikt-jvm</artifactId>
@@ -168,11 +192,8 @@
                         </goals>
                         <configuration>
                             <annotationProcessorArgs>
-                                <processorArg>
-                                    mapstruct.defaultComponentModel=cdi
-                                </processorArg>
-                                <processorArg>
-                                    mapstruct.defaultInjectionStrategy=constructor
+                                <processorArg>mapstruct.defaultComponentModel=cdi</processorArg>
+                                <processorArg>mapstruct.defaultInjectionStrategy=constructor
                                 </processorArg>
                             </annotationProcessorArgs>
                             <annotationProcessorPaths>
@@ -188,7 +209,6 @@
                 <configuration>
                     <compilerPlugins>
                         <plugin>all-open</plugin>
-                        <plugin>jpa</plugin>
                     </compilerPlugins>
 
                     <args>
@@ -203,8 +223,6 @@
                         </option>
                         <option>all-open:annotation=jakarta.enterprise.context.ApplicationScoped
                         </option>
-                        <option>all-open:annotation=jakarta.persistence.Embeddable</option>
-                        <option>all-open:annotation=jakarta.persistence.Entity</option>
                         <option>all-open:annotation=jakarta.ws.rs.Path</option>
                     </pluginOptions>
                 </configuration>
