@@ -17,6 +17,7 @@ import org.jboss.logging.Logger
 import org.jboss.resteasy.reactive.ClientWebApplicationException
 import org.mapstruct.Mapper
 import org.mapstruct.Mapping
+import java.io.IOException
 
 data class TmdbUrlRequest(
     val link: String,
@@ -70,7 +71,16 @@ class TmdbMovieMetadataResolver
         private val logger: Logger,
     ) : MovieMetadataResolver {
         override fun resolveByUrl(url: String): MovieMetadata {
-            val response = service.resolveMetadata(TmdbUrlRequest(url))
+            val response =
+                try {
+                    service.resolveMetadata(TmdbUrlRequest(url))
+                } catch (e: ClientWebApplicationException) {
+                    if (e.response.status == 404) {
+                        throw MovieNotFoundException("Could not find movie: ${e.response.readEntity(String::class.java)}")
+                    }
+
+                    throw IOException(e)
+                }
             return converter.toModel(response)
         }
 
@@ -95,7 +105,7 @@ class TmdbMovieMetadataResolver
                         throw MovieNotFoundException("Movie not found on TMDB")
                     }
 
-                    throw e
+                    throw IOException(e)
                 }
             return converter.toModel(response)
         }

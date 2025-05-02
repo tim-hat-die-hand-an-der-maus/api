@@ -14,6 +14,7 @@ import consulting.timhatdiehandandermaus.application.repository.QueueRepository
 import jakarta.enterprise.context.RequestScoped
 import jakarta.inject.Inject
 import org.jboss.logging.Logger
+import java.io.IOException
 import java.util.UUID
 
 private const val THAT_MOVIE_WITH_AN_AIRPLANE = "f388de4e-184e-4258-a0b5-10ad753c1ece"
@@ -39,12 +40,18 @@ class AddMovie
                 } catch (e: MovieNotFoundException) {
                     log.info("Movie not found on IMDb: $url")
                     null
+                } catch (e: IOException) {
+                    log.error("Failed to resolve movie on IMDb: $url", e)
+                    null
                 }
             val tmdbMetadata =
                 try {
                     tmdbResolver.resolveByUrl(url)
                 } catch (e: MovieNotFoundException) {
                     log.info("Movie not found on TMDB: $url")
+                    null
+                } catch (e: IOException) {
+                    log.error("Failed to resolve movie on TMDB: $url", e)
                     null
                 }
 
