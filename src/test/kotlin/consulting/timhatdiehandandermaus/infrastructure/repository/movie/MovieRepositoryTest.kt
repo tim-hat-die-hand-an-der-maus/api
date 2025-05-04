@@ -113,6 +113,21 @@ class MovieRepositoryTest {
     }
 
     @Test
+    fun testList(
+        metadata0: MovieMetadata,
+        metadata1: MovieMetadata,
+        metadata2: MovieMetadata,
+    ) {
+        val metadata = listOf(metadata0, metadata1, metadata2)
+        metadata.forEach {
+            repo.insert(MovieInsertDto(MovieStatus.Queued, it, tmdbMetadata = null))
+        }
+
+        val movies = repo.listMovies(MovieStatus.Queued)
+        assertEquals(metadata.map { it.id }, movies.map { it.imdbMetadata!!.id })
+    }
+
+    @Test
     fun testForEachMovieWithCutoff(
         @Timestamped("2023-01-01T00:00:00Z")
         metadata1: MovieMetadata,
