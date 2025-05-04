@@ -14,13 +14,17 @@ import io.quarkus.runtime.annotations.RegisterForReflection
 import jakarta.enterprise.context.RequestScoped
 import jakarta.inject.Inject
 import org.jdbi.v3.core.Jdbi
+import org.jdbi.v3.core.kotlin.KotlinMapper
 import org.jdbi.v3.core.kotlin.inTransactionUnchecked
 import org.jdbi.v3.core.kotlin.useHandleUnchecked
 import org.jdbi.v3.core.kotlin.useTransactionUnchecked
 import org.jdbi.v3.core.mapper.JoinRow
+import org.jdbi.v3.core.mapper.RowMapper
+import org.jdbi.v3.core.statement.StatementContext
 import org.jdbi.v3.core.statement.UnableToExecuteStatementException
 import org.jdbi.v3.sqlobject.config.RegisterJoinRowMapper
-import org.jdbi.v3.sqlobject.customizer.BindBean
+import org.jdbi.v3.sqlobject.config.RegisterRowMapper
+import org.jdbi.v3.sqlobject.kotlin.BindKotlin
 import org.jdbi.v3.sqlobject.kotlin.attach
 import org.jdbi.v3.sqlobject.statement.SqlBatch
 import org.jdbi.v3.sqlobject.statement.SqlQuery
@@ -28,6 +32,7 @@ import org.jdbi.v3.sqlobject.statement.SqlUpdate
 import org.mapstruct.Mapper
 import org.mapstruct.Mapping
 import org.postgresql.util.PSQLException
+import java.sql.ResultSet
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
@@ -230,7 +235,7 @@ private interface MetadataDao {
     )
     fun insertBatch(
         movieId: UUID,
-        @BindBean metadata: List<MovieMetadata>,
+        @BindKotlin metadata: List<MovieMetadata>,
     )
 
     @SqlUpdate(
@@ -263,18 +268,35 @@ private interface MetadataDao {
     )
     fun upsert(
         movieId: UUID,
-        @BindBean metadata: MovieMetadata,
+        @BindKotlin metadata: MovieMetadata,
     )
 
     @SqlQuery(
         """
-            select * from metadata m
+            select c.ratio as c_ratio, c.url as c_url, m.* from metadata m
             left join cover c on m.source_id = c.metadata_source_id and m.source_type = c.metadata_source_type
             where m.movie_id = :movieId
         """,
     )
+    @RegisterRowMapper(CoverRowMapper::class)
     @RegisterJoinRowMapper(MetadataRow::class, CoverRow::class)
     fun findForMovie(movieId: UUID): List<JoinRow>
+}
+
+@RegisterForReflection
+class CoverRowMapper : RowMapper<CoverRow> {
+    override fun map(
+        rs: ResultSet,
+        ctx: StatementContext,
+    ): CoverRow? {
+        if (rs.getString("c_url") == null) {
+            return null
+        }
+
+        @Suppress("UNCHECKED_CAST")
+        val mapper = KotlinMapper(CoverRow::class, "c_") as RowMapper<CoverRow>
+        return mapper.map(rs, ctx)
+    }
 }
 
 private interface CoverDao {
@@ -290,7 +312,7 @@ private interface CoverDao {
     fun upsertCover(
         metadataSourceId: String,
         metadataSourceType: MetadataSourceType,
-        @BindBean cover: CoverMetadata,
+        @BindKotlin cover: CoverMetadata,
     )
 }
 

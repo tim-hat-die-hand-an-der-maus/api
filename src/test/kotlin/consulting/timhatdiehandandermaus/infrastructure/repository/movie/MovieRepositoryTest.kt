@@ -118,7 +118,7 @@ class MovieRepositoryTest {
         metadata1: MovieMetadata,
         metadata2: MovieMetadata,
     ) {
-        val metadata = listOf(metadata0, metadata1, metadata2)
+        val metadata = listOf(metadata0, metadata1, metadata2.copy(cover = null))
         metadata.forEach {
             repo.insert(MovieInsertDto(MovieStatus.Queued, it, tmdbMetadata = null))
         }
