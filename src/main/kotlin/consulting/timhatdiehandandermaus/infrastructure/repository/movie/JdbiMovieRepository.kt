@@ -353,7 +353,6 @@ data class MetadataRow(
 
 @RegisterForReflection
 data class CoverRow(
-    var id: Long?,
     var url: String,
     var ratio: Double,
 )
