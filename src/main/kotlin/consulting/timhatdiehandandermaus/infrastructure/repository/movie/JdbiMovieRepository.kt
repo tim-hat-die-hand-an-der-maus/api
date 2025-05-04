@@ -33,7 +33,6 @@ import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.util.UUID
 import java.util.stream.Stream
-import kotlin.streams.asSequence
 
 @RequestScoped
 class JdbiMovieRepository
@@ -153,22 +152,23 @@ class JdbiMovieRepository
             }
         }
 
-        override fun listMovies(status: MovieStatus?): Sequence<Movie> =
+        override fun listMovies(status: MovieStatus?): List<Movie> =
             jdbi.inTransactionUnchecked { handle ->
                 val movieDao = handle.attach<MovieDao>()
                 val movieRows =
                     if (status == null) {
-                        movieDao.streamAll().asSequence()
+                        movieDao.streamAll()
                     } else {
-                        movieDao.streamAllByStatus(status).asSequence()
+                        movieDao.streamAllByStatus(status)
                     }
 
                 val metadataDao = handle.attach<MetadataDao>()
 
-                movieRows.map { movieRow ->
-                    val metadata = metadataDao.findForMovie(movieRow.id).map(mapper::joinToMetadata)
-                    mapper.toModel(movieRow, metadata)
-                }
+                movieRows
+                    .map { movieRow ->
+                        val metadata = metadataDao.findForMovie(movieRow.id).map(mapper::joinToMetadata)
+                        mapper.toModel(movieRow, metadata)
+                    }.toList()
             }
     }
 

@@ -52,5 +52,5 @@ interface MovieRepository {
         action: (Movie) -> Unit,
     )
 
-    fun listMovies(status: MovieStatus?): Sequence<Movie>
+    fun listMovies(status: MovieStatus?): List<Movie>
 }
