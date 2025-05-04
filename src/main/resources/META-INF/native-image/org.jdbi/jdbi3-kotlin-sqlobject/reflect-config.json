@@ -1,0 +1,7 @@
+[
+  {
+    "name" : "org.jdbi.v3.sqlobject.kotlin.internal.BindKotlinFactory",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true
+  }
+]
