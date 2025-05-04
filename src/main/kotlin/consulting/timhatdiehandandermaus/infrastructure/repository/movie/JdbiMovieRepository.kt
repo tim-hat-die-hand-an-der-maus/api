@@ -14,7 +14,6 @@ import io.quarkus.runtime.annotations.RegisterForReflection
 import jakarta.enterprise.context.RequestScoped
 import jakarta.inject.Inject
 import org.jdbi.v3.core.Jdbi
-import org.jdbi.v3.core.kotlin.KotlinMapper
 import org.jdbi.v3.core.kotlin.inTransactionUnchecked
 import org.jdbi.v3.core.kotlin.useHandleUnchecked
 import org.jdbi.v3.core.kotlin.useTransactionUnchecked
@@ -289,13 +288,15 @@ class CoverRowMapper : RowMapper<CoverRow> {
         rs: ResultSet,
         ctx: StatementContext,
     ): CoverRow? {
-        if (rs.getString("c_url") == null) {
+        val url = rs.getString("c_url")
+        if (url == null) {
             return null
         }
 
-        @Suppress("UNCHECKED_CAST")
-        val mapper = KotlinMapper(CoverRow::class, "c_") as RowMapper<CoverRow>
-        return mapper.map(rs, ctx)
+        return CoverRow(
+            url,
+            rs.getDouble("c_ratio"),
+        )
     }
 }
 
