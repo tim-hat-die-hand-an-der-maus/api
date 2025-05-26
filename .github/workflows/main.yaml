@@ -34,7 +34,7 @@ jobs:
   build-container-image:
     needs:
       - check
-    uses: tim-hat-die-hand-an-der-maus/actions-container/.github/workflows/build-dual-image-kaniko.yml@v7
+    uses: tim-hat-die-hand-an-der-maus/actions-container/.github/workflows/build-dual-image-buildah.yml@v7
     with:
       amd-runner-name: warp-ubuntu-latest-x64-8x
       arm-runner-name: warp-ubuntu-latest-arm64-8x
