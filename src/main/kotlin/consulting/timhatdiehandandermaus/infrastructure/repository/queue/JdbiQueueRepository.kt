@@ -9,6 +9,7 @@ import jakarta.inject.Inject
 import org.jdbi.v3.core.Jdbi
 import org.jdbi.v3.core.kotlin.inTransactionUnchecked
 import org.jdbi.v3.core.kotlin.useTransactionUnchecked
+import org.jdbi.v3.core.kotlin.withHandleUnchecked
 import org.jdbi.v3.core.statement.UnableToExecuteStatementException
 import org.jdbi.v3.sqlobject.kotlin.attach
 import org.jdbi.v3.sqlobject.statement.SqlQuery
@@ -47,7 +48,7 @@ class JdbiQueueRepository
         }
 
         override fun list(): List<QueueItemDto> =
-            jdbi.inTransactionUnchecked { handle ->
+            jdbi.withHandleUnchecked { handle ->
                 val rows = handle.attach<QueueItemDao>().list()
                 rows.map { QueueItemDto(it) }
             }

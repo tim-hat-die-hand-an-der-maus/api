@@ -1,4 +1,4 @@
-package consulting.timhatdiehandandermaus.infrastructure.repository.queue
+package consulting.timhatdiehandandermaus.infrastructure.repository.user
 
 import com.radcortez.flyway.test.annotation.DataSource
 import com.radcortez.flyway.test.annotation.FlywayTest
@@ -24,7 +24,7 @@ import java.util.UUID
 @QuarkusTest
 @FlywayTest(DataSource(QuarkusDataSourceProvider::class))
 @ExtendWith(DummyDataResolver::class)
-class QueueRepositoryTest {
+class UserRepositoryTest {
     @Inject
     lateinit var movieRepo: MovieRepository
 
