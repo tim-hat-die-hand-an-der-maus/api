@@ -1,10 +1,12 @@
 package consulting.timhatdiehandandermaus.domain.model
 
+import consulting.timhatdiehandandermaus.application.model.CanonicalUser
 import consulting.timhatdiehandandermaus.application.model.CoverMetadata
 import consulting.timhatdiehandandermaus.application.model.MetadataSourceType
 import consulting.timhatdiehandandermaus.application.model.Movie
 import consulting.timhatdiehandandermaus.application.model.MovieMetadata
 import consulting.timhatdiehandandermaus.application.model.MovieStatus
+import consulting.timhatdiehandandermaus.application.model.TelegramUser
 import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.api.extension.ParameterContext
 import org.junit.jupiter.api.extension.ParameterResolutionException
@@ -29,6 +31,8 @@ class DummyDataResolver : ParameterResolver {
 
     private val supportedTypes =
         listOf(
+            CanonicalUser::class,
+            TelegramUser::class,
             Movie::class,
             MovieMetadata::class,
         )
@@ -50,11 +54,19 @@ class DummyDataResolver : ParameterResolver {
         val source = parameterContext.findAnnotation(TestMetadataSource::class.java).getOrNull()
 
         return when (parameterContext.parameter.type.kotlin) {
+            CanonicalUser::class -> canonicalUser(name)
             Movie::class -> movie(name)
             MovieMetadata::class -> metadata(name, updateTime ?: Instant.now(clock), source?.source ?: MetadataSourceType.IMDB)
+            TelegramUser::class -> telegramUser(name)
             else -> throw ParameterResolutionException("Unsupported type: ${parameterContext.parameter.type}")
         }
     }
+
+    private fun canonicalUser(name: String): CanonicalUser =
+        CanonicalUser(
+            id = UUID.randomUUID(),
+            displayName = "Tester $name",
+        )
 
     private fun movie(name: String): Movie =
         Movie(
@@ -82,5 +94,12 @@ class DummyDataResolver : ParameterResolver {
                 ),
             infoPageUrl = "https://www.imdb.com/title/tt123456",
             updateTime = updateTime,
+        )
+
+    private fun telegramUser(name: String): TelegramUser =
+        TelegramUser(
+            id = Random.nextLong(),
+            firstName = "Tester",
+            lastName = name,
         )
 }
