@@ -2,6 +2,7 @@ package consulting.timhatdiehandandermaus.iface.api.user
 
 import consulting.timhatdiehandandermaus.application.exception.DuplicateException
 import consulting.timhatdiehandandermaus.application.exception.NotFoundException
+import consulting.timhatdiehandandermaus.application.usecase.GetUserById
 import consulting.timhatdiehandandermaus.application.usecase.GetUserByTelegramId
 import consulting.timhatdiehandandermaus.application.usecase.UpdateTelegramUser
 import consulting.timhatdiehandandermaus.iface.api.model.TelegramUserRequest
@@ -29,6 +30,7 @@ class UserResource
         private val requestMapper: UserRequestMapper,
         private val responseMapper: UserResponseMapper,
         private val getUserByTelegramId: GetUserByTelegramId,
+        private val getUserById: GetUserById,
         private val updateTelegramUser: UpdateTelegramUser,
     ) {
         @PUT
@@ -60,6 +62,18 @@ class UserResource
             @PathParam("id") telegramId: Long,
         ): UserResponse {
             val user = getUserByTelegramId(telegramId)
+            if (user == null) {
+                throw JakartaNotFoundException()
+            }
+            return responseMapper.toDto(user)
+        }
+
+        @GET
+        @Path("/{id}")
+        fun getById(
+            @PathParam("id") id: UUID,
+        ): UserResponse {
+            val user = getUserById(id)
             if (user == null) {
                 throw JakartaNotFoundException()
             }

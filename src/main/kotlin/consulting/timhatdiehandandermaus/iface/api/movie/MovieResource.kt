@@ -44,7 +44,7 @@ class MovieResource
         fun put(body: MoviePostRequest): MovieResponse {
             val movie =
                 try {
-                    addMovie(body.imdbUrl)
+                    addMovie(body.imdbUrl, userId = body.userId)
                 } catch (e: MovieNotFoundException) {
                     throw NotFoundException(e)
                 } catch (e: DuplicateMovieException) {

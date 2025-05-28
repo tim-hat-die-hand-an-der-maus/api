@@ -33,7 +33,10 @@ class AddMovie
         private val queueRepo: QueueRepository,
     ) {
         @Throws(DuplicateMovieException::class)
-        operator fun invoke(url: String): Movie {
+        operator fun invoke(
+            url: String,
+            userId: UUID?,
+        ): Movie {
             val imdbMetadata =
                 try {
                     imdbResolver.resolveByUrl(url)
@@ -86,7 +89,7 @@ class AddMovie
                     movieRepo.updateStatus(movieId, MovieStatus.Queued)
                     movieId
                 }
-            queueRepo.insert(id)
+            queueRepo.insert(id, userId = userId)
             log.info("Inserted movie $id into the database")
             return converter.toMovie(id, movieDto)
         }
