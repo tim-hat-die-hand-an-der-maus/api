@@ -5,11 +5,13 @@ package consulting.timhatdiehandandermaus.iface.api.model
 import com.fasterxml.jackson.annotation.JsonCreator
 import consulting.timhatdiehandandermaus.application.model.MovieStatus
 import org.mapstruct.Mapper
+import java.util.UUID
 
 data class MoviePostRequest
     @JsonCreator
     constructor(
         val imdbUrl: String,
+        val userId: UUID? = null,
     )
 
 enum class MovieDeleteStatus {

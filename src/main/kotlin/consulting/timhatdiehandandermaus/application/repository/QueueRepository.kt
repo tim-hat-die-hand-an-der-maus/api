@@ -6,12 +6,16 @@ import java.util.UUID
 
 data class QueueItemDto(
     val movieId: UUID,
+    val userId: UUID?,
     // more info about votes and stuff
 )
 
 interface QueueRepository {
     @Throws(DuplicateMovieException::class)
-    fun insert(movieId: UUID)
+    fun insert(
+        movieId: UUID,
+        userId: UUID?,
+    )
 
     fun list(): List<QueueItemDto>
 

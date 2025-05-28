@@ -2,19 +2,16 @@ package consulting.timhatdiehandandermaus.infrastructure.repository.user
 
 import com.radcortez.flyway.test.annotation.DataSource
 import com.radcortez.flyway.test.annotation.FlywayTest
-import consulting.timhatdiehandandermaus.application.exception.DuplicateMovieException
-import consulting.timhatdiehandandermaus.application.exception.MovieNotFoundException
-import consulting.timhatdiehandandermaus.application.model.MovieMetadata
-import consulting.timhatdiehandandermaus.application.model.MovieStatus
-import consulting.timhatdiehandandermaus.application.repository.MovieInsertDto
-import consulting.timhatdiehandandermaus.application.repository.MovieRepository
-import consulting.timhatdiehandandermaus.application.repository.QueueRepository
+import consulting.timhatdiehandandermaus.application.exception.DuplicateException
+import consulting.timhatdiehandandermaus.application.exception.NotFoundException
+import consulting.timhatdiehandandermaus.application.model.CanonicalUser
+import consulting.timhatdiehandandermaus.application.model.TelegramUser
+import consulting.timhatdiehandandermaus.application.repository.UserRepository
 import consulting.timhatdiehandandermaus.domain.model.DummyDataResolver
 import consulting.timhatdiehandandermaus.infrastructure.repository.QuarkusDataSourceProvider
 import io.quarkus.test.junit.QuarkusTest
 import jakarta.inject.Inject
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
@@ -26,70 +23,120 @@ import java.util.UUID
 @ExtendWith(DummyDataResolver::class)
 class UserRepositoryTest {
     @Inject
-    lateinit var movieRepo: MovieRepository
-
-    @Inject
-    lateinit var repo: QueueRepository
+    lateinit var repo: UserRepository
 
     @Test
-    fun testInsert(metadata: MovieMetadata) {
-        val id = movieRepo.insert(MovieInsertDto(MovieStatus.Queued, metadata, tmdbMetadata = null))
+    fun testInsertCanonicalUser(user: CanonicalUser) {
         assertDoesNotThrow {
-            repo.insert(id)
+            repo.insert(user)
+        }
+
+        Assertions.assertEquals(user, repo.getById(user.id))
+    }
+
+    @Test
+    fun testInsertCanonicalUserDuplicate(user: CanonicalUser) {
+        repo.insert(user)
+        assertThrows<DuplicateException> {
+            repo.insert(user)
         }
     }
 
     @Test
-    fun testInsertUnknownMovie() {
-        assertThrows<MovieNotFoundException> {
-            repo.insert(UUID.randomUUID())
-        }
-    }
-
-    @Test
-    fun testDuplicateInsert(metadata: MovieMetadata) {
-        val id = movieRepo.insert(MovieInsertDto(MovieStatus.Queued, metadata, tmdbMetadata = null))
-
-        repo.insert(id)
-        assertThrows<DuplicateMovieException> {
-            repo.insert(id)
-        }
-
-        assertEquals(1, repo.list().size)
-    }
-
-    @Test
-    fun testList(
-        metadataOne: MovieMetadata,
-        metadataTwo: MovieMetadata,
+    fun testInsertTelegramUser(
+        canonicalUser: CanonicalUser,
+        user: TelegramUser,
     ) {
-        val ids =
-            listOf(metadataOne, metadataTwo).map {
-                movieRepo.insert(MovieInsertDto(MovieStatus.Queued, it, tmdbMetadata = null))
-            }
-
-        ids.forEach(repo::insert)
-
-        val list = repo.list()
-        assertEquals(ids, list.map { it.movieId })
-    }
-
-    @Test
-    fun testDelete(metadata: MovieMetadata) {
-        val id = movieRepo.insert(MovieInsertDto(MovieStatus.Queued, metadata, null))
-
-        repo.insert(id)
         assertDoesNotThrow {
-            repo.delete(id)
+            repo.insert(canonicalUser)
+            repo.insertTelegramUser(canonicalUser.id, user)
         }
 
-        assertTrue(repo.list().isEmpty())
+        val associatedUser = repo.getByTelegramId(user.id)
+        Assertions.assertEquals(canonicalUser, associatedUser)
     }
 
     @Test
-    fun testDeleteUnknown() {
-        assertThrows<MovieNotFoundException> {
-            repo.delete(UUID.randomUUID())
+    fun testInsertTelegramUserDuplicate(
+        canonicalUser: CanonicalUser,
+        user: TelegramUser,
+    ) {
+        repo.insert(canonicalUser)
+        repo.insertTelegramUser(canonicalUser.id, user)
+        assertThrows<DuplicateException> {
+            repo.insertTelegramUser(canonicalUser.id, user)
+        }
+    }
+
+    @Test
+    fun testInsertSecondTelegramUserForCanonical(
+        canonicalUser: CanonicalUser,
+        user1: TelegramUser,
+        user2: TelegramUser,
+    ) {
+        repo.insert(canonicalUser)
+        repo.insertTelegramUser(canonicalUser.id, user1)
+        assertThrows<DuplicateException> {
+            repo.insertTelegramUser(canonicalUser.id, user2)
+        }
+    }
+
+    @Test
+    fun testInsertTelegramUserMultiCanonical(
+        canonicalUser: CanonicalUser,
+        user: TelegramUser,
+    ) {
+        repo.insert(canonicalUser)
+        repo.insertTelegramUser(canonicalUser.id, user)
+        assertThrows<DuplicateException> {
+            repo.insertTelegramUser(UUID.randomUUID(), user)
+        }
+    }
+
+    @Test
+    fun testInsertTelegramUserNotFound(user: TelegramUser) {
+        assertThrows<NotFoundException> {
+            repo.insertTelegramUser(UUID.randomUUID(), user)
+        }
+    }
+
+    @Test
+    fun updateUnknownTelegramUser(user: TelegramUser) {
+        assertThrows<NotFoundException> {
+            repo.updateTelegramUser(user)
+        }
+    }
+
+    @Test
+    fun updateUnknownUser(user: CanonicalUser) {
+        assertThrows<NotFoundException> {
+            repo.updateCanonicalUser(user)
+        }
+    }
+
+    @Test
+    fun updateUser(user: CanonicalUser) {
+        repo.insert(user)
+        val updated = user.copy(displayName = "new name")
+        repo.updateCanonicalUser(updated)
+        Assertions.assertEquals(updated, repo.getById(user.id))
+    }
+
+    @Test
+    fun updateTelegramUser(
+        canonicalUser: CanonicalUser,
+        user: TelegramUser,
+    ) {
+        repo.insert(canonicalUser)
+        repo.insertTelegramUser(canonicalUser.id, user)
+        val updated =
+            user.copy(
+                firstName = "new first name",
+                lastName = "new last name",
+            )
+
+        assertDoesNotThrow {
+            repo.updateTelegramUser(updated)
         }
     }
 }
