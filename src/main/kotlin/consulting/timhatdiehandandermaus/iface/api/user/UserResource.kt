@@ -37,7 +37,7 @@ class UserResource
         @Path("/telegram")
         fun putTelegramUser(
             @QueryParam("existingId")
-            existingId: UUID?,
+            existingId: UUID? = null,
             body: TelegramUserRequest,
         ): UserResponse {
             val telegramUser = requestMapper.toModel(body)
