@@ -35,8 +35,15 @@ class UpdateAllMetadata
                 val oldImdbMetadata = movie.imdbMetadata
                 if (oldImdbMetadata != null) {
                     log.info("Resolving IMDb metadata for ${movie.id}")
-                    val imdbMetadata = imdbResolver.resolveById(oldImdbMetadata.id)
-                    if (!imdbMetadata.equalsIgnoreUpdateTime(oldImdbMetadata)) {
+                    val imdbMetadata =
+                        try {
+                            imdbResolver.resolveById(oldImdbMetadata.id)
+                        } catch (e: MovieNotFoundException) {
+                            null
+                        }
+                    if (imdbMetadata == null) {
+                        log.warn("Movie not found on IMDb: ${movie.id}")
+                    } else if (!imdbMetadata.equalsIgnoreUpdateTime(oldImdbMetadata)) {
                         log.info("Updating metadata ($imdbMetadata)")
                         movieRepo.updateMetadata(movie.id, imdbMetadata)
                     }

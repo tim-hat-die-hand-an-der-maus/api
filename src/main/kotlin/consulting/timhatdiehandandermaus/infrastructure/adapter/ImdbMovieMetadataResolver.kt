@@ -10,8 +10,10 @@ import jakarta.inject.Inject
 import jakarta.ws.rs.POST
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient
 import org.eclipse.microprofile.rest.client.inject.RestClient
+import org.jboss.resteasy.reactive.ClientWebApplicationException
 import org.mapstruct.Mapper
 import org.mapstruct.Mapping
+import java.io.IOException
 
 data class ImdbRequest(
     val imdbUrl: String,
@@ -55,7 +57,16 @@ class ImdbMovieMetadataResolver
         private val converter: ResponseConverter,
     ) : MovieMetadataResolver {
         override fun resolveByUrl(url: String): MovieMetadata {
-            val response = service.resolveMetadata(ImdbRequest(url))
+            val response =
+                try {
+                    service.resolveMetadata(ImdbRequest(url))
+                } catch (e: ClientWebApplicationException) {
+                    if (e.response.status == 404) {
+                        throw MovieNotFoundException("Could not find movie on IMDb: $url")
+                    } else {
+                        throw IOException(e)
+                    }
+                }
             return converter.toModel(response)
         }
 
