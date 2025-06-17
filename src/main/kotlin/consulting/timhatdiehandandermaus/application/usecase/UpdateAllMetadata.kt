@@ -26,12 +26,16 @@ class UpdateAllMetadata
             limit: Long = 0,
         ) {
             if (cutoffDate != null) {
-                log.info("Updating metadata for all movies")
+                log.info("Updating metadata for all movies (limit=$limit)")
             } else {
-                log.info("Updating metadata for all movies not updated since $cutoffDate")
+                log.info(
+                    "Updating metadata for all movies not updated since $cutoffDate (limit=$limit)",
+                )
             }
 
+            var count = 0
             movieRepo.forEachMovie(cutoffDate, limit = limit) { movie ->
+                count += 1
                 val oldImdbMetadata = movie.imdbMetadata
                 if (oldImdbMetadata != null) {
                     log.info("Resolving IMDb metadata for ${movie.id}")
@@ -73,5 +77,7 @@ class UpdateAllMetadata
                     movieRepo.updateMetadata(movie.id, tmdbMetadata)
                 }
             }
+
+            log.info("Processed $count movies")
         }
     }
