@@ -15,8 +15,6 @@ class UpdateAllMetadata
     @Inject
     constructor(
         private val log: Logger,
-        @MetadataSource(MetadataSourceType.IMDB)
-        private val imdbResolver: MovieMetadataResolver,
         @MetadataSource(MetadataSourceType.TMDB)
         private val tmdbResolver: MovieMetadataResolver,
         private val movieRepo: MovieRepository,
@@ -37,21 +35,6 @@ class UpdateAllMetadata
             movieRepo.forEachMovie(cutoffDate, limit = limit) { movie ->
                 count += 1
                 val oldImdbMetadata = movie.imdbMetadata
-                if (oldImdbMetadata != null) {
-                    log.info("Resolving IMDb metadata for ${movie.id}")
-                    val imdbMetadata =
-                        try {
-                            imdbResolver.resolveById(oldImdbMetadata.id)
-                        } catch (e: MovieNotFoundException) {
-                            null
-                        }
-                    if (imdbMetadata == null) {
-                        log.warn("Movie not found on IMDb: ${movie.id}")
-                    } else if (!imdbMetadata.equalsIgnoreUpdateTime(oldImdbMetadata)) {
-                        log.info("Updating metadata ($imdbMetadata)")
-                        movieRepo.updateMetadata(movie.id, imdbMetadata)
-                    }
-                }
 
                 log.info("Resolving TMDB metadata for movie ${movie.id}")
                 val oldTmdbMetadata = movie.tmdbMetadata

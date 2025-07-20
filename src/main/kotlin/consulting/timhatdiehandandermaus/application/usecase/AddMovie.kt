@@ -24,8 +24,6 @@ class AddMovie
     @Inject
     constructor(
         private val log: Logger,
-        @MetadataSource(MetadataSourceType.IMDB)
-        private val imdbResolver: MovieMetadataResolver,
         @MetadataSource(MetadataSourceType.TMDB)
         private val tmdbResolver: MovieMetadataResolver,
         private val converter: MovieInsertDtoConverter,
@@ -37,16 +35,6 @@ class AddMovie
             url: String,
             userId: UUID?,
         ): Movie {
-            val imdbMetadata =
-                try {
-                    imdbResolver.resolveByUrl(url)
-                } catch (e: MovieNotFoundException) {
-                    log.info("Movie not found on IMDb: $url")
-                    null
-                } catch (e: IOException) {
-                    log.error("Failed to resolve movie on IMDb: $url", e)
-                    null
-                }
             val tmdbMetadata =
                 try {
                     tmdbResolver.resolveByUrl(url)
@@ -58,14 +46,14 @@ class AddMovie
                     null
                 }
 
-            if (imdbMetadata == null && tmdbMetadata == null) {
+            if (tmdbMetadata == null) {
                 throw MovieNotFoundException()
             }
 
             val movieDto =
                 MovieInsertDto(
                     status = MovieStatus.Queued,
-                    imdbMetadata = imdbMetadata,
+                    imdbMetadata = null,
                     tmdbMetadata = tmdbMetadata,
                 )
             val id =
@@ -75,12 +63,7 @@ class AddMovie
                     log.debug("Movie already exists in database, refreshing metadata")
                     val movieId = e.id
 
-                    if (imdbMetadata != null) {
-                        movieRepo.updateMetadata(movieId, imdbMetadata)
-                    }
-                    if (tmdbMetadata != null) {
-                        movieRepo.updateMetadata(movieId, tmdbMetadata)
-                    }
+                    movieRepo.updateMetadata(movieId, tmdbMetadata)
 
                     if (movieId != UUID.fromString(THAT_MOVIE_WITH_AN_AIRPLANE)) {
                         throw e
