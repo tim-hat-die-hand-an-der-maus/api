@@ -87,7 +87,7 @@
         <dependency>
             <groupId>io.quarkiverse.jdbi</groupId>
             <artifactId>quarkus-jdbi</artifactId>
-            <version>1.7.4</version>
+            <version>1.7.5</version>
         </dependency>
 
         <!-- JDBI -->
