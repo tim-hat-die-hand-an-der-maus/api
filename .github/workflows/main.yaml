@@ -27,7 +27,7 @@ jobs:
       QUARKUS_DATASOURCE_JDBC_URL: "jdbc:postgresql://postgres:5432/tim"
     steps:
       - name: Check out repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Run checks
         run: ./mvnw --no-transfer-progress spotless:check test
 
@@ -63,7 +63,7 @@ jobs:
     needs:
       - build-container-image
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
       - run: git push origin main:release
