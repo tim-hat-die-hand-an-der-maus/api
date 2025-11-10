@@ -18,7 +18,7 @@ jobs:
   check:
     name: Test and Lint
     runs-on: ubuntu-24.04
-    container: eclipse-temurin:21
+    container: eclipse-temurin:25
     services:
       postgres:
         image: postgres:18-alpine
